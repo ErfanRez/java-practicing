@@ -1,4 +1,4 @@
-//* We have 2 integer sequences A and B. find and print count of numbers in A that are less than each number in B.
+//* We have an integer sequences A such that ai : 1<i< n. Find and print count of numbers in A that are less than each number entered by user.
 
 
 
