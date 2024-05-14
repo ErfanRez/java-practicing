@@ -1,5 +1,21 @@
-//* We have an integer sequences A such that ai : 1<i< n. Find and print count of numbers in A that are less than each number entered by user.
+//* We have an integer sequences A such that ai : 1<i< n.
+//* Find and print count of numbers in A that are less than each number entered by user.
 
+/* Example:
+
+input:
+3 3
+4 1 4
+2
+5
+4
+
+output:
+0
+1
+2
+
+*/
 
 
 import java.util.Scanner;
@@ -45,3 +61,5 @@ public class Main {
         }
     }
 }
+
+//! Big-O = O(n)
