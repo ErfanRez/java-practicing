@@ -1,4 +1,4 @@
-//* We have an integer sequences A such that ai : 1<i< n.
+//* We have an integer sequences A such that ai : 1<i<n.
 //* Find and print count of numbers in A that are less than each number entered by user.
 
 /* Example:
