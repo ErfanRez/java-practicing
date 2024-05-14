@@ -42,7 +42,7 @@ public class Main {
 
             // Calculate the sum of absolute differences
             for (int i = 0; i < n; i++) {
-                t += Math.abs((x + i * k) - a[i]); // cause i initialized from 0, we don't need to decrement by 1 as mentioned above
+                t += Math.abs((x + i * k) - a[i]); //! cause i initialized from 0, we don't need to decrement by 1 as mentioned above
             }
 
             // Update val if a smaller value is found
