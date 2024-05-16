@@ -51,7 +51,7 @@ public class Main {
 
 
 
-//? For a very large test case like one in the large-testcase folder we should use this approach:
+//? For a very large test case like one in the large-testcase folder, to prevent data type overflowing we should go this approach:
 
 // import java.util.Scanner;
 // import java.util.Arrays;
