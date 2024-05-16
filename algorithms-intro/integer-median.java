@@ -1,5 +1,5 @@
 //* We get an integer sequence from user. we want to convert all ai such that 1 <= i <= n, to a number M
-//* called the Median. find out and output the Median and the minimum operations needed to convert all ai to M 
+//* called the Median. find out and output the Median and the minimum operations needed to convert all ai to M
 
 /* Example:
 
