@@ -1,5 +1,5 @@
-//* we have an integer sequence, we want to turn it to an arithmetic sequence => a1 + a1+d + a1+2d +...
-//* (ai = a1 + (i-1)d)  with an specific d=k. if in each operation we could increment or decrement only
+//* we have an integer sequence, we want to turn it to an arithmetic sequence => x + x+k + x+2k +...
+//* (ai = a1 + (i-1)k). if in each operation we could increment or decrement only
 //* one number such that ai : 1 <= i <= n, what's the count of operations done on the original sequence?
 
 //* ∑ (1 <= 𝑖 <=n ) => ∣ ( 𝑥 + ( 𝑖 − 1 ) 𝑘 ) − 𝑎 𝑖 ∣
@@ -54,4 +54,4 @@ public class Main {
     }
 }
 
-//! Big-O = O(n(M−m)+n^2*k)
+//! Big-O = O(n(M−m)+n^2*k) - Not good!
