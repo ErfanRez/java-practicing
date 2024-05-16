@@ -3,6 +3,7 @@
 //* if in each operation we could increment or decrement only
 //* one number such that ai : 1 <= i <= n, what's the minimum count of operations done on the original sequence?
 
+
 /* Example:
 
 input:
