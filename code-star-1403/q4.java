@@ -1,8 +1,46 @@
 import java.util.Scanner;
 
+//! Test cases:
+
+/* 1-input:
+    2
+    additive-cipher -text "HELP me" -key 1
+    additive-cipher -text " HELP me " -key 1
+
+   1-output:
+    IFMQ NF
+    IFMQ NF
+*/
+
+/* 2-input:
+    2
+    multiplicative-cipher -text "danger" -key 3
+    multiplicative-cipher -key 3 -text "danger"
+
+   2-output:
+    JANSMZ
+    JANSMZ
+*/
+
+/* 3-input:
+    1
+    affine-cipher -text "Hi" -a 3 -b 1
+
+   3-output:
+    WZ
+*/
+
+/* 4-input:
+    1
+    mapping-cipher -text "hello" -mapping "zyxwvutsrqponmlkjihgfedcba"
+
+   4-output:
+    SVOOL
+*/
+
 public class Test {
 
-    private static char[] letters = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+    private static final char[] letters = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 
     public static String additiveCipher(String s, int k){
         String newStr = s.trim().toLowerCase();        
