@@ -122,7 +122,7 @@ public class Test {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int numCommands = Integer.parseInt(scanner.nextLine());
+        int numCommands = scanner.nextInt();
 
         for (int i = 0; i < numCommands; i++) {
             String inputLine = scanner.nextLine();
