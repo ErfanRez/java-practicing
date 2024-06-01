@@ -11,7 +11,7 @@ public class Q1 {
 
     private static String findNthString(int n) {
       
-        LinkedList<String> queue = new LinkedList<>();
+        Queue<String> queue = new LinkedList<>();
         queue.add("a");
         queue.add("b");
 
