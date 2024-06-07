@@ -20,7 +20,10 @@ public class Main {
         for(int i = 0; i < n; i++) {
             currentSum += a[i];
             max = Math.max(currentSum, max);
-            if(currentSum < 0) { //! Because we don't want to include negative sums as we want the maximum positive sum possible in a sub range
+            
+            //! Because we don't want to include negative sums as it's basically like we are subtracting
+            //! and as we want the maximum positive sum possible in a sub range ⤵️
+            if(currentSum < 0) {
                 currentSum = 0;
             }
         }
