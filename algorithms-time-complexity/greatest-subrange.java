@@ -1,6 +1,17 @@
 //* We want to print out the maximum sum of sub range of n numbers
 //* such that 1<l<r<n => al+a(l+1)+a(l+2)+...a(r) = maximum
 
+/* Example:
+
+input:
+6
+-7 3 -1 2 -4 3
+
+output:
+4
+
+*/
+
 import java.util.Scanner;
 
 public class Main {
