@@ -1,6 +1,7 @@
 import java.util.*;
 
-//! This code snippet is written by Erfan Rezaei, Sunday-Sec02, Student-ID: 40215041054114
+//! This code snippet is written by Erfan Rezaei
+//! Advanced Java Programming, Alireza Nikian, Spring 1403
 //! Islamic Azad University of Najafabad
 
 //* There is a static main method to test all methods so you can compile and run the file directly
