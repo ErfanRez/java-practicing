@@ -2,7 +2,7 @@
 //! Advanced Java Programming, Alireza Nikian, Spring 1403
 //! Islamic Azad University of Najafabad
 
-//* Ali jan there is a static main method to test all constructors and methods so you can compile and run the file directly
+//* There is a static main method to test all constructors and methods so you can compile and run the file directly
 //* or paste your own test cases in the main method body!
 
 public class MiniString {

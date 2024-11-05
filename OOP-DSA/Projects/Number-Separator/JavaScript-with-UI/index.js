@@ -2,10 +2,21 @@
 //! The following code is written by Erfan Rezaei
 //! Islamic Azad University of Najafabad
 
+window.onload = () => {
+  document.getElementById("numberInput").focus();
+};
+
+window.onfocus = () => {
+  document.getElementById("numberInput").focus();
+};
+
 //! Iterative method
 function iterativeSeparator(s) {
-  if (s.startsWith("0") || s.length === 0 || !/^\d+$/.test(s))
+  if (s.startsWith("0") || s.length === 0 || !/^\d+$/.test(s)) {
+    document.getElementById("numberInput").value = "";
     return "Invalid number!";
+  }
+
   if (s.length <= 3) return s;
 
   let result = "";
@@ -29,6 +40,7 @@ function iterativeSeparator(s) {
 //! Recursive method
 function recursiveSeparator(s) {
   if (s.startsWith("0") || s === "" || !/^\d+$/.test(s)) {
+    document.getElementById("numberInput").value = "";
     return "Invalid number!";
   }
 
@@ -46,5 +58,15 @@ function recursiveSeparator(s) {
 function updateSeparator() {
   const input = document.getElementById("numberInput").value;
   const result = recursiveSeparator(input);
-  document.getElementById("resultText").textContent = result;
+  const resultText = document.getElementById("resultText");
+
+  if (result === "Invalid number!") {
+    resultText.textContent = result;
+
+    setTimeout(() => {
+      resultText.textContent = "Please enter the amount!";
+    }, 1000);
+  } else {
+    resultText.textContent = result;
+  }
 }

@@ -24,6 +24,7 @@ public class Eval {
     }
 
     private static String infixToPostfix(String expression) {
+        expression = expression.replace(" ","");
         String postfix = "";
         Stack<Character> operators = new Stack<>();
         String number = "";
@@ -117,7 +118,6 @@ public class Eval {
 
 
     public static int eval(String expression) {
-        expression = expression.replace(" ","");
         String postfix = infixToPostfix(expression);
         System.out.println("Postfix: " + postfix);
         return evaluatePostfix(postfix);
