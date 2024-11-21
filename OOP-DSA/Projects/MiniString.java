@@ -83,7 +83,6 @@ public class MiniString {
 
         for (int i = 1; i < str.length(); i++) {
             char c = str.charAt(i);
-            boolean found = false;
 
             for (int j = 0; j < res.length(); j++) {
                 if (c == res.charAt(j)) {
