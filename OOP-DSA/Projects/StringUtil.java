@@ -5,7 +5,7 @@
 //* There is a static main method to test all constructors and methods so you can compile and run the file directly
 //* or paste your own test cases in the main method body!
 
-public class MiniString {
+public class StringUtil {
 
     public static String repeat(String str, int num) {
         String repeat = "";

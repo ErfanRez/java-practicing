@@ -26,11 +26,11 @@ class ListNode{ // IntLinkedListNode
     }
 }
 
-public class List { // IntLinkedList
+public class LinkedList { // IntLinkedList
     private ListNode first;
     private int size;
 
-    public List() {
+    public LinkedList() {
         first = null;
         size = 0;
     }
@@ -145,8 +145,10 @@ public class List { // IntLinkedList
         return sum;
     }
 
-    public boolean equals(List other){
+    public boolean equals(LinkedList other){
         if(this.size != other.size) return false;
+
+        if(this.isEmpty() && other.isEmpty()) return true;
 
         ListNode thisP = this.first;
         ListNode otherP = other.first;
@@ -184,7 +186,7 @@ public class List { // IntLinkedList
         */
 
         // Create a linked list
-        List list1 = new List();
+        LinkedList list1 = new LinkedList();
         list1.add(10);
         list1.add(20);
         list1.add(30);
@@ -222,7 +224,7 @@ public class List { // IntLinkedList
         }
 
         // Test equals method
-        List list2 = new List();
+        LinkedList list2 = new LinkedList();
         list2.add(10);
         list2.add(20);
         list2.add(40);
@@ -234,7 +236,7 @@ public class List { // IntLinkedList
 
         System.out.println("List1 equals List2? " + list1.equals(list2));
 
-        List list3 = new List();
+        LinkedList list3 = new LinkedList();
         list3.add(30);
         list3.add(40);
         list3.add(50);
