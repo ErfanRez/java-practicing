@@ -9,7 +9,7 @@ class Node {
     int key, height;
     Node left, right;
 
-    public Node(){}
+    public Node() {}
 
     public Node(int d) {
         key = d;
@@ -22,7 +22,7 @@ public class AVLTree {
 
     private Node root;
 
-    public AVLTree(){}
+    public AVLTree() {}
 
     private int height(Node n) {
         if (n == null)
@@ -54,12 +54,11 @@ public class AVLTree {
     private int getBalanceFactor(Node n) {
         if (n == null)
             return 0;
-        return height(n.left) - height(n.right);
+        return height(n.right) - height(n.left); // Changed calculation
     }
 
     // Insert a node
     public Node insert(Node node, int item) {
-
         if (node == null)
             return (new Node(item));
         if (item < node.key)
@@ -69,26 +68,30 @@ public class AVLTree {
         else
             return node;
 
-        // Update the balance factor of each node
-        // And, balance the tree
+        // Update the height of the ancestor node
         node.height = 1 + Math.max(height(node.left), height(node.right));
+
+        // Get the balance factor of this node
         int balanceFactor = getBalanceFactor(node);
-        if (balanceFactor > 1) {
+
+
+        if (balanceFactor < -1) { // Left-heavy subtree
             if (item < node.left.key) {
-                return rightRotate(node);
+                return rightRotate(node); // Left-Left Case
             } else if (item > node.left.key) {
                 node.left = leftRotate(node.left);
-                return rightRotate(node);
+                return rightRotate(node); // Left-Right Case
             }
         }
-        if (balanceFactor < -1) {
+        if (balanceFactor > 1) { // Right-heavy subtree
             if (item > node.right.key) {
-                return leftRotate(node);
+                return leftRotate(node); // Right-Right Case
             } else if (item < node.right.key) {
                 node.right = rightRotate(node.right);
-                return leftRotate(node);
+                return leftRotate(node); // Right-Left Case
             }
         }
+
         return node;
     }
 
@@ -101,7 +104,6 @@ public class AVLTree {
 
     // Delete a node
     public Node delete(Node root, int item) {
-
         if (root == null)
             return root;
         if (item < root.key)
@@ -110,45 +112,45 @@ public class AVLTree {
             root.right = delete(root.right, item);
         else {
             if ((root.left == null) || (root.right == null)) {
-                Node temp = root.left != null ?
-                        root.left : root.right;
+                Node temp = root.left != null ? root.left : root.right;
 
-                // No child case
                 if (temp == null) {
                     temp = root;
                     root = null;
-                } else // One child case
+                } else
                     root = temp;
             } else {
-                // node with two children: Get smallest in
-                // the right subtree
                 Node temp = minValueNode(root.right);
                 root.key = temp.key;
                 root.right = delete(root.right, temp.key);
             }
         }
+
         if (root == null)
             return root;
 
-        // Update the balance factor of each node and balance the tree
         root.height = 1 + Math.max(height(root.left), height(root.right));
+
         int balanceFactor = getBalanceFactor(root);
-        if (balanceFactor > 1) {
-            if (getBalanceFactor(root.left) >= 0) {
-                return rightRotate(root); //Left-Left Case
+
+
+        if (balanceFactor < -1) { // Left-heavy subtree
+            if (getBalanceFactor(root.left) <= 0) {
+                return rightRotate(root); // Left-Left Case
             } else {
                 root.left = leftRotate(root.left);
-                return rightRotate(root); //Left-Right Case
+                return rightRotate(root); // Left-Right Case
             }
         }
-        if (balanceFactor < -1) {
-            if (getBalanceFactor(root.right) <= 0) {
-                return leftRotate(root); //Right-Right Case
+        if (balanceFactor > 1) { // Right-heavy subtree
+            if (getBalanceFactor(root.right) >= 0) {
+                return leftRotate(root); // Right-Right Case
             } else {
                 root.right = rightRotate(root.right);
-                return leftRotate(root); //Right-Left Case
+                return leftRotate(root); // Right-Left Case
             }
         }
+
         return root;
     }
 
