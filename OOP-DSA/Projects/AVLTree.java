@@ -135,18 +135,18 @@ public class AVLTree {
         int balanceFactor = getBalanceFactor(root);
         if (balanceFactor > 1) {
             if (getBalanceFactor(root.left) >= 0) {
-                return rightRotate(root);
+                return rightRotate(root); //Left-Left Case
             } else {
                 root.left = leftRotate(root.left);
-                return rightRotate(root);
+                return rightRotate(root); //Left-Right Case
             }
         }
         if (balanceFactor < -1) {
             if (getBalanceFactor(root.right) <= 0) {
-                return leftRotate(root);
+                return leftRotate(root); //Right-Right Case
             } else {
                 root.right = rightRotate(root.right);
-                return leftRotate(root);
+                return leftRotate(root); //Right-Left Case
             }
         }
         return root;
