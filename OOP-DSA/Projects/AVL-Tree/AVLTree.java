@@ -9,7 +9,7 @@ class Node {
     int key, height;
     Node left, right;
 
-    public Node() {}
+    public Node(){}
 
     public Node(int d) {
         key = d;
@@ -22,7 +22,7 @@ public class AVLTree {
 
     private Node root;
 
-    public AVLTree() {}
+    public AVLTree(){}
 
     private int height(Node n) {
         if (n == null)
@@ -170,6 +170,14 @@ public class AVLTree {
         }
     }
 
+    public void postOrder(Node node) {
+        if (node != null) {
+            preOrder(node.left);
+            preOrder(node.right);
+            System.out.print(node.key + " ");
+        }
+    }
+
     // Print the tree
     public void printTree(Node currPtr, String indent, boolean last) {
         if (currPtr != null) {
@@ -189,23 +197,20 @@ public class AVLTree {
 
     public static void main(String[] args) {
         AVLTree tree = new AVLTree();
+        System.out.println("Inserting 40:");
+        tree.root = tree.insert(tree.root, 40);
+        tree.printTree(tree.root, "", true);
+        System.out.println("Inserting 60:");
+        tree.root = tree.insert(tree.root, 60);
+        tree.printTree(tree.root, "", true);
+        System.out.println("Inserting 50:");
+        tree.root = tree.insert(tree.root, 50);
+        tree.printTree(tree.root, "", true);
         System.out.println("Inserting 33:");
         tree.root = tree.insert(tree.root, 33);
         tree.printTree(tree.root, "", true);
-        System.out.println("Inserting 13:");
-        tree.root = tree.insert(tree.root, 13);
-        tree.printTree(tree.root, "", true);
-        System.out.println("Inserting 53:");
-        tree.root = tree.insert(tree.root, 53);
-        tree.printTree(tree.root, "", true);
-        System.out.println("Inserting 9:");
-        tree.root = tree.insert(tree.root, 9);
-        tree.printTree(tree.root, "", true);
-        System.out.println("Inserting 21:");
-        tree.root = tree.insert(tree.root, 21);
-        tree.printTree(tree.root, "", true);
-        System.out.println("Inserting 61:");
-        tree.root = tree.insert(tree.root, 61);
+        System.out.println("Inserting 55:");
+        tree.root = tree.insert(tree.root, 55);
         tree.printTree(tree.root, "", true);
         System.out.println("Inserting 8:");
         tree.root = tree.insert(tree.root, 8);
@@ -215,12 +220,12 @@ public class AVLTree {
         tree.printTree(tree.root, "", true);
 
 
-        tree.root = tree.delete(tree.root, 13);
-        System.out.println("Deleting 13:");
+        tree.root = tree.delete(tree.root, 40);
+        System.out.println("Deleting 40:");
         tree.printTree(tree.root, "", true);
 
-        tree.root = tree.delete(tree.root, 11);
-        System.out.println("Deleting 11: ");
+        tree.root = tree.delete(tree.root, 33);
+        System.out.println("Deleting 33: ");
         tree.printTree(tree.root, "", true);
 
         System.out.println();
@@ -232,5 +237,10 @@ public class AVLTree {
 
         System.out.println("Preorder traversal: ");
         tree.preOrder(tree.root);
+
+        System.out.println();
+
+        System.out.println("Postorder traversal: ");
+        tree.postOrder(tree.root);
     }
 }
