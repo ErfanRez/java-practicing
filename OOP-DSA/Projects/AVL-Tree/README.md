@@ -1,6 +1,6 @@
 # Project Overview
 
-**Project Title**: AVL Tree Visualizer
+**Project Title**: AVL Tree
 
 **Author**: Erfan Rezaei  
 **Course**: Data Structures  
