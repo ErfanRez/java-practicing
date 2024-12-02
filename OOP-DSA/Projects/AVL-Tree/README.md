@@ -14,6 +14,6 @@
 
 - Minimum Java version: **Java 11**
 - To run the project, execute the file `AVLTreeVisualizer.java` located in the following directory:
-  AVLTree\src\main\java\ds\avl\avltree
+  AVLTree\src\main\java\ds.avl.avltree
 
 ---
