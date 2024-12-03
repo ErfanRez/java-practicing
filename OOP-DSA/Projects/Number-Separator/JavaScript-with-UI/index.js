@@ -1,4 +1,4 @@
-//! Data Structures, Alireza Nikian, Fall 1403
+//! Data Structures, Alireza Nikian, Fall 2024
 //! The following code is written by Erfan Rezaei
 //! Islamic Azad University of Najafabad
 

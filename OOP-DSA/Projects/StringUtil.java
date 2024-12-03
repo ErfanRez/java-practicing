@@ -1,5 +1,5 @@
 //! This code snippet is written by Erfan Rezaei
-//! Advanced Java Programming, Alireza Nikian, Spring 1403
+//! Advanced Java Programming, Alireza Nikian, Spring 2024
 //! Islamic Azad University of Najafabad
 
 //* There is a static main method to test all constructors and methods so you can compile and run the file directly
