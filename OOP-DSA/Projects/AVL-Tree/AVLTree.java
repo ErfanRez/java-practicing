@@ -32,29 +32,29 @@ public class AVLTree {
 
     private Node rightRotate(Node y) {
         Node x = y.left;
-        Node T2 = x.right;
+        Node T = x.right;
         x.right = y;
-        y.left = T2;
+        y.left = T;
         y.height = 1 + Math.max(height(y.left), height(y.right));
         x.height = 1 + Math.max(height(x.left), height(x.right));
         return x;
     }
 
-    private Node leftRotate(Node x) {
-        Node y = x.right;
-        Node T2 = y.left;
-        y.left = x;
-        x.right = T2;
-        x.height = 1 + Math.max(height(x.left), height(x.right));
+    private Node leftRotate(Node y) {
+        Node x = y.right;
+        Node T = x.left;
+        x.left = y;
+        y.right = T;
         y.height = 1 + Math.max(height(y.left), height(y.right));
-        return y;
+        x.height = 1 + Math.max(height(x.left), height(x.right));
+        return x;
     }
 
     // Get balance factor of a node
     private int getBalanceFactor(Node n) {
         if (n == null)
             return 0;
-        return height(n.right) - height(n.left); // Changed calculation
+        return height(n.right) - height(n.left);
     }
 
     // Insert a node

@@ -47,8 +47,8 @@ public class AVLTreeVisualizer extends Application {
         insert(11);
 
 
-        delete(40);
-        delete(33);
+        // delete(40);
+        // delete(33);
     }
 
     private int height(Node n) {
@@ -68,17 +68,15 @@ public class AVLTreeVisualizer extends Application {
         return x;
     }
 
-    private Node leftRotate(Node x) {
-        Node y = x.right;
-        Node T2 = y.left;
-
-        y.left = x;
-        x.right = T2;
-
-        x.height = Math.max(height(x.left), height(x.right)) + 1;
-        y.height = Math.max(height(y.left), height(y.right)) + 1;
-
-        return y;
+    private Node leftRotate(Node y) {
+        Node x = y.right;
+        Node T = x.left;
+        x.left = y;
+        y.right = T;
+        y.height = 1 + Math.max(height(y.left), height(y.right));
+        x.height = 1 + Math.max(height(x.left), height(x.right));
+        
+        return x;
     }
 
     private int getBalanceFactor(Node n) {
