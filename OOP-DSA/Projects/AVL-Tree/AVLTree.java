@@ -178,6 +178,14 @@ public class AVLTree {
         }
     }
 
+    public void reverseInOrder(Node node){
+        if (node != null) {
+            inoOrder(node.right);
+            System.out.print(node.key + " ");
+            inoOrder(node.left);
+        }
+    }
+
     // Print the tree
     public void printTree(Node currPtr, String indent, boolean last) {
         if (currPtr != null) {

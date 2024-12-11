@@ -38,13 +38,22 @@ public class AVLTreeVisualizer extends Application {
         primaryStage.show();
 
 
-        insert(40);
-        insert(60);
+        insert(25);
+        insert(20);
+        insert(5);
+        insert(34);
         insert(50);
-        insert(33);
-        insert(55);
-        insert(8);
-        insert(11);
+        insert(30);
+        insert(10);
+
+//        insert(20);
+//        insert(10);
+//        insert(30);
+//        insert(5);
+//        insert(15);
+//        insert(40);
+//        insert(12);
+//        insert(17);
 
 
         // delete(40);
@@ -57,25 +66,27 @@ public class AVLTreeVisualizer extends Application {
 
     private Node rightRotate(Node y) {
         Node x = y.left;
-        Node T2 = x.right;
+        Node T = x.right;
 
         x.right = y;
-        y.left = T2;
+        y.left = T;
 
-        y.height = Math.max(height(y.left), height(y.right)) + 1;
-        x.height = Math.max(height(x.left), height(x.right)) + 1;
-
+        y.height = 1 + Math.max(height(y.left), height(y.right));
+        x.height = 1 + Math.max(height(x.left), height(x.right));
+        
         return x;
     }
 
     private Node leftRotate(Node y) {
         Node x = y.right;
         Node T = x.left;
+
         x.left = y;
         y.right = T;
+
         y.height = 1 + Math.max(height(y.left), height(y.right));
         x.height = 1 + Math.max(height(x.left), height(x.right));
-        
+
         return x;
     }
 
