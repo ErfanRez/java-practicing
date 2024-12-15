@@ -103,55 +103,55 @@ public class AVLTree {
     }
 
     // Delete a node
-    public Node delete(Node root, int item) {
-        if (root == null)
-            return root;
-        if (item < root.key)
-            root.left = delete(root.left, item);
-        else if (item > root.key)
-            root.right = delete(root.right, item);
+    public Node delete(Node node, int item) {
+        if (node == null)
+            return node;
+        if (item < node.key)
+            node.left = delete(node.left, item);
+        else if (item > node.key)
+            node.right = delete(node.right, item);
         else {
-            if ((root.left == null) || (root.right == null)) {
-                Node temp = root.left != null ? root.left : root.right;
+            if ((node.left == null) || (node.right == null)) {
+                Node temp = node.left != null ? node.left : node.right;
 
                 if (temp == null) {
-                    temp = root;
-                    root = null;
+                    temp = node;
+                    node = null;
                 } else
-                    root = temp;
+                    node = temp;
             } else {
-                Node temp = minValueNode(root.right);
-                root.key = temp.key;
-                root.right = delete(root.right, temp.key);
+                Node temp = minValueNode(node.right);
+                node.key = temp.key;
+                node.right = delete(node.right, temp.key);
             }
         }
 
-        if (root == null)
-            return root;
+        if (node == null)
+            return node;
 
-        root.height = 1 + Math.max(height(root.left), height(root.right));
+        node.height = 1 + Math.max(height(node.left), height(node.right));
 
-        int balanceFactor = getBalanceFactor(root);
+        int balanceFactor = getBalanceFactor(node);
 
 
         if (balanceFactor < -1) { // Left-heavy subtree
-            if (getBalanceFactor(root.left) <= 0) {
-                return rightRotate(root); // Left-Left Case
+            if (getBalanceFactor(node.left) <= 0) {
+                return rightRotate(node); // Left-Left Case
             } else {
-                root.left = leftRotate(root.left);
-                return rightRotate(root); // Left-Right Case
+                node.left = leftRotate(node.left);
+                return rightRotate(node); // Left-Right Case
             }
         }
         if (balanceFactor > 1) { // Right-heavy subtree
-            if (getBalanceFactor(root.right) >= 0) {
-                return leftRotate(root); // Right-Right Case
+            if (getBalanceFactor(node.right) >= 0) {
+                return leftRotate(node); // Right-Right Case
             } else {
-                root.right = rightRotate(root.right);
-                return leftRotate(root); // Right-Left Case
+                node.right = rightRotate(node.right);
+                return leftRotate(node); // Right-Left Case
             }
         }
 
-        return root;
+        return node;
     }
 
     public void inoOrder(Node node) {
@@ -159,6 +159,14 @@ public class AVLTree {
             inoOrder(node.left);
             System.out.print(node.key + " ");
             inoOrder(node.right);
+        }
+    }
+
+    public void reverseInOrder(Node node){
+        if (node != null) {
+            inoOrder(node.right);
+            System.out.print(node.key + " ");
+            inoOrder(node.left);
         }
     }
 

@@ -38,26 +38,25 @@ public class AVLTreeVisualizer extends Application {
         primaryStage.show();
 
 
-        insert(25);
-        insert(20);
-        insert(5);
-        insert(34);
-        insert(50);
-        insert(30);
-        insert(10);
-
+//        insert(25);
 //        insert(20);
-//        insert(10);
-//        insert(30);
 //        insert(5);
-//        insert(15);
-//        insert(40);
-//        insert(12);
-//        insert(17);
+//        insert(34);
+//        insert(50);
+//        insert(30);
+//        insert(10);
+
+        insert(20);
+        insert(10);
+        insert(30);
+        insert(5);
+        insert(15);
+        insert(40);
+        insert(12);
+        insert(17);
 
 
-        // delete(40);
-        // delete(33);
+         delete(20);
     }
 
     private int height(Node n) {
