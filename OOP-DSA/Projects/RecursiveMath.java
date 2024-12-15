@@ -13,13 +13,9 @@ public class RecursiveMath {
     }
 
     public static int power(int a, int b) {
-        return power(a, b, a);
-    }
+        if(b == 1) return a;
 
-    private static int power(int a, int b, int c) {
-        if (b == 1) return a;
-
-        return power(a * c, b - 1, c);
+        return a * power(a, b - 1);
     }
 
     public static int multiply(int a, int b) {
@@ -84,19 +80,19 @@ public class RecursiveMath {
         System.out.println("3 ^ 3 = " + power(3, 3)); // 27
 
         // Test multiply
-        System.out.println(multiply(9, 4)); // 36
-        System.out.println(multiply(14, 4)); // 56
+        System.out.println("9 * 4 = " + multiply(9, 4)); // 36
+        System.out.println("14 * 4 = " + multiply(14, 4)); // 56
 
         // Test divide
-        System.out.println(divide(10, 3)); // 3
-        System.out.println(divide(14, 4)); // 3
-        System.out.println(divide(27, 5)); // 5
-        System.out.println(divide(0, 5)); // 0
+        System.out.println("10 / 3 = " + divide(10, 3)); // 3
+        System.out.println("14 / 4 = " + divide(14, 4)); // 3
+        System.out.println("27 / 5 = " + divide(27, 5)); // 5
+        System.out.println("0 / 5 = " + divide(0, 5)); // 0
 
         // Test remainder
-        System.out.println(remainder(10, 3)); // 1
-        System.out.println(remainder(14, 4)); // 2
-        System.out.println(remainder(27, 5)); // 2
+        System.out.println("10 % 3 = " + remainder(10, 3)); // 1
+        System.out.println("14 % 4 = " + remainder(14, 4)); // 2
+        System.out.println("27 % 5 = " + remainder(27, 5)); // 2
 
         // Test bigDigit
         System.out.println("Biggest digit in 562 is " + bigDigit(562)); // 6
