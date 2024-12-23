@@ -1,29 +1,103 @@
-### IntelliJ IDEA ###
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+# Compiled class files
+*.class
 
-### Eclipse ###
-.apt_generated
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Maven #
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/assets/**  # Keep JavaFX assets if any
+
+# Eclipse #
+.metadata/
 .classpath
-.factorypath
 .project
-.settings
-.springBeans
-.sts4-cache
+.settings/
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# IDEA #
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
 
-### VS Code ###
+# VS Code #
 .vscode/
 
-### Mac OS ###
+# JavaFX #
+**/jfxrt.jar
+**/javafx-sdk/
+
+# OS Files #
 .DS_Store
+Thumbs.db
+
+# IntelliJ IDEA #
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Gradle #
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Other #
+**/.DS_Store
+**/Thumbs.db
+*.log
+
+# Backup files #
+*.bak
+*.swp
+*.tmp
+
+# Windows Explorer #
+Thumbs.db
+ehthumbs.db
+
+# macOS #
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Common IDE files #
+*.class
+*.log
+*.swp
+*.swo
+*.bak
+*.tmp
+*.out
+*.lock
+*.dmg
+*.pid
+*.seed
+
+# JavaFX CSS #
+*.css.map
+
+# Local environment settings #
+.env
