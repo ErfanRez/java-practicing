@@ -1,6 +1,6 @@
 # Project Overview
 
-**Project Title**: AVL Tree
+**Project Title**: Expression Tree
 
 **Author**: Erfan Rezaei  
 **Course**: Data Structures  
@@ -13,7 +13,7 @@
 ### Prerequisites
 
 - Minimum Java version: **Java 11**
-- To run the project, execute the file `AVLTreeVisualizer.java` or `AVLTreeHardCoded.java` located in the following directory:
-  src\main\java\ds\avl
+- To run the project, execute the file `Main.java` located in the following directory:
+  src\main\java\ds\avl\expressiontree
 
 ---

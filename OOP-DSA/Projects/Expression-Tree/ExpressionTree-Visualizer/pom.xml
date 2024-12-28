@@ -5,9 +5,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ds</groupId>
-  <artifactId>AVL</artifactId>
+  <artifactId>ExpressionTree</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>AVL</name>
+  <name>ExpressionTree</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,7 +58,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>ds.avl/ds.avl.AVLTreeVisualizer</mainClass>
+              <mainClass>ds.expressiontree/ds.expressiontree.Main</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>

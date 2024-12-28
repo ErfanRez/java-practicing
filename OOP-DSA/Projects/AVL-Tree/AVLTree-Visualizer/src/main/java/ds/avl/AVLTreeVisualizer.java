@@ -1,23 +1,16 @@
-package ds.avl.avltree;
+package ds.avl;
+
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-class Node {
-    int key, height;
-    Node left, right;
-
-    public Node(int d) {
-        key = d;
-        height = 1;
-    }
-}
 
 public class AVLTreeVisualizer extends Application {
 
@@ -30,33 +23,64 @@ public class AVLTreeVisualizer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Pane pane = new Pane();
-        pane.getChildren().add(visualizer);
-        Scene scene = new Scene(pane, 800, 600);
+        BorderPane mainPane = new BorderPane();
+        Pane treePane = new Pane();
+        visualizer.prefWidthProperty().bind(treePane.widthProperty());
+        visualizer.prefHeightProperty().bind(treePane.heightProperty());
+
+        // Input controls for adding and deleting nodes
+        TextField insertField = new TextField();
+        insertField.setPromptText("Insert key");
+        Button insertButton = new Button("Insert");
+
+        TextField deleteField = new TextField();
+        deleteField.setPromptText("Delete key");
+        Button deleteButton = new Button("Delete");
+
+        HBox controlPanel = new HBox(10, insertField, insertButton, deleteField, deleteButton);
+        controlPanel.setStyle("-fx-padding: 10; -fx-background-color: #f0f0f0;");
+
+        Line separatorLine = new Line(0, 0, 800, 0);
+        separatorLine.setStroke(Color.GRAY);
+        separatorLine.setStrokeWidth(1);
+        separatorLine.setTranslateY(5);
+
+        Pane separatorPane = new Pane(separatorLine);
+
+        BorderPane topPane = new BorderPane();
+        topPane.setTop(controlPanel);
+        topPane.setCenter(separatorPane);
+
+        mainPane.setTop(topPane);
+        mainPane.setCenter(treePane);
+
+        treePane.getChildren().add(visualizer);
+
+        Scene scene = new Scene(mainPane, 800, 600);
         primaryStage.setTitle("AVL Tree Visualizer");
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        // Button actions
+        insertButton.setOnAction(e -> {
+            try {
+                int key = Integer.parseInt(insertField.getText().trim());
+                insert(key);
+                insertField.clear();
+            } catch (NumberFormatException ex) {
+                insertField.clear();
+            }
+        });
 
-//        insert(25);
-//        insert(20);
-//        insert(5);
-//        insert(34);
-//        insert(50);
-//        insert(30);
-//        insert(10);
-
-        insert(20);
-        insert(10);
-        insert(30);
-        insert(5);
-        insert(15);
-        insert(40);
-        insert(12);
-        insert(17);
-
-
-         delete(20);
+        deleteButton.setOnAction(e -> {
+            try {
+                int key = Integer.parseInt(deleteField.getText().trim());
+                delete(key);
+                deleteField.clear();
+            } catch (NumberFormatException ex) {
+                deleteField.clear();
+            }
+        });
     }
 
     private int height(Node n) {
@@ -72,7 +96,7 @@ public class AVLTreeVisualizer extends Application {
 
         y.height = 1 + Math.max(height(y.left), height(y.right));
         x.height = 1 + Math.max(height(x.left), height(x.right));
-        
+
         return x;
     }
 
@@ -201,44 +225,3 @@ public class AVLTreeVisualizer extends Application {
     }
 }
 
-class TreeVisualizer extends Pane {
-
-    public void clear() {
-        this.getChildren().clear();
-    }
-
-    public void drawTree(Node root, double x, double y, double hGap) {
-        if (root != null) {
-            drawNode(x, y, root.key);
-            if (root.left != null) {
-                drawEdge(x, y, x - hGap, y + 50);
-                drawTree(root.left, x - hGap, y + 50, hGap / 2);
-            }
-            if (root.right != null) {
-                drawEdge(x, y, x + hGap, y + 50);
-                drawTree(root.right, x + hGap, y + 50, hGap / 2);
-            }
-        }
-    }
-
-    private void drawNode(double x, double y, int value) {
-        Circle circle = new Circle(x, y, 20);
-        circle.setFill(Color.LIGHTBLUE);
-        circle.setStroke(Color.BLACK);
-
-        Text text = new Text(x - 6, y + 5, String.valueOf(value));
-
-        this.getChildren().addAll(circle, text);
-    }
-
-    private void drawEdge(double x1, double y1, double x2, double y2) {
-        double dx = x2 - x1;
-        double dy = y2 - y1;
-        double distance = Math.sqrt(dx * dx + dy * dy);
-        double offsetX = dx * 20 / distance;
-        double offsetY = dy * 20 / distance;
-
-        Line line = new Line(x1 + offsetX, y1 + offsetY, x2 - offsetX, y2 - offsetY);
-        this.getChildren().add(line);
-    }
-}
