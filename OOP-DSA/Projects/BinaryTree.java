@@ -20,39 +20,39 @@ class TreeNode {
 public class BinaryTree {
     private TreeNode root;
 
-    public BinaryTree() {
-        root = new TreeNode(14);
-        root.left = new TreeNode(2);
-        root.right = new TreeNode(11);
-        root.left.left = new TreeNode(1);
-        root.left.right = new TreeNode(3);
-        root.right.left = new TreeNode(10);
-        root.right.right = new TreeNode(30);
-        root.right.left.left = new TreeNode(7);
-        root.right.right.left = new TreeNode(40);
-    }
+     public BinaryTree(){
+     root = new TreeNode(14);
+     root.left = new TreeNode(2);
+     root.right = new TreeNode(11);
+     root.left.left = new TreeNode(1);
+     root.left.right = new TreeNode(3);
+     root.right.left = new TreeNode(10);
+     root.right.right = new TreeNode(30);
+     root.right.left.left = new TreeNode(7);
+     root.right.right.left = new TreeNode(40);
+     }
 
     // Pathological (For testing isPathological method, should return true)
-    //    public BinaryTree(){
-    //        root = new TreeNode(14);
-    //        root.right = new TreeNode(11);
-    //        root.right.left = new TreeNode(10);
-    //        root.right.left.right = new TreeNode(7);
-    //
-    //    }
+//    public BinaryTree(){
+//        root = new TreeNode(14);
+//        root.right = new TreeNode(11);
+//        root.right.left = new TreeNode(10);
+//        root.right.left.right = new TreeNode(7);
+//
+//    }
 
     public boolean isEmpty() {
         return root == null;
     }
 
-    public void incrementAllLeaves() {
-        incrementAllLeaves(root);
+    public void incrementAllLeaves(){
+         incrementAllLeaves(root);
     }
 
-    private void incrementAllLeaves(TreeNode p) {
-        if (p == null) return;
+    private static void incrementAllLeaves(TreeNode p){
+         if(p == null) return;
 
-        if (p.left == null && p.right == null) {
+        if(p.left == null && p.right == null){
             p.data = p.data + 1;
         }
 
@@ -60,16 +60,18 @@ public class BinaryTree {
         incrementAllLeaves(p.right);
     }
 
-    public int numberOfEvenNodes() {
-        return numberOfEvenNodes(root);
+    public int numberOfEvenNodes(){
+
+         return numberOfEvenNodes(root);
     }
-    private int numberOfEvenNodes(TreeNode p) {
+
+    private static int numberOfEvenNodes(TreeNode p){
         if (p == null)
             return 0;
 
         int count = 0;
 
-        if (p.data % 2 == 0) count++;
+        if(p.data % 2 == 0) count++;
 
         count += numberOfEvenNodes(p.left);
         count += numberOfEvenNodes(p.right);
@@ -77,21 +79,53 @@ public class BinaryTree {
         return count;
     }
 
-    public boolean isPathological() {
-        return isPathological(root);
+    public int numberOfTargetNodes(int target){
+
+         return numberOfTargetNodes(root, target);
     }
 
-    private boolean isPathological(TreeNode p) {
-        if (p == null) return true;
+    private static int numberOfTargetNodes(TreeNode p, int target){
+        if (p == null)
+            return 0;
 
-        if (p.left != null && p.right != null) return false;
+        int count = 0;
 
+        if(p.data == target && (p.left != null && p.right != null)) count++;
 
-        return p.left != null ? isPathological(p.left) : isPathological(p.right);
+        count += numberOfTargetNodes(p.left, target);
+        count += numberOfTargetNodes(p.right, target);
+
+        return count;
     }
 
-    public void mirror() {
-        root = mirror(root);
+    public static TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if (t1 == null) return t2;
+        if (t2 == null) return t1;
+
+        t1.data += t2.data;
+
+        t1.left = mergeTrees(t1.left, t2.left);
+        t1.right = mergeTrees(t1.right, t2.right);
+
+        return t1;
+    }
+
+    public boolean isPathological(){
+
+         return isPathological(root);
+    }
+
+    private static boolean isPathological(TreeNode p){
+         if(p == null) return true;
+
+         if(p.left != null && p.right != null) return false;
+
+
+         return p.left != null ? isPathological(p.left) : isPathological(p.right);
+    }
+
+    public void mirror(){
+         root = mirror(root);
     }
 
     private TreeNode mirror(TreeNode p) {
@@ -105,16 +139,16 @@ public class BinaryTree {
         return temp;
     }
 
-    public boolean contains(int item) {
-        return contains(item, root);
+    public boolean contains(int item){
+         return contains(item, root);
     }
 
-    private boolean contains(int item, TreeNode p) {
-        if (p == null) return false;
+    private boolean contains(int item, TreeNode p){
+         if(p == null) return false;
 
-        if (p.data == item) return true;
+         if(p.data == item) return true;
 
-        return contains(item, p.left) || contains(item, p.right);
+         return contains(item, p.left) || contains(item, p.right);
     }
 
     public void printTree() {
@@ -167,5 +201,41 @@ public class BinaryTree {
         System.out.println("Tree after mirroring: ");
         t.mirror();
         t.printTree();
+
+        System.out.print("\n\n");
+
+        //Tests for merge and target nodes with degree of 2
+
+        BinaryTree tree1 = new BinaryTree();
+        BinaryTree tree2 = new BinaryTree();
+
+
+        tree1.root = new TreeNode(1);
+        tree1.root.left = new TreeNode(3);
+        tree1.root.right = new TreeNode(2);
+        tree1.root.left.left = new TreeNode(5);
+
+
+        tree2.root = new TreeNode(2);
+        tree2.root.left = new TreeNode(1);
+        tree2.root.right = new TreeNode(3);
+        tree2.root.left.right = new TreeNode(4);
+        tree2.root.right.right = new TreeNode(7);
+
+        System.out.println("Tree 1:");
+        tree1.printTree();
+        System.out.println("\nTree 2:");
+        tree2.printTree();
+
+
+        TreeNode mergedTreeRoot = BinaryTree.mergeTrees(tree1.root, tree2.root);
+        System.out.println("\nMerged Tree:");
+        tree1.root = mergedTreeRoot;
+        tree1.printTree();
+
+
+        int target = 4;
+        int count = tree1.numberOfTargetNodes(target);
+        System.out.println("\nNumber of nodes with value " + target + " having two children: " + count);
     }
 }
