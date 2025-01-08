@@ -18,14 +18,10 @@ public class RecursiveMath {
         return a * power(a, b - 1);
     }
 
-    public static int multiply(int a, int b) {
-        return multiply(a, b, a);
-    }
-
-    private static int multiply(int a, int b, int c) {
+    private static int multiply(int a, int b) {
         if (b == 1) return a;
 
-        return multiply(a + c, b - 1, c);
+        return a + multiply(a, b - 1);
     }
 
     public static int divide(int a, int b) {
