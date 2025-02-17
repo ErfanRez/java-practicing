@@ -1,12 +1,14 @@
-package ds.avl;
+package avl;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import javafx.geometry.VPos;
+import javafx.scene.text.TextBoundsType;
 
-class TreeVisualizer extends Pane {
+public class TreePane extends Pane {
 
     public void clear() {
         this.getChildren().clear();
@@ -27,11 +29,23 @@ class TreeVisualizer extends Pane {
     }
 
     private void drawNode(double x, double y, int value) {
+        // Create the circle at (x, y)
         Circle circle = new Circle(x, y, 20);
         circle.setFill(Color.LIGHTBLUE);
         circle.setStroke(Color.BLACK);
 
-        Text text = new Text(x - 6, y + 5, String.valueOf(value));
+        // Create the text for the node's value
+        Text text = new Text(String.valueOf(value));
+        // Set the origin so vertical centering is based on the visual center
+        text.setTextOrigin(VPos.CENTER);
+        // Optionally, use VISUAL bounds (helps if your font has extra whitespace)
+        text.setBoundsType(TextBoundsType.VISUAL);
+        // Force CSS to be applied so layout bounds are updated
+        text.applyCss();
+        double textWidth = text.getLayoutBounds().getWidth();
+        // Center the text horizontally and vertically:
+        text.setX(x - textWidth / 2);
+        text.setY(y);
 
         this.getChildren().addAll(circle, text);
     }

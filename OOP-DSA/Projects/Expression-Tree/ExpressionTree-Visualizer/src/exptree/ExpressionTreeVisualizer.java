@@ -1,4 +1,4 @@
-package ds.expressiontree;
+package exptree;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -8,7 +8,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -17,17 +17,21 @@ import java.util.Stack;
 public class ExpressionTreeVisualizer extends Application {
 
     private Node root;
-    private TreeVisualizer visualizer = new TreeVisualizer();
+    private TreePane visualizer = new TreePane();
     private TextField expressionField = new TextField();
     private Button drawButton = new Button("Draw Tree");
+
+    // Use a StackPane to center the TreeVisualizer
+    private StackPane centerPane = new StackPane();
 
     @Override
     public void start(Stage primaryStage) {
         BorderPane rootLayout = new BorderPane();
 
-        Pane pane = new Pane();
-        pane.getChildren().add(visualizer);
-        rootLayout.setCenter(pane);
+
+        centerPane.getChildren().add(visualizer);
+        rootLayout.setCenter(centerPane);
+
 
         expressionField.setPromptText("Enter infix expression");
         expressionField.setMinWidth(300);
@@ -40,21 +44,23 @@ public class ExpressionTreeVisualizer extends Application {
         topLayout.getChildren().addAll(expressionField, drawButton);
 
         Separator separator = new Separator();
-
         VBox topSection = new VBox(10);
         topSection.setAlignment(Pos.CENTER);
         topSection.getChildren().addAll(topLayout, separator);
-
         rootLayout.setTop(topSection);
 
         Scene scene = new Scene(rootLayout, 800, 600);
         primaryStage.setTitle("Expression Tree Visualizer");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
 
-    public static void main(String[] args) {
-        launch(args);
+
+        centerPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            if (root != null) {
+                int maxDepth = getMaxDepth(root);
+                drawTreeCentered(maxDepth);
+            }
+        });
     }
 
     private void drawTreeFromInput() {
@@ -62,20 +68,27 @@ public class ExpressionTreeVisualizer extends Application {
         if (!expression.isEmpty()) {
             root = constructTree(expression);
             int maxDepth = getMaxDepth(root);
-            visualizeTree(maxDepth);
+            drawTreeCentered(maxDepth);
         }
     }
 
-    private void visualizeTree(int maxDepth) {
+    private void drawTreeCentered(int maxDepth) {
         visualizer.clear();
-        visualizer.drawTree(root, 400, 50, 150, 0, maxDepth);
+
+        double centerX = centerPane.getWidth() / 2;
+
+        double centerY = 80;
+        visualizer.drawTree(root, centerX, centerY, 150, 0, maxDepth);
     }
+
 
     private static int precedence(char op) {
         switch (op) {
-            case '+': case '-':
+            case '+':
+            case '-':
                 return 1;
-            case '*': case '/':
+            case '*':
+            case '/':
                 return 2;
             case '^':
                 return 3;
@@ -90,44 +103,40 @@ public class ExpressionTreeVisualizer extends Application {
 
     private static String infixToPostfix(String expression) {
         expression = expression.replace(" ", "");
-        String postfix = "";
+        StringBuilder postfix = new StringBuilder();
         Stack<Character> operators = new Stack<>();
-        String number = "";
+        StringBuilder number = new StringBuilder();
 
         for (char c : expression.toCharArray()) {
             if (!isOperator(c) && c != '(' && c != ')') {
-                number += c;
+                number.append(c);
             } else {
-                if (!number.isEmpty()) {
-                    postfix += number + " ";
-                    number = "";
+                if (number.length() > 0) {
+                    postfix.append(number).append(" ");
+                    number.setLength(0);
                 }
-
                 if (c == '(') {
                     operators.push(c);
                 } else if (c == ')') {
                     while (!operators.isEmpty() && operators.peek() != '(') {
-                        postfix += operators.pop() + " ";
+                        postfix.append(operators.pop()).append(" ");
                     }
                     operators.pop();
-                } else if (isOperator(c)) {
+                } else {
                     while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(c)) {
-                        postfix += operators.pop() + " ";
+                        postfix.append(operators.pop()).append(" ");
                     }
                     operators.push(c);
                 }
             }
         }
-
-        if (!number.isEmpty()) {
-            postfix += number + " ";
+        if (number.length() > 0) {
+            postfix.append(number).append(" ");
         }
-
         while (!operators.isEmpty()) {
-            postfix += operators.pop() + " ";
+            postfix.append(operators.pop()).append(" ");
         }
-
-        return postfix.trim();
+        return postfix.toString().trim();
     }
 
     public Node constructTree(String expression) {
@@ -144,7 +153,6 @@ public class ExpressionTreeVisualizer extends Application {
                 stack.push(new Node(token));
             }
         }
-
         return stack.pop();
     }
 
@@ -156,5 +164,9 @@ public class ExpressionTreeVisualizer extends Application {
             int rightDepth = getMaxDepth(node.right);
             return Math.max(leftDepth, rightDepth) + 1;
         }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

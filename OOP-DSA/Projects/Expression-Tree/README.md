@@ -12,8 +12,7 @@
 
 ### Prerequisites
 
-- Minimum Java version: **Java 11**
-- To run the project, execute the file `Main.java` located in the following directory:
-  src\main\java\ds\avl\expressiontree
+- Java version: **Java 8**
+- To run the project, execute the file `Main.java` located in the src directory.
 
 ---

@@ -1,12 +1,13 @@
-package ds.expressiontree;
+package exptree;
 
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
-public class TreeVisualizer extends Pane {
+public class TreePane extends Pane {
 
     private static final double MIN_GAP = 50;
 
@@ -34,14 +35,20 @@ public class TreeVisualizer extends Pane {
     }
 
     private void drawNode(double x, double y, String value) {
-        Circle circle = new Circle(x, y, 20);
+        Circle circle = new Circle(20); // radius only; StackPane will handle positioning
         circle.setFill(Color.LIGHTBLUE);
         circle.setStroke(Color.BLACK);
 
-        Text text = new Text(x - 6, y + 5, value);
+        Text text = new Text(value);
 
-        this.getChildren().addAll(circle, text);
+        StackPane stack = new StackPane();
+        stack.setLayoutX(x - 20); // offset by the circle's radius
+        stack.setLayoutY(y - 20);
+        stack.getChildren().addAll(circle, text);
+
+        this.getChildren().add(stack);
     }
+
 
     private void drawEdge(double x1, double y1, double x2, double y2) {
         double dx = x2 - x1;

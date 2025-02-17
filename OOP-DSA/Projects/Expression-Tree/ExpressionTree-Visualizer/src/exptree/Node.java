@@ -1,4 +1,4 @@
-package ds.expressiontree;
+package exptree;
 
 public class Node {
     String data;

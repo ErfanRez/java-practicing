@@ -1,16 +1,22 @@
-package ds.avl;
-
+package avl;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-
-public class AVLTreeHardCoded extends Application {
+public class AVLTreeVisualizer extends Application {
 
     private Node root;
-    private TreeVisualizer visualizer = new TreeVisualizer();
+    private TreePane visualizer = new TreePane();
+    private StackPane centerPane = new StackPane();
 
     public static void main(String[] args) {
         launch(args);
@@ -18,34 +24,64 @@ public class AVLTreeHardCoded extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Pane pane = new Pane();
-        pane.getChildren().add(visualizer);
-        Scene scene = new Scene(pane, 800, 600);
+        BorderPane mainPane = new BorderPane();
+
+        centerPane.getChildren().add(visualizer);
+        visualizer.prefWidthProperty().bind(centerPane.widthProperty());
+        visualizer.prefHeightProperty().bind(centerPane.heightProperty());
+        mainPane.setCenter(centerPane);
+
+        TextField insertField = new TextField();
+        insertField.setPromptText("Insert key");
+        Button insertButton = new Button("Insert");
+
+        TextField deleteField = new TextField();
+        deleteField.setPromptText("Delete key");
+        Button deleteButton = new Button("Delete");
+
+        HBox controlPanel = new HBox(10, insertField, insertButton, deleteField, deleteButton);
+        controlPanel.setStyle("-fx-padding: 10; -fx-background-color: #f0f0f0;");
+        controlPanel.setAlignment(Pos.CENTER);
+
+        Separator separator = new Separator();
+
+        VBox topSection = new VBox(10, controlPanel, separator);
+        topSection.setAlignment(Pos.CENTER);
+
+        mainPane.setTop(topSection);
+
+        Scene scene = new Scene(mainPane, 800, 600);
         primaryStage.setTitle("AVL Tree Visualizer");
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        centerPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            if (root != null) {
+                visualizeTree();
+            }
+        });
 
-//        insert(25);
-//        insert(20);
-//        insert(5);
-//        insert(34);
-//        insert(50);
-//        insert(30);
-//        insert(10);
+        insertButton.setOnAction(e -> {
+            try {
+                int key = Integer.parseInt(insertField.getText().trim());
+                insert(key);
+                insertField.clear();
+            } catch (NumberFormatException ex) {
+                insertField.clear();
+            }
+        });
 
-        insert(20);
-        insert(10);
-        insert(30);
-        insert(5);
-        insert(15);
-        insert(40);
-        insert(12);
-        insert(17);
-
-
-//        delete(20);
+        deleteButton.setOnAction(e -> {
+            try {
+                int key = Integer.parseInt(deleteField.getText().trim());
+                delete(key);
+                deleteField.clear();
+            } catch (NumberFormatException ex) {
+                deleteField.clear();
+            }
+        });
     }
+
 
     private int height(Node n) {
         return n == null ? 0 : n.height;
@@ -93,7 +129,6 @@ public class AVLTreeHardCoded extends Application {
             return node;
 
         node.height = Math.max(height(node.left), height(node.right)) + 1;
-
         int balanceFactor = getBalanceFactor(node);
 
         if (balanceFactor < -1 && key < node.left.key)
@@ -156,7 +191,6 @@ public class AVLTreeHardCoded extends Application {
             return node;
 
         node.height = Math.max(height(node.left), height(node.right)) + 1;
-
         int balanceFactor = getBalanceFactor(node);
 
         if (balanceFactor < -1 && getBalanceFactor(node.left) <= 0)
@@ -185,6 +219,9 @@ public class AVLTreeHardCoded extends Application {
 
     private void visualizeTree() {
         visualizer.clear();
-        visualizer.drawTree(root, 400, 50, 150);
+        double centerX = centerPane.getWidth() / 2;
+        double centerY = 80;
+        visualizer.drawTree(root, centerX, centerY, 150);
     }
 }
+

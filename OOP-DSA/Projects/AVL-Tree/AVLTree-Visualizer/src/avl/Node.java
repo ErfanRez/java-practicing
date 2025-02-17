@@ -1,6 +1,6 @@
-package ds.avl;
+package avl;
 
-class Node {
+public class Node {
     int key, height;
     Node left, right;
 

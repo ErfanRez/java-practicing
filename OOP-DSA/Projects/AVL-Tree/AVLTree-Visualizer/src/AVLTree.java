@@ -4,7 +4,7 @@
 
 import java.util.*;
 
-// Node class
+
 class Node {
     int key, height;
     Node left, right;
@@ -17,7 +17,7 @@ class Node {
     }
 }
 
-// Tree class
+// Console App
 public class AVLTree {
 
     private Node root;
@@ -185,7 +185,7 @@ public class AVLTree {
             System.out.print(node.key + " ");
         }
     }
-    
+
     // Print the tree
     public void printTree() {
         printTree(root, "", true);
