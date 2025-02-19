@@ -29,21 +29,21 @@ public class TreePane extends Pane {
     }
 
     private void drawNode(double x, double y, int value) {
-        // Create the circle at (x, y)
+
         Circle circle = new Circle(x, y, 20);
         circle.setFill(Color.LIGHTBLUE);
         circle.setStroke(Color.BLACK);
 
-        // Create the text for the node's value
+
         Text text = new Text(String.valueOf(value));
-        // Set the origin so vertical centering is based on the visual center
+
         text.setTextOrigin(VPos.CENTER);
-        // Optionally, use VISUAL bounds (helps if your font has extra whitespace)
+
         text.setBoundsType(TextBoundsType.VISUAL);
-        // Force CSS to be applied so layout bounds are updated
+
         text.applyCss();
         double textWidth = text.getLayoutBounds().getWidth();
-        // Center the text horizontally and vertically:
+
         text.setX(x - textWidth / 2);
         text.setY(y);
 

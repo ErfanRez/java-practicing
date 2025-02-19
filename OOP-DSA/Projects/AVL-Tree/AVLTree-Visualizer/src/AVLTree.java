@@ -57,8 +57,12 @@ public class AVLTree {
         return height(n.right) - height(n.left);
     }
 
+    public void insert(int item){
+        root = this.insert(root, item);
+    }
+
     // Insert a node
-    public Node insert(Node node, int item) {
+    private Node insert(Node node, int item) {
         if (node == null)
             return (new Node(item));
         if (item < node.key)
@@ -102,8 +106,12 @@ public class AVLTree {
         return current;
     }
 
+    public void delete(int item){
+        root = this.delete(root, item);
+    }
+
     // Delete a node
-    public Node delete(Node node, int item) {
+    private Node delete(Node node, int item) {
         if (node == null)
             return node;
         if (item < node.key)
@@ -154,20 +162,32 @@ public class AVLTree {
         return node;
     }
 
-    public void inoOrder(Node node) {
+    private void inOrder(){
+        this.inOrder(root);
+    }
+
+    private void inOrder(Node node) {
         if (node != null) {
-            inoOrder(node.left);
+            inOrder(node.left);
             System.out.print(node.key + " ");
-            inoOrder(node.right);
+            inOrder(node.right);
         }
     }
 
-    public void reverseInOrder(Node node){
+    private void reverseInOrder(){
+        this.reverseInOrder(root);
+    }
+
+    private void reverseInOrder(Node node){
         if (node != null) {
-            inoOrder(node.right);
+            reverseInOrder(node.right);
             System.out.print(node.key + " ");
-            inoOrder(node.left);
+            reverseInOrder(node.left);
         }
+    }
+
+    private void preOrder(){
+        this.preOrder(root);
     }
 
     public void preOrder(Node node) {
@@ -176,6 +196,10 @@ public class AVLTree {
             preOrder(node.left);
             preOrder(node.right);
         }
+    }
+
+    private void postOrder(){
+        this.postOrder(root);
     }
 
     public void postOrder(Node node) {
@@ -210,58 +234,58 @@ public class AVLTree {
     public static void main(String[] args) {
         AVLTree tree = new AVLTree();
         System.out.println("Inserting 40:");
-        tree.root = tree.insert(tree.root, 40);
+        tree.insert(40);
         tree.printTree();
         System.out.print("\n\n");
 
         System.out.println("Inserting 60:");
-        tree.root = tree.insert(tree.root, 60);
+        tree.insert(60);
         tree.printTree();
         System.out.print("\n\n");
 
         System.out.println("Inserting 50:");
-        tree.root = tree.insert(tree.root, 50);
+         tree.insert(50);
         tree.printTree();
         System.out.print("\n\n");
 
         System.out.println("Inserting 33:");
-        tree.root = tree.insert(tree.root, 33);
+        tree.insert(33);
         tree.printTree();
         System.out.print("\n\n");
 
         System.out.println("Inserting 55:");
-        tree.root = tree.insert(tree.root, 55);
+        tree.insert(55);
         tree.printTree();
         System.out.print("\n\n");
 
         System.out.println("Inserting 8:");
-        tree.root = tree.insert(tree.root, 8);
+        tree.insert(8);
         tree.printTree();
         System.out.print("\n\n");
 
         System.out.println("Inserting 11:");
-        tree.root = tree.insert(tree.root, 11);
+        tree.insert(11);
         tree.printTree();
         System.out.print("\n\n");
 
         System.out.println("Deleting 40:");
-        tree.root = tree.delete(tree.root, 40);
+        tree.delete(40);
         tree.printTree();
         System.out.print("\n\n");
 
         System.out.println("Deleting 33: ");
-        tree.root = tree.delete(tree.root, 33);
+        tree.delete(33);
         tree.printTree();
 
         System.out.print("\n\n");
 
         System.out.println("Inorder traversal: ");
-        tree.inoOrder(tree.root);
+        tree.inOrder();
 
         System.out.print("\n\n");
 
         System.out.println("Reverse inorder traversal: ");
-        tree.reverseInOrder(tree.root);
+        tree.reverseInOrder();
 
         // System.out.println("Preorder traversal: ");
         // tree.preOrder(tree.root);
