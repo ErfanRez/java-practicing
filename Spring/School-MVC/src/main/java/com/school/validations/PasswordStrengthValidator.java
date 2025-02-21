@@ -1,9 +1,9 @@
 package com.school.validations;
 
 import com.school.annotation.PasswordValidator;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
 import java.util.Arrays;
 import java.util.List;
 

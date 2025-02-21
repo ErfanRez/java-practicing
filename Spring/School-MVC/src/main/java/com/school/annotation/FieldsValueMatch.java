@@ -1,9 +1,9 @@
 package com.school.annotation;
 
 import com.school.validations.FieldsValueMatchValidator;
-
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
