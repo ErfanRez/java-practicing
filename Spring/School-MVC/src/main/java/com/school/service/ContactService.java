@@ -33,8 +33,6 @@ public class ContactService {
     public boolean saveMessageDetails(Contact contact){
         boolean isSaved = false;
         contact.setStatus(AppConstants.OPEN);
-        contact.setCreatedBy(AppConstants.ANONYMOUS);
-        contact.setCreatedAt(LocalDateTime.now());
         Contact savedContact = contactRepository.save(contact);
         if(null != savedContact && savedContact.getContactId()>0) {
             isSaved = true;
@@ -47,13 +45,11 @@ public class ContactService {
         return contactMsgs;
     }
 
-    public boolean updateMsgStatus(int contactId, String updatedBy){
+    public boolean updateMsgStatus(int contactId){
         boolean isUpdated = false;
         Optional<Contact> contact = contactRepository.findById(contactId);
         contact.ifPresent(contact1 -> {
             contact1.setStatus(AppConstants.CLOSE);
-            contact1.setUpdatedBy(updatedBy);
-            contact1.setUpdatedAt(LocalDateTime.now());
         });
         Contact updatedContact = contactRepository.save(contact.get());
         if(null != updatedContact && updatedContact.getUpdatedBy()!=null) {
