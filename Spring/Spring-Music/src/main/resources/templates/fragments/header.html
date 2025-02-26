@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="header" class="border-bottom border-secondary border-opacity-25 p-2">
+    <nav class="navbar">
+        <div class="container-fluid mb-1 mt-1">
+            <form class="d-flex" role="search">
+                <div class="input-group" style="width: 25rem">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon1"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <input type="search" class="form-control" placeholder="What do you want to play?" aria-label="Search">
+                </div>
+            </form>
+            <button class="btn btn-light rounded-4">Login</button>
+        </div>
+    </nav>
+</header>
+</body>
+</html>
