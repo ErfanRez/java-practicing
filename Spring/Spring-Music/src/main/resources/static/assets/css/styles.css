@@ -1,7 +1,15 @@
+:root {
+    --transition: all 0.3s ease;
+}
+
 html, body {
     height: 100%;
     margin: 0;
     scroll-behavior: smooth;
+}
+
+.text-custom {
+    color: #6DB33F !important; /* Replace with your preferred color */
 }
 
 body {
@@ -40,3 +48,83 @@ main {
     height: 60px; /* Adjust based on your footer's height */
     z-index: 101; /* Above the sidebar */
 }
+
+.accordion-button::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+    margin-left: 25px !important;
+    opacity: 80%;
+    width: 1.1rem !important;
+    height: 1.1rem !important;
+}
+
+.hover-style:hover{
+    background-color: var(--bs-dark);
+}
+
+.like-hover:hover i{
+    color: red !important;
+}
+
+.card{
+   padding: 10px;
+    transition: var(--transition);
+}
+
+.card:hover{
+    background-color: var(--bs-gray-800);
+}
+
+.card-body {
+    padding: 0 1px 0 10px !important;
+}
+
+.play-card {
+    position: relative;
+}
+
+.play-icon {
+    position: absolute;
+    display: flex;
+    bottom: 15px; /* Start from bottom */
+    right: 8px;
+    width: 45px;
+    height: 45px;
+    background-color: #6DB33F;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0; /* Initially hidden */
+    transform: translateY(15px); /* Positioned below */
+    transition: var(--transition);
+}
+
+
+.play-icon:hover {
+    scale: 110%;
+}
+
+.play-card:hover .play-icon {
+    opacity: 1; /* Become visible */
+    transform: translateY(0); /* Move to original position */
+}
+
+.play-icon i {
+    color: #1A1D20;
+}
+
+/* Adjust the number of cards per slide based on screen size */
+@media (min-width: 768px) {
+    .carousel-inner .carousel-item {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .carousel-inner .carousel-item > div {
+        flex: 0 0 25%; /* Show 4 cards per slide */
+        max-width: 25%;
+    }
+}
+
+
+
+
