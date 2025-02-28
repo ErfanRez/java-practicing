@@ -1,21 +1,24 @@
 :root {
     --transition: all 0.3s ease;
+    --spring-color: #6DB33F;
 }
 
 html, body {
     height: 100%;
     margin: 0;
+    box-sizing: border-box;
     scroll-behavior: smooth;
 }
 
-.text-custom {
-    color: #6DB33F !important; /* Replace with your preferred color */
-}
-
 body {
-    padding-bottom: 60px; /* Adjust based on your footer's height */
     display: flex;
 }
+
+.text-custom {
+    color: var(--spring-color) !important;
+}
+
+
 .header {
     margin-left: 250px; /* Width of the sidebar */
     padding: 1rem;
@@ -23,7 +26,6 @@ body {
 
 main {
     flex: 1;
-    padding: 1rem;
     overflow: auto;
 }
 
@@ -32,8 +34,8 @@ main {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 70px; /* Based on your footer's height */
-    z-index: 101; /* Above the sidebar */
+    height: 70px;
+    z-index: 101;
 }
 
 footer h5 {
@@ -105,8 +107,8 @@ footer a:hover {
 }
 
 .play-card:hover .play-icon {
-    opacity: 1; /* Become visible */
-    transform: translateY(0); /* Move to original position */
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .play-icon i {
@@ -130,5 +132,34 @@ footer a:hover {
     opacity: 0.7;
 }
 
+/* Scrollable Container */
+.scrollable-container {
+    scroll-behavior: smooth; /* Enable smooth scrolling */
+    -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+
+.scrollable-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar in Chrome/Safari */
+}
+
+/* Arrows */
+.arrow-left,
+.arrow-right {
+    opacity: 0; /* Initially hidden */
+    transition: var(--transition);
+}
+
+.pagination-container:hover .arrow-left,
+.pagination-container:hover .arrow-right {
+    opacity: 1; /* Show arrows on hover */
+}
+
+/* Disabled Arrows */
+.arrow-left.disabled,
+.arrow-right.disabled {
+    visibility: hidden; /* Hide the arrow completely */
+    pointer-events: none; /* Disable click events */
+}
 
 
