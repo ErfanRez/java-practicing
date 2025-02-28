@@ -16,19 +16,6 @@ body {
     padding-bottom: 60px; /* Adjust based on your footer's height */
     display: flex;
 }
-
-#sidebar {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 250px; /* Fixed width for the sidebar */
-    z-index: 100; /* Stay on top of other content */
-    padding-top: 48px; /* Account for fixed header height */
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
-    overflow-y: auto; /* Enable vertical scrolling if content exceeds viewport */
-}
-
 .header {
     margin-left: 250px; /* Width of the sidebar */
     padding: 1rem;
@@ -45,9 +32,22 @@ main {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 60px; /* Adjust based on your footer's height */
+    height: 70px; /* Based on your footer's height */
     z-index: 101; /* Above the sidebar */
 }
+
+footer h5 {
+    font-weight: bold;
+}
+
+footer a {
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
 
 .accordion-button::after {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
@@ -57,7 +57,7 @@ main {
     height: 1.1rem !important;
 }
 
-.hover-style:hover{
+.side-hover:hover{
     background-color: var(--bs-dark);
 }
 
@@ -113,18 +113,22 @@ main {
     color: #1A1D20;
 }
 
-/* Adjust the number of cards per slide based on screen size */
-@media (min-width: 768px) {
-    .carousel-inner .carousel-item {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .carousel-inner .carousel-item > div {
-        flex: 0 0 25%; /* Show 4 cards per slide */
-        max-width: 25%;
-    }
+.main-grid{
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
+.grid-span{
+    grid-column: 1 / -1 !important;
+}
+
+.general-hover{
+    opacity: 1;
+    transition: var(--transition);
+}
+.general-hover:hover{
+    opacity: 0.7;
+}
 
 
 
