@@ -1,4 +1,4 @@
-package com.music.controller;
+package com.music.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @ControllerAdvice(annotations = Controller.class)
-public class GlobalExceptionController {
+public class GlobalExceptionHandler{
 
     @ExceptionHandler({Exception.class})
     public ModelAndView exceptionHandler(Exception exception){
