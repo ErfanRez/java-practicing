@@ -38,3 +38,70 @@ document.querySelectorAll('.scrollable-container').forEach(container => {
     checkScrollPosition(container, arrowLeft, arrowRight);
     container.addEventListener('scroll', () => checkScrollPosition(container, arrowLeft, arrowRight));
 });
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+//Bootstrap error Toast
+
+// Function to show the error toast if there are validation errors
+// function showErrorToast() {
+//     const errorToast = document.getElementById('errorToast');
+//     if (errorToast && errorToast.dataset.hasErrors === 'true') {
+//         const toast = new bootstrap.Toast(errorToast);
+//         toast.show();
+//     }
+// }
+
+// // Call the function when the DOM is fully loaded
+// document.addEventListener('DOMContentLoaded', showErrorToast);
+
+
+
+// // Function to show all error multiple toasts
+// function showErrorToasts() {
+//     const toasts = document.querySelectorAll('.toast');
+//     toasts.forEach(toast => {
+//         const bootstrapToast = new bootstrap.Toast(toast);
+//         bootstrapToast.show();
+//     });
+// }
+//
+// // Call the function when the DOM is fully loaded
+// document.addEventListener('DOMContentLoaded', showErrorToasts);
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+// Add album songs scripts
+
+document.addEventListener('DOMContentLoaded', function () {
+    const songInputsContainer = document.getElementById('songInputs');
+    const addSongButton = document.getElementById('addSongButton');
+
+    let songCount = 2; // Start counting from 3
+
+    addSongButton.addEventListener('click', function () {
+        songCount++;
+
+        // Create new song title input
+        const songTitleInput = document.createElement('div');
+        songTitleInput.className = 'mb-3 song-input';
+        songTitleInput.innerHTML = `
+                <label for="songTitle${songCount}" class="form-label">Song Title</label>
+                <input type="text" class="form-control" id="songTitle${songCount}" name="songTitles" required>
+            `;
+
+        // Create new song file input
+        const songFileInput = document.createElement('div');
+        songFileInput.className = 'mb-3 song-input';
+        songFileInput.innerHTML = `
+                <label for="songFile${songCount}" class="form-label">Song File</label>
+                <input type="file" class="form-control" id="songFile${songCount}" name="songFiles" accept="audio/*" required>
+                <div class="form-text">Only audio files (e.g., MP3, WAV) are allowed.</div>
+            `;
+
+        // Append new inputs to the container
+        songInputsContainer.appendChild(songTitleInput);
+        songInputsContainer.appendChild(songFileInput);
+    });
+});
