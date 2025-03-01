@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
+<body>
+<section layout:fragment="content" class="grid-span">
+
+    <div class="d-flex align-items-center justify-content-start mt-3 px-5">
+        <h3 class="h3">Songs</h3>
+    </div>
+
+    <div class="px-5 mt-2">
+        <table class="table table-hover table-borderless border-top">
+            <thead>
+            <tr>
+                <th scope="col" style="width: 50px;">#</th>
+                <th scope="col">Title</th>
+                <th scope="col" class="text-end"><i class="fa-regular fa-clock"></i></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="song-row align-middle">
+                <th scope="row">
+                    <span class="row-number">1</span>
+                    <i class="fa-solid fa-play play-button"></i>
+                </th>
+                <td class="d-flex align-items-center">
+                    <img src="/assets/images/album-cover.webp" alt="Cover" class="me-3 rounded-3" style="object-fit: cover; width: 50px; height: 50px;">
+                    <div class="d-flex flex-column">
+                        <a href="#" class="link-light link-underline-opacity-0 link-underline-opacity-75-hover" style="width: fit-content;">Sample Song 1</a>
+                        <a href="#" class="link-secondary link-underline-opacity-0 link-underline-opacity-75-hover h6 text-body-tertiary" style="width: fit-content;">Singer</a>
+                    </div>
+                </td>
+<!--                without image-->
+<!--                <td class="d-flex flex-column">-->
+<!--                    <a href="#" class="link-light link-underline-opacity-0 link-underline-opacity-75-hover" style="width: fit-content;">Sample Song 3</a>-->
+<!--                    <a href="#" class="link-secondary link-underline-opacity-0 link-underline-opacity-75-hover h6 text-body-tertiary" style="width: fit-content;">Singer</a>-->
+<!--                </td>-->
+                <td class="text-end">
+                    <button class="heart-btn" title="Add to favorite"><i class="fa-regular fa-heart me-3"></i></button>
+                    <span>3:45</span>
+                </td>
+            </tr>
+            <tr class="song-row align-middle">
+                <th scope="row">
+                    <span class="row-number">2</span>
+                    <i class="fa-solid fa-play play-button"></i>
+                </th>
+                <td class="d-flex align-items-center">
+                    <img src="/assets/images/album-cover.webp" alt="Cover" class="me-3 rounded-3" style="object-fit: cover; width: 50px; height: 50px;">
+                    <div class="d-flex flex-column">
+                        <a href="#" class="link-light link-underline-opacity-0 link-underline-opacity-75-hover" style="width: fit-content;">Sample Song 2</a>
+                        <a href="#" class="link-secondary link-underline-opacity-0 link-underline-opacity-75-hover h6 text-body-tertiary" style="width: fit-content;">Singer</a>
+                    </div>
+                </td>
+                <td class="text-end">
+                    <button class="heart-btn" title="Add to favorite"><i class="fa-regular fa-heart me-3"></i></button>
+                    <span>4:20</span>
+                </td>
+            </tr>
+            <tr class="song-row align-middle">
+                <th scope="row">
+                    <span class="row-number">3</span>
+                    <i class="fa-solid fa-play play-button"></i>
+                </th>
+                <td class="d-flex align-items-center">
+                    <img src="/assets/images/album-cover.webp" alt="Cover" class="me-3 rounded-3" style="object-fit: cover; width: 50px; height: 50px;">
+                    <div class="d-flex flex-column">
+                        <a href="#" class="link-light link-underline-opacity-0 link-underline-opacity-75-hover" style="width: fit-content;">Sample Song 3</a>
+                        <a href="#" class="link-secondary link-underline-opacity-0 link-underline-opacity-75-hover h6 text-body-tertiary" style="width: fit-content;">Singer</a>
+                    </div>
+                </td>
+                <td class="text-end">
+                    <button class="heart-btn" title="Add to favorite"><i class="fa-regular fa-heart me-3"></i></button>
+                    <span>2:58</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr class="mt-5">
+    <footer th:replace="~{fragments/content-footer}"></footer>
+</section>
+</body>
+</html>

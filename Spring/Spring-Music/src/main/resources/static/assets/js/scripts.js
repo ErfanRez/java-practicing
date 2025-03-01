@@ -1,16 +1,3 @@
-//Swiper Config
-
-// console.log("swiper loaded")
-// const swiper = new Swiper('.swiper', {
-//     loop: true, // Enable infinite looping
-//     slidesPerView: 'auto', // Show as many slides as fit in the container
-//     spaceBetween: 16, // Space between slides
-//     navigation: {
-//         nextEl: '.swiper-button-next',
-//         prevEl: '.swiper-button-prev',
-//     },
-// });
-
 //Card Pagination
 
 // Scroll left
