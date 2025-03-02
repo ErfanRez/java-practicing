@@ -43,7 +43,7 @@ document.querySelectorAll('.scrollable-container').forEach(container => {
 
 //Bootstrap error Toast
 
-// Function to show the error toast if there are validation errors
+// Function to show the single error toast if there are validation errors
 // function showErrorToast() {
 //     const errorToast = document.getElementById('errorToast');
 //     if (errorToast && errorToast.dataset.hasErrors === 'true') {
@@ -57,7 +57,7 @@ document.querySelectorAll('.scrollable-container').forEach(container => {
 
 
 
-// // Function to show all error multiple toasts
+// // Function to show all multiple error toasts
 // function showErrorToasts() {
 //     const toasts = document.querySelectorAll('.toast');
 //     toasts.forEach(toast => {
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let songCount = 2; // Start counting from 3
 
-    addSongButton.addEventListener('click', function () {
+    !!addSongButton && addSongButton.addEventListener('click', function () {
         songCount++;
 
         // Create new song title input

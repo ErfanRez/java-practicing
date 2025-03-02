@@ -1,7 +1,10 @@
 package com.music.controller;
 
-import com.music.model.Album;
+import com.music.dto.CreateAlbumDto;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,9 +12,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+@Slf4j
+@Getter
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardController {
+    private final String albumDir = "src/main/resources/static/assets/images/albums/";
 
     @GetMapping()
     public String displayDashboard(){
@@ -25,49 +36,67 @@ public class DashboardController {
 
     @GetMapping("/new-album")
     public String displayNewAlbum(Model model){
-        model.addAttribute("album", new Album());
+        model.addAttribute("album", new CreateAlbumDto());
         return "new-album";
     }
 
     @PostMapping("/new-album")
     public String handleNewAlbumForm(
-            @Valid @ModelAttribute("album") Album album,
+            @RequestParam("cover") MultipartFile cover,
+            @Valid @ModelAttribute("album") CreateAlbumDto createAlbumDto,
             BindingResult bindingResult,
-            RedirectAttributes redirectAttributes
+            Model model,
+            RedirectAttributes redirectAttributes,
+            HttpSession session
     ) {
+        if (cover.isEmpty()) {
+            model.addAttribute("coverError", "Please select a file to upload.");
+            return "new-album";
+        }
+
         if (bindingResult.hasErrors()) {
             return "new-album";
         }
 
-        // Save the album (replace with actual logic)
-        Long albumId = saveAlbum(album);
+        try {
+            // Ensure the directory exists
+            Path directoryPath = Paths.get(albumDir);
+            if (!Files.exists(directoryPath)) {
+                Files.createDirectories(directoryPath);
+            }
 
-        // Add album details to flash attributes
-        redirectAttributes.addFlashAttribute("albumName", album.getName());
-        redirectAttributes.addFlashAttribute("albumCover", album.getCover());
+            // Save the image to the upload directory
+            String fileName = cover.getOriginalFilename();
+            Path filePath = Paths.get(albumDir + fileName);
+            Files.write(filePath, cover.getBytes());
 
-        // Redirect to the add-song page for the new album
-        redirectAttributes.addAttribute("albumId", albumId);
-        return "redirect:/dashboard/album/{albumId}/add-songs";
+            //To delete file
+//            try {
+//                Files.deleteIfExists(directoryPath);
+//            } catch (IOException deleteEx) {
+//                // Log the deletion failure
+//                deleteEx.printStackTrace();
+//            }
+
+
+            // Store the relative URL in the session
+            String relativeUrl = "/assets/images/albums/" + fileName;
+            createAlbumDto.setCoverUrl(relativeUrl);
+            System.out.println("Image saved at: " + filePath.toAbsolutePath());
+
+        } catch (IOException e) {
+            // Log the exception
+            log.error("Error saving file: " + e.getMessage(), e);
+        }
+
+        session.setAttribute("album", createAlbumDto);
+
+        return "redirect:/dashboard/album/add-songs";
     }
 
-    @GetMapping("/album/{albumId}/add-songs")
-    public String displayAddSongForm(@PathVariable Long albumId, Model model) {
-        // Fetch the album by ID (replace with actual logic)
-        Album album = getAlbumById(albumId);
-        model.addAttribute("album", album);
-        model.addAttribute("albumId", albumId);
+    @GetMapping("/album/add-songs")
+    public String displayAddSongForm(Model model) {
+
         return "add-songs";
-    }
-
-    // Dummy methods for now (replace with actual service calls)
-    private Long saveAlbum(Album album) {
-        // Save the album to the database and return its ID
-        return 1L; // Replace with actual logic
-    }
-
-    private Album getAlbumById(Long albumId) {
-        // Fetch the album from the database
-        return new Album(); // Replace with actual logic
     }
 }
