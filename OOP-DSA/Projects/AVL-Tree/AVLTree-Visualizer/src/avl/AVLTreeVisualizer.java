@@ -1,6 +1,7 @@
 package avl;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class AVLTreeVisualizer extends Application {
@@ -17,6 +19,12 @@ public class AVLTreeVisualizer extends Application {
     private Node root;
     private TreePane visualizer = new TreePane();
     private StackPane centerPane = new StackPane();
+
+
+    private Label inorderTitleLabel = new Label("Inorder: ");
+    private Label inorderExprLabel = new Label();
+    private Label reverseInorderTitleLabel = new Label("Reverse Inorder: ");
+    private Label reverseInorderExprLabel = new Label();
 
     public static void main(String[] args) {
         launch(args);
@@ -47,8 +55,25 @@ public class AVLTreeVisualizer extends Application {
 
         VBox topSection = new VBox(10, controlPanel, separator);
         topSection.setAlignment(Pos.CENTER);
-
         mainPane.setTop(topSection);
+
+
+        HBox inorderBox = new HBox(10);
+        inorderBox.setAlignment(Pos.CENTER_LEFT);
+        inorderTitleLabel.setStyle("-fx-font-size: 18px;");
+        inorderExprLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        inorderBox.getChildren().addAll(inorderTitleLabel, inorderExprLabel);
+
+        HBox reverseInorderBox = new HBox(10);
+        reverseInorderBox.setAlignment(Pos.CENTER_LEFT);
+        reverseInorderTitleLabel.setStyle("-fx-font-size: 18px;");
+        reverseInorderExprLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        reverseInorderBox.getChildren().addAll(reverseInorderTitleLabel, reverseInorderExprLabel);
+
+        VBox bottomBox = new VBox(10, inorderBox, reverseInorderBox);
+        bottomBox.setAlignment(Pos.BOTTOM_LEFT);
+        bottomBox.setPadding(new Insets(0, 0, 30, 30)); // top, right, bottom, left
+        mainPane.setBottom(bottomBox);
 
         Scene scene = new Scene(mainPane, 800, 600);
         primaryStage.setTitle("AVL Tree Visualizer");
@@ -81,7 +106,6 @@ public class AVLTreeVisualizer extends Application {
             }
         });
     }
-
 
     private int height(Node n) {
         return n == null ? 0 : n.height;
@@ -155,10 +179,19 @@ public class AVLTreeVisualizer extends Application {
         visualizeTree();
     }
 
+//  Deleting a node (Minimum of right subtree)
     private Node minValueNode(Node node) {
         Node current = node;
         while (current.left != null)
             current = current.left;
+        return current;
+    }
+
+//  Deleting a node (Maximum of left subtree)
+    private Node maxValueNode(Node node) {
+        Node current = node;
+        while (current.right != null)
+            current = current.right;
         return current;
     }
 
@@ -173,17 +206,25 @@ public class AVLTreeVisualizer extends Application {
         else {
             if (node.left == null || node.right == null) {
                 Node temp = (node.left != null) ? node.left : node.right;
-
                 if (temp == null) {
                     temp = node;
                     node = null;
                 } else {
                     node = temp;
                 }
-            } else {
-                Node temp = minValueNode(node.right);
+            }
+//            deleting using minimum of right subtree
+//            else {
+//                Node temp = minValueNode(node.right);
+//                node.key = temp.key;
+//                node.right = delete(node.right, temp.key);
+//            }
+
+//          deleting using maximum of left subtree
+            else {
+                Node temp = maxValueNode(node.left);
                 node.key = temp.key;
-                node.right = delete(node.right, temp.key);
+                node.left = delete(node.left, temp.key);
             }
         }
 
@@ -212,6 +253,7 @@ public class AVLTreeVisualizer extends Application {
         return node;
     }
 
+
     public void delete(int key) {
         root = delete(root, key);
         visualizeTree();
@@ -222,6 +264,22 @@ public class AVLTreeVisualizer extends Application {
         double centerX = centerPane.getWidth() / 2;
         double centerY = 80;
         visualizer.drawTree(root, centerX, centerY, 150);
+
+
+        inorderExprLabel.setText(getInorder(root).trim());
+        reverseInorderExprLabel.setText(getReverseInorder(root).trim());
+    }
+
+
+    private String getInorder(Node node) {
+        if (node == null)
+            return "";
+        return getInorder(node.left) + node.key + " " + getInorder(node.right);
+    }
+
+    private String getReverseInorder(Node node) {
+        if (node == null)
+            return "";
+        return getReverseInorder(node.right) + node.key + " " + getReverseInorder(node.left);
     }
 }
-

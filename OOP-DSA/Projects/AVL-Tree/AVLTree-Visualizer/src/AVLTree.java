@@ -99,10 +99,19 @@ public class AVLTree {
         return node;
     }
 
+//  Deleting a node (Minimum of right subtree)
     private Node minValueNode(Node node) {
         Node current = node;
         while (current.left != null)
             current = current.left;
+        return current;
+    }
+
+//  Deleting a node (Maximum of left subtree)
+    private Node maxValueNode(Node node) {
+        Node current = node;
+        while (current.right != null)
+            current = current.right;
         return current;
     }
 
@@ -127,10 +136,19 @@ public class AVLTree {
                     node = null;
                 } else
                     node = temp;
-            } else {
-                Node temp = minValueNode(node.right);
+            }
+//            deleting using minimum of right subtree
+//            else {
+//                Node temp = minValueNode(node.right);
+//                node.key = temp.key;
+//                node.right = delete(node.right, temp.key);
+//            }
+
+//          deleting using maximum of left subtree
+            else {
+                Node temp = maxValueNode(node.left);
                 node.key = temp.key;
-                node.right = delete(node.right, temp.key);
+                node.left = delete(node.left, temp.key);
             }
         }
 
