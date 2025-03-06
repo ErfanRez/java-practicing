@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -98,5 +99,69 @@ public class DashboardController {
     public String displayAddSongForm(Model model) {
 
         return "add-songs";
+    }
+
+    @PostMapping("/album/add-songs")
+    public String handleAddSongsForm(
+            @RequestParam("songTitles") List<String> songTitles,
+            @RequestParam("songFiles") List<MultipartFile> songFiles,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+        // Retrieve the album from the session
+        CreateAlbumDto album = (CreateAlbumDto) session.getAttribute("album");
+        if (album == null) {
+            redirectAttributes.addFlashAttribute("error", "No album found. Please create an album first.");
+            return "redirect:/dashboard/new-album";
+        }
+
+        // Validate the number of songs
+        if (songTitles.size() != songFiles.size()) {
+            redirectAttributes.addFlashAttribute("error", "Number of song titles and files do not match.");
+            return "redirect:/dashboard/album/add-songs";
+        }
+
+        // Directory to save song files
+        String songDir = "src/main/resources/static/assets/songs/";
+        Path songDirectoryPath = Paths.get(songDir);
+
+        try {
+            // Ensure the directory exists
+            if (!Files.exists(songDirectoryPath)) {
+                Files.createDirectories(songDirectoryPath);
+            }
+
+            // Process each song
+            for (int i = 0; i < songTitles.size(); i++) {
+                String songTitle = songTitles.get(i);
+                MultipartFile songFile = songFiles.get(i);
+
+                if (songFile.isEmpty()) {
+                    redirectAttributes.addFlashAttribute("error", "One or more song files are empty.");
+                    return "redirect:/dashboard/album/add-songs";
+                }
+
+                // Save the song file
+                String fileName = System.currentTimeMillis() + "_" + songFile.getOriginalFilename();
+                Path filePath = Paths.get(songDir + fileName);
+                Files.write(filePath, songFile.getBytes());
+
+                // Associate the song with the album (you can use a service or repository here)
+                // For now, we'll just log the details
+                log.info("Song Title: " + songTitle);
+                log.info("Song File: " + fileName);
+            }
+
+            // Clear the session after saving the album
+            session.removeAttribute("album");
+
+            redirectAttributes.addFlashAttribute("success", "Album and songs saved successfully!");
+            return "redirect:/dashboard";
+
+        } catch (IOException e) {
+            log.error("Error saving song files: " + e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("error", "An error occurred while saving the songs.");
+            return "redirect:/dashboard/album/add-songs";
+        }
     }
 }
