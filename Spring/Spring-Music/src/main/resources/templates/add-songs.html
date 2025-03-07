@@ -9,6 +9,8 @@
             <h2 th:text="${session.album.name}">Album Name</h2>
         </div>
 
+        <div class="text-danger" th:if="${error}" th:text="${error}"></div>
+
         <!-- Add Songs Form -->
         <form method="post" enctype="multipart/form-data">
             <!-- Song Inputs Container -->
