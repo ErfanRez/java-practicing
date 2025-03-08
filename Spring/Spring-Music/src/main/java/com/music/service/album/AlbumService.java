@@ -1,42 +1,39 @@
 package com.music.service.album;
 
-import com.music.dto.CreateAlbumDto;
+import com.music.dto.AlbumDto;
 import com.music.model.Album;
 import com.music.model.Cover;
 import com.music.model.Song;
 import com.music.repository.AlbumRepository;
 import com.music.repository.CoverRepository;
-import com.music.repository.SongRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 
-@Service
 @Slf4j
+@Service
 public class AlbumService implements IAlbumService {
 
     private final AlbumRepository albumRepository;
 
     private final CoverRepository coverRepository;
 
-    private final SongRepository songRepository;
-
-    public AlbumService(AlbumRepository albumRepository, CoverRepository coverRepository, SongRepository songRepository) {
+    public AlbumService(AlbumRepository albumRepository, CoverRepository coverRepository) {
         this.albumRepository = albumRepository;
         this.coverRepository = coverRepository;
-        this.songRepository = songRepository;
     }
 
     @Override
     @Transactional
-    public void saveAlbumWithSongsAndCover(CreateAlbumDto albumDto, List<Song> songs, Cover cover) {
+    public void saveAlbumWithSongsAndCover(AlbumDto albumDto, List<Song> songs, Cover cover) {
         if (albumDto == null || songs == null || cover == null) {
             throw new IllegalArgumentException("AlbumDto, songs, and cover must not be null");
         }
 
-        Album album = CreateAlbumDto.DtoToAlbumMapper(albumDto);
+        Album album = AlbumDto.DtoToAlbumMapper(albumDto);
 
         Cover savedCover = coverRepository.save(cover);
         album.setCover(savedCover);

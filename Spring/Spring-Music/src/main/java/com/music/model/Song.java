@@ -24,7 +24,7 @@ public class Song extends BaseEntity {
     private Cover cover;
 
     @ManyToOne
-    @JoinColumn(name = "album_id")
+    @JoinColumn(name = "album_id", nullable = true)
     private Album album;
 }
 

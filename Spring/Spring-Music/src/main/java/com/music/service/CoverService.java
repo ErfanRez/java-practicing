@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CoverService {
 
-    @Autowired
-    private CoverRepository coverRepository;
+    private final CoverRepository coverRepository;
+
+    public CoverService(CoverRepository coverRepository) {
+        this.coverRepository = coverRepository;
+    }
 
     public Cover createCover(String key, String url) {
         Cover cover = new Cover();

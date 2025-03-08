@@ -1,34 +1,37 @@
 package com.music.service.song;
 
+import com.music.dto.TrackDto;
+import com.music.model.Cover;
 import com.music.model.Song;
+import com.music.repository.CoverRepository;
 import com.music.repository.SongRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class SongService {
+public class SongService implements ISongService {
 
-    @Autowired
-    private SongRepository songRepository;
+    private final SongRepository songRepository;
+    private final CoverRepository coverRepository;
 
-    public Song createSong(String title, String fileUrl) {
-        Song song = new Song();
-        song.setTitle(title);
-        song.setFileUrl(fileUrl);
-//        song.setGenre(genre);
-//        song.setCover(cover);
+    public SongService(SongRepository songRepository, CoverRepository coverRepository) {
+        this.songRepository = songRepository;
+        this.coverRepository = coverRepository;
+    }
 
-//        Album album = albumRepository.findById(albumId)
-//                .orElseThrow(() -> new RuntimeException("Album not found"));
-//        song.setAlbum(album);
-//
-//        Artist artist = artistRepository.findById(artistId)
-//                .orElseThrow(() -> new RuntimeException("Artist not found"));
-//        song.setArtist(artist);
+    @Transactional
+    @Override
+    public void saveTrack(TrackDto trackDto, String audioKey, String audioUrl, String coverKey, String coverUrl) {
+        Cover cover = new Cover();
+        cover.setKey(coverKey);
+        cover.setUrl(coverUrl);
+        Cover savedCover = coverRepository.save(cover);
 
-        return songRepository.save(song);
+        Song song = TrackDto.toSongMapper(trackDto, audioKey, audioUrl, savedCover);
+
+        songRepository.save(song);
     }
 
     public List<Song> getAllSongs() {

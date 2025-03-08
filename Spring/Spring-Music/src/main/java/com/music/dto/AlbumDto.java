@@ -11,7 +11,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class CreateAlbumDto {
+public class AlbumDto {
     @NotBlank(message = "Album name is required")
     private String title;
 
@@ -28,12 +28,12 @@ public class CreateAlbumDto {
 
     private String coverUrl;
 
-    public static Album DtoToAlbumMapper(CreateAlbumDto createAlbumDto){
+    public static Album DtoToAlbumMapper(AlbumDto albumDto){
         Album album = new Album();
-        album.setTitle(createAlbumDto.getTitle());
-        album.setReleaseDate(createAlbumDto.getReleaseDate());
-        album.setPrice(createAlbumDto.getPrice());
-        album.setGenre(createAlbumDto.getGenre());
+        album.setTitle(albumDto.getTitle());
+        album.setReleaseDate(albumDto.getReleaseDate());
+        album.setPrice(albumDto.getPrice());
+        album.setGenre(albumDto.getGenre());
         return album;
     }
 }

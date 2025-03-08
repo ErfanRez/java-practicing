@@ -113,9 +113,16 @@ document.addEventListener('DOMContentLoaded', function () {
 function disableSubmitButton() {
     const submitButton = document.getElementById('submitButton');
     const addSongButton = document.getElementById("addSongButton")
-    addSongButton.disabled = true;
-    submitButton.disabled = true;
-    submitButton.innerText = 'Saving...';
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.innerText = 'Saving...';
+    } else {
+        console.error("Submit button not found!");
+    }
+    if(addSongButton){
+        addSongButton.disabled = true;
+    }
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
