@@ -1,6 +1,6 @@
 package com.music.service.album;
 
-import com.music.constants.Constants;
+import com.music.utils.Constants;
 import com.music.dto.AlbumDto;
 import com.music.model.Album;
 import com.music.model.Cover;

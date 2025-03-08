@@ -56,7 +56,7 @@
                     <label for="genre" class="form-label">Genre</label>
                     <select class="form-select" id="genre" th:field="*{genre}">
                         <option value="" selected>Select a genre</option>
-                        <option th:each="genre : ${T(com.music.constants.Genres).values()}"
+                        <option th:each="genre : ${T(com.music.utils.Genres).values()}"
                                 th:value="${genre}"
                                 th:text="${genre.displayName}"> <!-- Use displayName -->
                         </option>

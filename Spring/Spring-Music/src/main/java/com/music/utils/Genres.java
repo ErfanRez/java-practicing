@@ -1,4 +1,4 @@
-package com.music.constants;
+package com.music.utils;
 
 public enum Genres {
     POP("Pop"),

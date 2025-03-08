@@ -1,4 +1,4 @@
-package com.music.constants;
+package com.music.utils;
 
 public class Constants {
     public static final String ALBUM_LOCAL_DIR = "src/main/resources/static/assets/images/covers/";

@@ -1,6 +1,6 @@
 package com.music.service.song;
 
-import com.music.constants.Constants;
+import com.music.utils.Constants;
 import com.music.dto.TrackDto;
 import com.music.model.Cover;
 import com.music.model.Song;

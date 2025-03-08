@@ -1,6 +1,6 @@
 package com.music.model;
 
-import com.music.constants.Genres;
+import com.music.utils.Genres;
 import jakarta.persistence.*;
 import lombok.Data;
 

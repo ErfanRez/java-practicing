@@ -1,6 +1,6 @@
 package com.music.dto;
 
-import com.music.constants.Genres;
+import com.music.utils.Genres;
 import com.music.model.Album;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;

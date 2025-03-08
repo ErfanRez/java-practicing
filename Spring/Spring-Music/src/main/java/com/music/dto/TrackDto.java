@@ -5,7 +5,7 @@ import com.music.model.Song;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import com.music.constants.Genres;
+import com.music.utils.Genres;
 
 @Data
 public class TrackDto {

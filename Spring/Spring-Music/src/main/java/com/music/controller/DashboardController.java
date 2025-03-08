@@ -16,7 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.music.constants.Constants;
+import com.music.utils.Constants;
 
 import java.util.*;
 import java.io.IOException;
@@ -56,9 +56,20 @@ public class DashboardController {
             @RequestParam("cover") MultipartFile cover,
             @Valid @ModelAttribute("track") TrackDto trackDto,
             BindingResult bindingResult,
+            Model model,
             RedirectAttributes redirectAttributes
     ) {
         if (bindingResult.hasErrors()) {
+            return "new-track";
+        }
+
+        if (audioFile.isEmpty()) {
+            model.addAttribute("audioError", "Please select track file to upload.");
+            return "new-track";
+        }
+
+        if (cover.isEmpty()) {
+            model.addAttribute("coverError", "Please select track cover to upload.");
             return "new-track";
         }
 
@@ -89,14 +100,15 @@ public class DashboardController {
             @Valid @ModelAttribute("album") AlbumDto albumDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes,
+            Model model,
             HttpSession session
     ) {
-        if (cover.isEmpty()) {
-            redirectAttributes.addFlashAttribute("coverError", "Please select a file to upload.");
-            return "redirect:/new-album";
+        if (bindingResult.hasErrors()) {
+            return "new-album";
         }
 
-        if (bindingResult.hasErrors()) {
+        if (cover.isEmpty()) {
+            model.addAttribute("coverError", "Please select track cover to upload.");
             return "new-album";
         }
 
@@ -131,7 +143,7 @@ public class DashboardController {
     }
 
     @GetMapping("/album/add-songs")
-    public String displayAddSongForm(Model model) {
+    public String displayAddSongForm() {
 
         return "add-songs";
     }
