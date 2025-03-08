@@ -6,13 +6,13 @@
         <!-- Album Details -->
         <div class="text-center mb-4">
             <img th:src="${session.album.coverUrl}" alt="Album Cover" class="rounded-3 shadow-sm mb-2" style="width: 150px; height: 150px; object-fit: cover;">
-            <h2 th:text="${session.album.name}">Album Name</h2>
+            <h2 th:text="${session.album.title}">Album Name</h2>
         </div>
 
-        <div class="text-danger" th:if="${error}" th:text="${error}"></div>
+        <div class="text-danger mb-5" th:if="${error}" th:text="${error}"></div>
 
         <!-- Add Songs Form -->
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" onsubmit="disableSubmitButton()">
             <!-- Song Inputs Container -->
             <div id="songInputs">
                 <!-- Default Song Inputs (at least two) -->
@@ -40,7 +40,7 @@
             <div class="mb-4 d-flex justify-content-between align-items-center">
                 <button type="button" id="addSongButton" class="btn btn-secondary">Add Another Song</button>
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-success">Save Album</button>
+                <button type="submit" id="submitButton" class="btn btn-success">Save Album</button>
             </div>
         </form>
     </div>

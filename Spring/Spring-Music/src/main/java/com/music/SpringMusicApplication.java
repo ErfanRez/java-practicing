@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableJpaRepositories("com.music.repository")
 @EntityScan("com.music.model")
+@EnableJpaAuditing
 public class SpringMusicApplication {
 
     public static void main(String[] args) {

@@ -9,22 +9,22 @@ import lombok.Data;
 public class Song extends BaseEntity {
 
     private String title;
+
+    @Column(unique = true)
     private String fileUrl;
+
+    @Column(unique = true)
     private String fileKey;
 
     @Enumerated(EnumType.STRING)
     private Genres genre;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "cover_id")
     private Cover cover;
 
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "album_id", nullable = true)
-    private Album album;
-
     @ManyToOne
-    @JoinColumn(name = "artist_id")
-    private Artist artist;
+    @JoinColumn(name = "album_id")
+    private Album album;
 }
 

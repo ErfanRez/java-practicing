@@ -3,6 +3,12 @@
 <body>
 <section layout:fragment="content" class="grid-span mt-3">
 
+    <!-- Toast fragment -->
+    <div th:if="${success}">
+        <div th:replace="~{fragments/toast :: toast('success', ${success})}"></div>
+    </div>
+
+
     <div class="d-flex align-items-center justify-content-between mt-3 px-5">
         <div class="d-flex align-items-center">
             <img src="/assets/images/singer.webp" alt="Artist" class="cover-container object-fit-cover rounded-circle me-4" width="250" height="250">

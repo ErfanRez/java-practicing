@@ -105,3 +105,30 @@ document.addEventListener('DOMContentLoaded', function () {
         songInputsContainer.appendChild(songFileInput);
     });
 });
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+//disable submission button
+
+function disableSubmitButton() {
+    const submitButton = document.getElementById('submitButton');
+    const addSongButton = document.getElementById("addSongButton")
+    addSongButton.disabled = true;
+    submitButton.disabled = true;
+    submitButton.innerText = 'Saving...';
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+// Form submission success toast
+function showToast() {
+    const toastMessage = document.getElementById('toastMessage');
+    if (toastMessage) {
+        const toast = new bootstrap.Toast(toastMessage);
+        toast.show();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', showToast);
+
+/////////////////////////////////////////////////////////////////////////////////////////////

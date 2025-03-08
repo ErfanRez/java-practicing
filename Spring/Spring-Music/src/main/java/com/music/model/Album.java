@@ -2,7 +2,6 @@ package com.music.model;
 
 import com.music.constants.Genres;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,13 +23,23 @@ public class Album extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Genres genre;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Cover cover;
-
-    @ManyToOne
-    @JoinColumn(name = "artist_id")
-    private Artist artist;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Song> songs = new ArrayList<>();
+
+    // Helper method to add songs to the album
+    public void addSong(Song song) {
+        songs.add(song);
+        song.setAlbum(this);
+        song.setCover(this.cover);
+    }
+
+    // Helper method to remove songs from the album
+    public void removeSong(Song song) {
+        songs.remove(song);
+        song.setAlbum(null);
+        song.setCover(null);
+    }
 }

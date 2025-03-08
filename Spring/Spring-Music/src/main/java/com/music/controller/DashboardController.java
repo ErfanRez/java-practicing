@@ -107,12 +107,13 @@ public class DashboardController {
     }
 
     @PostMapping("/album/add-songs")
-    public String handleAddSongsForm(
+    public synchronized String handleAddSongsForm(
             @RequestParam("songTitles") List<String> songTitles,
             @RequestParam("songFiles") List<MultipartFile> songFiles,
             HttpSession session,
             RedirectAttributes redirectAttributes
     ) {
+
         CreateAlbumDto createAlbumDto = (CreateAlbumDto) session.getAttribute("album");
         if (createAlbumDto == null) {
             redirectAttributes.addFlashAttribute("error", "No album found. Please create an album first.");
@@ -137,7 +138,7 @@ public class DashboardController {
                     return "redirect:/dashboard/album/add-songs";
                 }
 
-                String key = "songs/" + System.currentTimeMillis() + "_" + songFile.getOriginalFilename();
+                String key = "songs/" + UUID.randomUUID() + "_" + songFile.getOriginalFilename();
                 String url = s3Service.uploadFile(key, songFile.getBytes());
                 Song song = new Song();
                 song.setTitle(songTitle);
@@ -155,7 +156,7 @@ public class DashboardController {
                 Path filePath = Paths.get(localCoverPath);
                 byte[] coverBytes = Files.readAllBytes(filePath);
 
-                String coverKey = "covers/" + System.currentTimeMillis() + "_" + filePath.getFileName().toString();
+                String coverKey = "covers/" + UUID.randomUUID() + "_" + filePath.getFileName().toString();
                 String coverUrl = s3Service.uploadFile(coverKey, coverBytes);
 
                 cover.setKey(coverKey);
@@ -175,7 +176,7 @@ public class DashboardController {
         } catch (IOException e) {
             log.error("Error uploading files: " + e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error", "An error occurred while uploading the files.");
-            return "redirect:/dashboard/album/add-songs";
+            return "redirect:/dashboard/new-album";
         }
     }
 
