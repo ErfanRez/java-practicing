@@ -7,5 +7,5 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface ISongService {
-    void saveTrack(TrackDto trackDto, String audioKey, String audioUrl, String coverKey, String coverUrl);
+    void saveTrackWithCover(TrackDto trackDto, MultipartFile audioFile, MultipartFile coverFile) throws IOException;
 }

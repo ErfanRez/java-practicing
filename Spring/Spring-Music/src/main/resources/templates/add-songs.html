@@ -11,11 +11,8 @@
 
         <div class="text-danger mb-5" th:if="${error}" th:text="${error}"></div>
 
-        <!-- Add Songs Form -->
         <form method="post" enctype="multipart/form-data" onsubmit="disableSubmitButton()">
-            <!-- Song Inputs Container -->
             <div id="songInputs">
-                <!-- Default Song Inputs (at least two) -->
                 <div class="mb-3 song-input">
                     <label for="songTitle1" class="form-label">Song Title</label>
                     <input type="text" class="form-control" id="songTitle1" name="songTitles" required>

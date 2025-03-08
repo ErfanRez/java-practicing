@@ -29,14 +29,13 @@ public class Album extends BaseEntity {
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Song> songs = new ArrayList<>();
 
-    // Helper method to add songs to the album
+
     public void addSong(Song song) {
         songs.add(song);
         song.setAlbum(this);
         song.setCover(this.cover);
     }
 
-    // Helper method to remove songs from the album
     public void removeSong(Song song) {
         songs.remove(song);
         song.setAlbum(null);

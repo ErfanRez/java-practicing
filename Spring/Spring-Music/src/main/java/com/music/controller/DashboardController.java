@@ -3,8 +3,6 @@ package com.music.controller;
 
 import com.music.dto.AlbumDto;
 import com.music.dto.TrackDto;
-import com.music.model.Cover;
-import com.music.model.Song;
 import com.music.service.S3Service;
 import com.music.service.album.AlbumService;
 import com.music.service.song.SongService;
@@ -60,44 +58,27 @@ public class DashboardController {
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     ) {
-        if (audioFile.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Please select an audio file to upload.");
-            return "redirect:/dashboard/new-track";
-        }
-
-        if (cover.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Please select a cover picture to upload.");
-            return "redirect:/dashboard/new-track";
-        }
-
         if (bindingResult.hasErrors()) {
             return "new-track";
         }
 
         try {
-            // Upload the audio file to S3
-            String audioKey = "tracks/" + System.currentTimeMillis() + "_" + audioFile.getOriginalFilename();
-            String audioUrl = s3Service.uploadFile(audioKey, audioFile.getBytes());
-
-            // Upload the cover picture to S3
-            String coverKey = "covers/" + System.currentTimeMillis() + "_" + cover.getOriginalFilename();
-            String coverUrl = s3Service.uploadFile(coverKey, cover.getBytes());
-
-            // Save the track and cover to the database
-            songService.saveTrack(trackDto, audioKey, audioUrl, coverKey, coverUrl);
-
+            songService.saveTrackWithCover(trackDto, audioFile, cover);
             redirectAttributes.addFlashAttribute("success", "Track saved successfully!");
             return "redirect:/dashboard";
 
         } catch (IOException e) {
-            log.error("Error uploading files: {}", e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("saveError", "An error occurred while uploading the track.");
+
+            log.error("Failed to upload files for track: {}", trackDto.getTitle(), e);
+            redirectAttributes.addFlashAttribute("error", "An error occurred while uploading the track.");
             return "redirect:/dashboard/new-track";
         }
+
+
     }
 
     @GetMapping("/new-album")
-    public String displayNewAlbum(Model model){
+    public String displayNewAlbum(Model model) {
         model.addAttribute("album", new AlbumDto());
         return "new-album";
     }
@@ -105,14 +86,14 @@ public class DashboardController {
     @PostMapping("/new-album")
     public String handleNewAlbumForm(
             @RequestParam("cover") MultipartFile cover,
-            @Valid @ModelAttribute("album") AlbumDto createAlbumDto,
+            @Valid @ModelAttribute("album") AlbumDto albumDto,
             BindingResult bindingResult,
-            Model model,
+            RedirectAttributes redirectAttributes,
             HttpSession session
     ) {
         if (cover.isEmpty()) {
-            model.addAttribute("coverError", "Please select a file to upload.");
-            return "new-album";
+            redirectAttributes.addFlashAttribute("coverError", "Please select a file to upload.");
+            return "redirect:/new-album";
         }
 
         if (bindingResult.hasErrors()) {
@@ -123,28 +104,27 @@ public class DashboardController {
 
         try {
             // Ensure the directory exists
-            Path directoryPath = Paths.get(Constants.albumDir);
+            Path directoryPath = Paths.get(Constants.ALBUM_LOCAL_DIR);
             if (!Files.exists(directoryPath)) {
                 Files.createDirectories(directoryPath);
             }
 
             // Save the image to the upload directory
             String fileName = cover.getOriginalFilename();
-            filePath = Paths.get(Constants.albumDir + fileName);
+            filePath = Paths.get(Constants.ALBUM_LOCAL_DIR + fileName);
             Files.write(filePath, cover.getBytes());
 
 
             // Store the relative URL in the session
             String relativeUrl = "/assets/images/covers/" + fileName;
-            createAlbumDto.setCoverUrl(relativeUrl);
-            log.info("Image saved at: " + filePath.toAbsolutePath());
+            albumDto.setCoverUrl(relativeUrl);
+            log.info("Image saved at: {}", filePath.toAbsolutePath());
 
         } catch (IOException e) {
-            // Log the exception
-            log.error("Error saving file: " + e.getMessage(), e);
+            log.error("Error saving file: {}", e.getMessage(), e);
         }
 
-        session.setAttribute("album", createAlbumDto);
+        session.setAttribute("album", albumDto);
         session.setAttribute("coverPath",  filePath);
 
         return "redirect:/dashboard/album/add-songs";
@@ -164,8 +144,8 @@ public class DashboardController {
             RedirectAttributes redirectAttributes
     ) {
 
-        AlbumDto createAlbumDto = (AlbumDto) session.getAttribute("album");
-        if (createAlbumDto == null) {
+        AlbumDto albumDto = (AlbumDto) session.getAttribute("album");
+        if (albumDto == null) {
             redirectAttributes.addFlashAttribute("error", "No album found. Please create an album first.");
             return "redirect:/dashboard/new-album";
         }
@@ -175,56 +155,14 @@ public class DashboardController {
             return "redirect:/dashboard/album/add-songs";
         }
 
-        List<Song> songs= new ArrayList<>();
-        Cover cover = new Cover();
         try {
-            // Upload songs to S3
-            for (int i = 0; i < songTitles.size(); i++) {
-                String songTitle = songTitles.get(i);
-                MultipartFile songFile = songFiles.get(i);
-
-                if (songFile.isEmpty()) {
-                    redirectAttributes.addFlashAttribute("error", "One or more song files are empty.");
-                    return "redirect:/dashboard/album/add-songs";
-                }
-
-                String key = "songs/" + System.currentTimeMillis() + "_" + songFile.getOriginalFilename();
-                String url = s3Service.uploadFile(key, songFile.getBytes());
-                Song song = new Song();
-                song.setTitle(songTitle);
-                song.setFileKey(key);
-                song.setFileUrl(url);
-                song.setGenre(createAlbumDto.getGenre());
-
-                songs.add(song);
-
-            }
-
-            // Upload the cover to S3
-            String localCoverPath = session.getAttribute("coverPath").toString();
-            if (localCoverPath != null) {
-                Path filePath = Paths.get(localCoverPath);
-                byte[] coverBytes = Files.readAllBytes(filePath);
-
-                String coverKey = "covers/" + System.currentTimeMillis() + "_" + filePath.getFileName().toString();
-                String coverUrl = s3Service.uploadFile(coverKey, coverBytes);
-
-                cover.setKey(coverKey);
-                cover.setUrl(coverUrl);
-
-
-                // Delete the locally saved cover file
-                Files.deleteIfExists(filePath);
-            }
-
-            albumService.saveAlbumWithSongsAndCover(createAlbumDto, songs, cover);
-
+            albumService.saveAlbumWithSongsAndCover(albumDto, songTitles, songFiles);
             session.removeAttribute("album");
+            session.removeAttribute("coverPath");
             redirectAttributes.addFlashAttribute("success", "Album and songs saved successfully!");
             return "redirect:/dashboard";
-
         } catch (IOException e) {
-            log.error("Error uploading files: " + e.getMessage(), e);
+            log.error("Failed to upload files for album: {}", albumDto.getTitle(), e);
             redirectAttributes.addFlashAttribute("error", "An error occurred while uploading the files.");
             return "redirect:/dashboard/new-album";
         }
