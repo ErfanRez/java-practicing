@@ -97,9 +97,32 @@ footer a:hover {
     transition: var(--transition);
 }
 
+.like-icon {
+    position: absolute;
+    display: flex;
+    top: 15px;
+    right: 20px;
+    width: fit-content;
+    height: fit-content;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0; /* Initially hidden */
+    transition: var(--transition);
+}
+
+.like-icon:hover{
+    scale: var(--scale-percentage);
+}
 
 .play-icon:hover {
     scale: var(--scale-percentage);
+}
+
+.play-card:hover .like-icon {
+    opacity: 1;
 }
 
 .play-card:hover .play-icon {

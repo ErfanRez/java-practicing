@@ -3,6 +3,7 @@ package com.music.controller;
 
 import com.music.dto.AlbumDto;
 import com.music.dto.TrackDto;
+import com.music.model.User;
 import com.music.service.S3Service;
 import com.music.service.album.AlbumService;
 import com.music.service.song.SongService;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -57,7 +59,8 @@ public class DashboardController {
             @Valid @ModelAttribute("track") TrackDto trackDto,
             BindingResult bindingResult,
             Model model,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            @AuthenticationPrincipal User user
     ) {
         if (bindingResult.hasErrors()) {
             return "new-track";
@@ -74,7 +77,7 @@ public class DashboardController {
         }
 
         try {
-            songService.saveTrackWithCover(trackDto, audioFile, cover);
+            songService.saveTrackWithCover(trackDto, audioFile, cover, user);
             redirectAttributes.addFlashAttribute("success", "Track saved successfully!");
             return "redirect:/dashboard";
 
@@ -99,7 +102,6 @@ public class DashboardController {
             @RequestParam("cover") MultipartFile cover,
             @Valid @ModelAttribute("album") AlbumDto albumDto,
             BindingResult bindingResult,
-            RedirectAttributes redirectAttributes,
             Model model,
             HttpSession session
     ) {
@@ -153,7 +155,8 @@ public class DashboardController {
             @RequestParam("songTitles") List<String> songTitles,
             @RequestParam("songFiles") List<MultipartFile> songFiles,
             HttpSession session,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            @AuthenticationPrincipal User user
     ) {
 
         AlbumDto albumDto = (AlbumDto) session.getAttribute("album");
@@ -168,7 +171,7 @@ public class DashboardController {
         }
 
         try {
-            albumService.saveAlbumWithSongsAndCover(albumDto, songTitles, songFiles);
+            albumService.saveAlbumWithSongsAndCover(albumDto, songTitles, songFiles, user);
             session.removeAttribute("album");
             session.removeAttribute("coverPath");
             redirectAttributes.addFlashAttribute("success", "Album and songs saved successfully!");

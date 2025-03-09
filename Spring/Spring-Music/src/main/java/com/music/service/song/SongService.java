@@ -1,5 +1,7 @@
 package com.music.service.song;
 
+import com.music.model.User;
+import com.music.repository.UserRepository;
 import com.music.utils.Constants;
 import com.music.dto.TrackDto;
 import com.music.model.Cover;
@@ -8,26 +10,33 @@ import com.music.repository.CoverRepository;
 import com.music.repository.SongRepository;
 import com.music.service.S3Service;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class SongService implements ISongService {
     private final SongRepository songRepository;
     private final CoverRepository coverRepository;
     private final S3Service s3Service;
+    private final UserRepository userRepository;
 
-    public SongService(SongRepository songRepository, CoverRepository coverRepository, S3Service s3Service) {
+    public SongService(SongRepository songRepository, CoverRepository coverRepository, S3Service s3Service, UserRepository userRepository) {
         this.songRepository = songRepository;
         this.coverRepository = coverRepository;
         this.s3Service = s3Service;
+        this.userRepository = userRepository;
     }
 
     @Override
     @Transactional
-    public void saveTrackWithCover(TrackDto trackDto, MultipartFile audioFile, MultipartFile coverFile) throws IOException {
+    public void saveTrackWithCover(TrackDto trackDto, MultipartFile audioFile, MultipartFile coverFile, User auth) throws IOException {
+        User user = userRepository.findByUsername(auth.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User with username:" + auth.getUsername() + " not found"));
+
         String audioKey = Constants.TRACKS_PREFIX + System.currentTimeMillis() + "_" + audioFile.getOriginalFilename();
         String audioUrl = s3Service.uploadFile(audioKey, audioFile.getBytes());
 
@@ -40,6 +49,7 @@ public class SongService implements ISongService {
         Cover savedCover = coverRepository.save(cover);
 
         Song song = TrackDto.toSongMapper(trackDto, audioKey, audioUrl, savedCover);
+        song.setArtist(user);
         songRepository.save(song);
     }
 }

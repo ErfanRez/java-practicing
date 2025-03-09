@@ -4,8 +4,14 @@ import com.music.utils.Genres;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
+@Entity
 public class Song extends BaseEntity {
 
     private String title;
@@ -19,6 +25,8 @@ public class Song extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Genres genre;
 
+    private long likeCount = 0;
+
     @ManyToOne
     @JoinColumn(name = "cover_id")
     private Cover cover;
@@ -26,5 +34,9 @@ public class Song extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "album_id", nullable = true)
     private Album album;
+
+    @ManyToOne
+    @JoinColumn(name = "artist_id", nullable = false)
+    private User artist;
 }
 

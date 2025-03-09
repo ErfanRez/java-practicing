@@ -2,14 +2,12 @@ package com.music.model;
 
 import com.music.utils.Roles;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Entity
@@ -35,6 +33,28 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Roles role = Roles.USER; // Default role is USER, (ADMIN, USER, ARTIST)
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_favorite_songs",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "song_id")
+    )
+    private Set<Song> favoriteSongs = new HashSet<>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_favorite_albums",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "album_id")
+    )
+    private Set<Album> favoriteAlbums = new HashSet<>();
+
+    @OneToMany(mappedBy = "artist", orphanRemoval = true)
+    private List<Song> songs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "artist", orphanRemoval = true)
+    private List<Album> albums = new ArrayList<>();
+
     public User() {}
 
     public User(String username, String password, Roles role, String email) {
@@ -44,11 +64,46 @@ public class User extends BaseEntity implements UserDetails {
         this.email = email;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_"+ role));
+    public void addFavoriteSong(Song song) {
+        favoriteSongs.add(song);
     }
 
+    public void removeFavoriteSong(Song song) {
+        favoriteSongs.remove(song);
+    }
+
+    public void addFavoriteAlbum(Album album) {
+        favoriteAlbums.add(album);
+    }
+
+    public void removeFavoriteAlbum(Album album) {
+        favoriteAlbums.remove(album);
+    }
+
+    public void addSong(Song song) {
+        songs.add(song);
+        song.setArtist(this);
+    }
+
+    public void removeSong(Song song) {
+        songs.remove(song);
+        song.setArtist(null);
+    }
+
+    public void addAlbum(Album album) {
+        albums.add(album);
+        album.setArtist(this);
+    }
+
+    public void removeAlbum(Album album) {
+        albums.remove(album);
+        album.setArtist(null);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role));
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -70,4 +125,3 @@ public class User extends BaseEntity implements UserDetails {
         return true;
     }
 }
-

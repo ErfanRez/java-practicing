@@ -1,7 +1,6 @@
 package com.music.dto;
 
 import com.music.model.User;
-import com.music.model.User;
 import com.music.utils.Roles;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
