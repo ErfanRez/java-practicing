@@ -2,6 +2,25 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
 <body>
 <section layout:fragment="content" class="grid-span">
+    <div th:if="${error}">
+        <div th:replace="~{fragments/toast :: toast('danger', ${error})}"></div>
+    </div>
+
+    <div th:if="${auth}">
+        <div th:replace="~{fragments/toast :: toast('success', ${auth})}"></div>
+    </div>
+
+    <div th:if="${param.login}">
+        <div th:replace="~{fragments/toast :: toast('success', 'Login successful')}"></div>
+    </div>
+
+    <div th:if="${param.error}">
+        <div th:replace="~{fragments/toast :: toast('danger', 'Login failed!')}"></div>
+    </div>
+
+    <div th:if="${param.logout}">
+        <div th:replace="~{fragments/toast :: toast('success', 'Logout successful')}"></div>
+    </div>
 
     <!-- Songs-->
     <div class="d-flex align-items-center justify-content-between mt-3 px-5">

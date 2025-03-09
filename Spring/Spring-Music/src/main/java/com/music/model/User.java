@@ -1,46 +1,73 @@
 package com.music.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.music.utils.Roles;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-//implements UserDetails
+import java.util.Collection;
+import java.util.List;
+
 @Data
 @Entity
-public class User {
+public class User extends BaseEntity implements UserDetails {
+    @Column(nullable = true)
+    private String firstName;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = true)
+    private String lastName;
 
-    private  String username;
-    private  String password;
-    private  String firstName;
-    private  String lastName;
-    private  String emailAddress;
+    @Column(nullable = true, unique = true)
+    private String nickname; // Optional
 
-    private String role;
+    @Column(unique = true, nullable = false)
+    private String username;
 
-    public User() {
-    }
+    @Column(unique = true, nullable = false)
+    private String email;
 
-    public User(String username, String password, String role,
-                String firstName, String lastName, String emailAddress) {
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.emailAddress = emailAddress;
+    @Column(nullable = false)
+    private String password;
 
-        this.role = role;
-    }
+    @Enumerated(EnumType.STRING)
+    private Roles role = Roles.USER; // Default role is USER, (ADMIN, USER, ARTIST)
 
-    public User(String username, String password, String role) {
+    public User() {}
+
+    public User(String username, String password, Roles role, String email) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.email = email;
+    }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_"+ role));
+    }
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
+

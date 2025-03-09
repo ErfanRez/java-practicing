@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en" data-bs-theme="dark">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,6 +29,9 @@
 <!-- Footer -->
 <footer th:replace="~{fragments/footer :: footer}" class="footer bg-dark py-3">
 </footer>
+
+<!-- Login/Register Modal -->
+<div th:replace="~{fragments/auth-modal}"></div>
 
 <script th:src="@{/webjars/bootstrap/5.3.3/dist/js/bootstrap.bundle.js}"></script>
 <script src="/assets/js/scripts.js"></script>

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <body>
 <section layout:fragment="content" class="grid-span mt-3">
-
     <!-- Toast fragment -->
     <div th:if="${success}">
         <div th:replace="~{fragments/toast :: toast('success', ${success})}"></div>
@@ -13,7 +12,8 @@
         <div class="d-flex align-items-center">
             <img src="/assets/images/singer.webp" alt="Artist" class="cover-container object-fit-cover rounded-circle me-4" width="250" height="250">
             <div class="d-flex flex-column">
-                <h3>Artist Name</h3>
+                <h3 sec:authentication="name">Artist Name</h3>
+                <h6 sec:authentication="authorities">Artist Name</h6>
                 <h4 class="text-secondary-emphasis">Nickname</h4>
             </div>
         </div>

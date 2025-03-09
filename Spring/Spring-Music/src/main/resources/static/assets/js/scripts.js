@@ -113,14 +113,26 @@ document.addEventListener('DOMContentLoaded', function () {
 function disableSubmitButton() {
     const submitButton = document.getElementById('submitButton');
     const addSongButton = document.getElementById("addSongButton")
+    const loginButton = document.getElementById("loginButton")
+    const registerButton = document.getElementById("registerButton")
     if (submitButton) {
         submitButton.disabled = true;
         submitButton.innerText = 'Saving...';
     } else {
         console.error("Submit button not found!");
     }
+
     if(addSongButton){
         addSongButton.disabled = true;
+    }
+
+    if (loginButton) {
+        loginButton.disabled = true;
+        loginButton.innerText = 'Loading...';
+    }
+    if (registerButton) {
+        registerButton.disabled = true;
+        registerButton.innerText = 'Loading...';
     }
 
 }
@@ -137,5 +149,23 @@ function showToast() {
 }
 
 document.addEventListener('DOMContentLoaded', showToast);
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+// Show modal when login button is clicked
+document.getElementById('loginButton').addEventListener('click', function () {
+    const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+    loginModal.show();
+});
+
+// Toggle artist fields based on selected role
+document.getElementById('registerRole').addEventListener('change', function () {
+    const artistFields = document.getElementById('artistFields');
+    if (this.value === 'ARTIST') {
+        artistFields.style.display = 'block';
+    } else {
+        artistFields.style.display = 'none';
+    }
+});
 
 /////////////////////////////////////////////////////////////////////////////////////////////
