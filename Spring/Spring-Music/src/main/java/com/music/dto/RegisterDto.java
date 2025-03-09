@@ -22,7 +22,7 @@ public class RegisterDto {
     @Email(message = "Invalid email format")
     private String email;
 
-    private Roles role; // Roles: USER, USER
+    private Roles role; // Role: USER
 
     @NotBlank(message = "Password is required")
     private String password;

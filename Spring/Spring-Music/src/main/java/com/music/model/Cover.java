@@ -1,13 +1,15 @@
 package com.music.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.Embeddable;
 import lombok.Data;
 
-@Entity
+@Embeddable
 @Data
-public class Cover extends BaseEntity {
-    @Column(name = "`key`")
-    String key;
-    String url;
+public class Cover {
+    @Column(name = "cover_key")
+    private String key;
+
+    @Column(name = "cover_url")
+    private String url;
 }

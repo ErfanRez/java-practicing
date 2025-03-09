@@ -6,7 +6,6 @@ import com.music.utils.Constants;
 import com.music.dto.TrackDto;
 import com.music.model.Cover;
 import com.music.model.Song;
-import com.music.repository.CoverRepository;
 import com.music.repository.SongRepository;
 import com.music.service.S3Service;
 import jakarta.transaction.Transactional;
@@ -15,18 +14,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Service
 public class SongService implements ISongService {
     private final SongRepository songRepository;
-    private final CoverRepository coverRepository;
     private final S3Service s3Service;
     private final UserRepository userRepository;
 
-    public SongService(SongRepository songRepository, CoverRepository coverRepository, S3Service s3Service, UserRepository userRepository) {
+    public SongService(SongRepository songRepository, S3Service s3Service, UserRepository userRepository) {
         this.songRepository = songRepository;
-        this.coverRepository = coverRepository;
         this.s3Service = s3Service;
         this.userRepository = userRepository;
     }
@@ -46,9 +42,8 @@ public class SongService implements ISongService {
         Cover cover = new Cover();
         cover.setKey(coverKey);
         cover.setUrl(coverUrl);
-        Cover savedCover = coverRepository.save(cover);
 
-        Song song = TrackDto.toSongMapper(trackDto, audioKey, audioUrl, savedCover);
+        Song song = TrackDto.toSongMapper(trackDto, audioKey, audioUrl, cover);
         song.setArtist(user);
         songRepository.save(song);
     }

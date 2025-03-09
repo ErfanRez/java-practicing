@@ -24,7 +24,7 @@ public class AlbumDto {
     private Double price;
 
     @NotNull(message = "Genre is required")
-    private Genres genre; // Add genre field
+    private Genres genre;
 
     private String coverUrl;
 

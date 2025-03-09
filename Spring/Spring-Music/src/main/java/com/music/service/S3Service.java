@@ -11,7 +11,7 @@ public class S3Service {
 
     private final S3Client s3Client;
 
-    private final String bucketName = "spring"; // bucket name
+    private final String bucketName = "spring";
 
     public S3Service(S3Client s3Client) {
         this.s3Client = s3Client;
@@ -24,8 +24,9 @@ public class S3Service {
                 .key(key)
                 .build(), RequestBody.fromBytes(fileBytes));
 
+        String endpoint = "storage.c2.liara.space";
         // Return the S3 URL
-        return String.format("https://%s/%s/%s", "storage.c2.liara.space", bucketName, key);
+        return String.format("https://%s/%s/%s", endpoint, bucketName, key);
     }
 
     public void deleteFile(String key) {

@@ -4,12 +4,6 @@ import com.music.utils.Genres;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import jakarta.persistence.*;
-import lombok.Data;
-
-import java.util.HashSet;
-import java.util.Set;
-
 @Data
 @Entity
 public class Song extends BaseEntity {
@@ -27,8 +21,7 @@ public class Song extends BaseEntity {
 
     private long likeCount = 0;
 
-    @ManyToOne
-    @JoinColumn(name = "cover_id")
+    @Embedded
     private Cover cover;
 
     @ManyToOne

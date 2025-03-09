@@ -8,10 +8,7 @@ import com.music.model.Album;
 import com.music.model.Cover;
 import com.music.model.Song;
 import com.music.repository.AlbumRepository;
-import com.music.repository.CoverRepository;
-import com.music.repository.SongRepository;
 import com.music.service.S3Service;
-import com.music.utils.Roles;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,14 +25,12 @@ import java.nio.file.Paths;
 @Service
 public class AlbumService implements IAlbumService {
     private final AlbumRepository albumRepository;
-    private final CoverRepository coverRepository;
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final HttpSession session;
 
-    public AlbumService(AlbumRepository albumRepository, CoverRepository coverRepository, UserRepository userRepository, S3Service s3Service, HttpSession session) {
+    public AlbumService(AlbumRepository albumRepository, UserRepository userRepository, S3Service s3Service, HttpSession session) {
         this.albumRepository = albumRepository;
-        this.coverRepository = coverRepository;
         this.userRepository = userRepository;
         this.s3Service = s3Service;
         this.session = session;
@@ -60,15 +55,12 @@ public class AlbumService implements IAlbumService {
             cover.setKey(coverKey);
             cover.setUrl(coverUrl);
 
-
             // Delete the locally saved cover file
             Files.deleteIfExists(filePath);
         }
 
-        Cover savedCover = coverRepository.save(cover);
-
         Album album = AlbumDto.DtoToAlbumMapper(albumDto);
-        album.setCover(savedCover);
+        album.setCover(cover);
         album.setArtist(user);
 
         for (int i = 0; i < songTitles.size(); i++) {
@@ -83,7 +75,7 @@ public class AlbumService implements IAlbumService {
             song.setFileKey(songKey);
             song.setFileUrl(songUrl);
             song.setGenre(album.getGenre());
-            song.setCover(savedCover);
+            song.setCover(cover);
             song.setArtist(user);
 
             album.addSong(song);
