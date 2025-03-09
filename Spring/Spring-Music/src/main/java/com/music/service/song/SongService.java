@@ -43,7 +43,8 @@ public class SongService implements ISongService {
         cover.setKey(coverKey);
         cover.setUrl(coverUrl);
 
-        Song song = TrackDto.toSongMapper(trackDto, audioKey, audioUrl, cover);
+        Song song = TrackDto.toSongMapper(trackDto, audioKey, audioUrl);
+        song.setCover(cover);
         song.setArtist(user);
         songRepository.save(song);
     }

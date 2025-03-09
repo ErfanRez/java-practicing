@@ -5,4 +5,5 @@ public class Constants {
     public static final String TRACKS_PREFIX = "tracks/";
     public static final String SONGS_PREFIX = "songs/";
     public static final String COVERS_PREFIX = "covers/";
+    public static final String PROFILES_PREFIX = "profiles/";
 }

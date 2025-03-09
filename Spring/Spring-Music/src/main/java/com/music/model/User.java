@@ -21,6 +21,10 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = true, unique = true)
     private String nickname; // Optional
 
+    @Embedded
+    @Column(nullable = true)
+    private ArtistPic profilePic;
+
     @Column(unique = true, nullable = false)
     private String username;
 

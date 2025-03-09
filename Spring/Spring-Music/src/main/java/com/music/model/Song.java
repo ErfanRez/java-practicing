@@ -11,10 +11,10 @@ public class Song extends BaseEntity {
     private String title;
 
     @Column(unique = true)
-    private String fileUrl;
+    private String audioUrl;
 
     @Column(unique = true)
-    private String fileKey;
+    private String audioKey;
 
     @Enumerated(EnumType.STRING)
     private Genres genre;
@@ -22,6 +22,7 @@ public class Song extends BaseEntity {
     private long likeCount = 0;
 
     @Embedded
+    @Column(nullable = false)
     private Cover cover;
 
     @ManyToOne

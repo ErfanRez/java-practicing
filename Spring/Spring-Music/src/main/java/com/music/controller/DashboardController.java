@@ -2,11 +2,13 @@ package com.music.controller;
 
 
 import com.music.dto.AlbumDto;
+import com.music.dto.ArtistDto;
 import com.music.dto.TrackDto;
 import com.music.model.User;
 import com.music.service.S3Service;
 import com.music.service.album.AlbumService;
 import com.music.service.song.SongService;
+import com.music.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.Getter;
@@ -34,11 +36,13 @@ public class DashboardController {
     private final AlbumService albumService;
     private final S3Service s3Service;
     private final SongService songService;
+    private final UserService userService;
 
-    public DashboardController(AlbumService albumService, S3Service s3Service, SongService songService) {
+    public DashboardController(AlbumService albumService, S3Service s3Service, SongService songService, UserService userService) {
         this.albumService = albumService;
         this.s3Service = s3Service;
         this.songService = songService;
+        this.userService = userService;
     }
 
     @GetMapping()
@@ -207,5 +211,46 @@ public class DashboardController {
 //
 //        return "redirect:/dashboard"; // Redirect to the dashboard or any other page
 //    }
+
+    @GetMapping("/new-artist")
+    public String showArtistRegisterForm(Model model) {
+        model.addAttribute("artist", new ArtistDto());
+        return "new-artist";
+    }
+
+    @PostMapping("/new-artist")
+    public String registerArtist(
+            @Valid @ModelAttribute("artist") ArtistDto artistDto,
+            BindingResult bindingResult,
+            @RequestParam(value = "profilePicture") MultipartFile profilePicture,
+            @RequestParam String confirmPassword,
+            RedirectAttributes redirectAttributes,
+            Model model
+    ) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return "new-artist";
+        }
+
+        if (!artistDto.getPassword().equals(confirmPassword)) {
+            model.addAttribute("error", "Passwords do not match");
+            return "new-artist";
+        }
+
+        if (profilePicture.isEmpty()) {
+            model.addAttribute("error", "Please upload a profile picture");
+            return "new-artist";
+        }
+
+
+        if (userService.existsByUsernameOrEmailOrNickname(artistDto.getUsername(), artistDto.getEmail(), artistDto.getNickname())) {
+            model.addAttribute("error", "Artist already exists!");
+            return "new-artist";
+        }
+
+        userService.saveArtist(artistDto, profilePicture);
+
+        redirectAttributes.addFlashAttribute("success", "Artist registration successful");
+        return "redirect:/dashboard";
+    }
 
 }

@@ -20,7 +20,7 @@
                     <!-- Login Form -->
                     <div class="tab-content" id="loginRegisterTabsContent">
                         <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
-                            <form id="loginForm" th:action="@{/auth/login}" method="post">
+                            <form id="loginForm" th:action="@{/auth/login}" method="post" onsubmit="disableSubmitButton()">
                                 <div class="mb-3">
                                     <label for="loginUsername" class="form-label">Username</label>
                                     <input type="text" class="form-control" id="loginUsername" name="username" required autocomplete="off">
@@ -35,47 +35,24 @@
 
                         <!-- Register Form -->
                         <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                            <form id="registerForm" th:action="@{/auth/register}" method="post">
-<!--                            <form id="registerForm" th:action="@{/auth/register}" th:object="${registerDto}" method="post">-->
-                                <div class="mb-3">
-                                    <label for="registerRole" class="form-label">Register as:</label>
-                                    <select class="form-select" id="registerRole" name="role" required>
-<!--                                    <select class="form-select" id="registerRole" th:field="*{role}" required>-->
-                                        <option value="USER">User</option>
-                                        <option value="ARTIST">Artist</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3" id="artistFields" style="display: none;">
-                                    <label for="firstName" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" name="firstName">
-                                    <label for="lastName" class="form-label mt-3">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" name="lastName">
-                                    <label for="nickname" class="form-label mt-3">Nickname (Optional)</label>
-                                    <input type="text" class="form-control" id="nickname" name="nickname">
-                                </div>
+                            <form id="registerForm" th:action="@{/auth/register}" method="post" onsubmit="disableSubmitButton()">
                                 <div class="mb-3">
                                     <label for="username" class="form-label">Username</label>
                                     <input type="text" class="form-control" id="username" name="username" required>
-<!--                                    <input type="text" class="form-control" id="username" th:field="*{username}" required>-->
-<!--                                    <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="email" name="email" required>
-<!--                                    <input type="email" class="form-control" id="email" th:field="*{emailAddress}" required>-->
-<!--                                    <div class="text-danger" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></div>-->
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
                                     <input type="password" class="form-control" id="password" name="password" required>
-<!--                                    <input type="password" class="form-control" id="password" th:field="*{password}" required>-->
-<!--                                    <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
                                 </div>
                                 <div class="mb-3">
                                     <label for="confirmPassword" class="form-label">Confirm Password</label>
                                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
                                 </div>
-                                <button type="submit" id="registerButton" class="btn btn-success w-100">Register</button>
+                                <button type="submit" id="registeringButton" class="btn btn-success w-100">Register</button>
                             </form>
                         </div>
                     </div>

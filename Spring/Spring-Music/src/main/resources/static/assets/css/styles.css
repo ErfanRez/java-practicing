@@ -214,4 +214,11 @@ footer a:hover {
     color: red;
 }
 
+.art-profile{
+    transition: var(--transition);
+}
+.art-profile:hover{
+    scale: var(--scale-percentage);
+}
+
 

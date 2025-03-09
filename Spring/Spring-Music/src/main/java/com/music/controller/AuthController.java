@@ -2,7 +2,6 @@ package com.music.controller;
 
 import com.music.dto.RegisterDto;
 import com.music.service.user.UserService;
-import com.music.utils.Roles;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +17,11 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @GetMapping("/register")
-    public String showRegisterForm(Model model) {
+//    @GetMapping("/register")
+//    public String showRegisterForm(Model model) {
 //        model.addAttribute("registerDto", new RegisterDto()); // Add registerDto to the model
-        return "fragments/auth-modal"; // Return the modal fragment
-    }
+//        return "fragments/auth-modal"; // Return the modal fragment
+//    }
 
     @PostMapping("/register")
     public String register(
@@ -30,41 +29,21 @@ public class AuthController {
 //            BindingResult bindingResult,
             RegisterDto registerDto,
             @RequestParam String confirmPassword,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            Model model
     ){
 //        if (bindingResult.hasErrors()) {
 //            return "/home";
 //        }
 
         if (!registerDto.getPassword().equals(confirmPassword)) {
-            redirectAttributes.addFlashAttribute("error", "Passwords do not match!");
-            return "redirect:/";
+            model.addAttribute("error", "Passwords do not match!");
+            return "/home";
         }
 
-        if (registerDto.getRole() == Roles.ARTIST) {
-            userService.saveArtist(registerDto);
-        } else {
-            userService.saveUser(registerDto);
-        }
+        userService.saveUser(registerDto);
 
         redirectAttributes.addFlashAttribute("auth", "Registration successful");
         return "redirect:/";
     }
-
-//     Custom login endpoint (optional)
-//    @PostMapping("/login")
-//    public String login(RedirectAttributes redirectAttributes) {
-//        redirectAttributes.addFlashAttribute("auth", "Login successful");
-//        // Spring Security will handle authentication automatically
-//
-//        return "redirect:/dashboard";
-//    }
-//
-//
-//     Custom logout endpoint (optional)
-//    @PostMapping("/logout")
-//    public String logout(RedirectAttributes redirectAttributes) {
-//        redirectAttributes.addFlashAttribute("auth", "Logout successful");
-//        return "redirect:/";
-//    }
 }

@@ -1,6 +1,5 @@
 package com.music.dto;
 
-import com.music.model.Cover;
 import com.music.model.Song;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,13 +14,13 @@ public class TrackDto {
     @NotNull(message = "Genre is required")
     private Genres genre;
 
-    public static Song toSongMapper(TrackDto trackDto, String audioKey, String audioUrl, Cover cover) {
+    public static Song toSongMapper(TrackDto trackDto, String audioKey, String audioUrl) {
         Song song = new Song();
         song.setTitle(trackDto.getTitle());
         song.setGenre(trackDto.getGenre());
-        song.setFileKey(audioKey);
-        song.setFileUrl(audioUrl);
-        song.setCover(cover);
+        song.setAudioKey(audioKey);
+        song.setAudioUrl(audioUrl);
+
         return song;
     }
 }

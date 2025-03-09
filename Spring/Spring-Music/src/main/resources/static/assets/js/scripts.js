@@ -112,9 +112,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function disableSubmitButton() {
     const submitButton = document.getElementById('submitButton');
-    const addSongButton = document.getElementById("addSongButton")
-    const loginButton = document.getElementById("loginButton")
-    const registerButton = document.getElementById("registerButton")
+    const addSongButton = document.getElementById("addSongButton");
+    const loadingButton = document.getElementById("loadingButton");
+    const loginButton = document.getElementById("loginButton");
+    const registeringButton = document.getElementById("registeringButton");
+
     if (submitButton) {
         submitButton.disabled = true;
         submitButton.innerText = 'Saving...';
@@ -126,13 +128,19 @@ function disableSubmitButton() {
         addSongButton.disabled = true;
     }
 
+    if (loadingButton) {
+        loadingButton.disabled = true;
+        loadingButton.innerText = 'Loading...';
+    }
+
     if (loginButton) {
         loginButton.disabled = true;
         loginButton.innerText = 'Loading...';
     }
-    if (registerButton) {
-        registerButton.disabled = true;
-        registerButton.innerText = 'Loading...';
+
+    if (registeringButton) {
+        registeringButton.disabled = true;
+        registeringButton.innerText = 'Loading...';
     }
 
 }
@@ -158,14 +166,30 @@ document.getElementById('loginButton').addEventListener('click', function () {
     loginModal.show();
 });
 
-// Toggle artist fields based on selected role
-document.getElementById('registerRole').addEventListener('change', function () {
-    const artistFields = document.getElementById('artistFields');
-    if (this.value === 'ARTIST') {
-        artistFields.style.display = 'block';
-    } else {
-        artistFields.style.display = 'none';
-    }
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+//Change img src in artist registration form
+
+document.addEventListener('DOMContentLoaded', function () {
+    const profilePictureInput = document.getElementById('profilePicture');
+    const profilePicturePreview = document.getElementById('profilePicturePreview');
+
+    // Open file dialog when the image is clicked
+    profilePicturePreview.addEventListener('click', function () {
+        profilePictureInput.click();
+    });
+
+    // Update the image preview when a file is selected
+    profilePictureInput.addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                profilePicturePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////

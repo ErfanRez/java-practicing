@@ -72,8 +72,8 @@ public class AlbumService implements IAlbumService {
 
             Song song = new Song();
             song.setTitle(songTitle);
-            song.setFileKey(songKey);
-            song.setFileUrl(songUrl);
+            song.setAudioKey(songKey);
+            song.setAudioUrl(songUrl);
             song.setGenre(album.getGenre());
             song.setCover(cover);
             song.setArtist(user);
