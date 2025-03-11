@@ -7,10 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
@@ -47,9 +44,19 @@ public class AVLTreeVisualizer extends Application {
         deleteField.setPromptText("Delete key");
         Button deleteButton = new Button("Delete");
 
-        HBox controlPanel = new HBox(10, insertField, insertButton, deleteField, deleteButton);
-        controlPanel.setStyle("-fx-padding: 10; -fx-background-color: #f0f0f0;");
-        controlPanel.setAlignment(Pos.CENTER);
+
+        Button clearButton = new Button("Clear");
+
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+
+        HBox controlPanel = new HBox(10, insertField, insertButton, deleteField, deleteButton, spacer, clearButton);
+        controlPanel.setAlignment(Pos.CENTER_LEFT);
+        controlPanel.setPadding(new Insets(10));
+        controlPanel.setStyle("-fx-background-color: #f0f0f0;");
+
 
         Separator separator = new Separator();
 
@@ -104,6 +111,11 @@ public class AVLTreeVisualizer extends Application {
             } catch (NumberFormatException ex) {
                 deleteField.clear();
             }
+        });
+
+        clearButton.setOnAction(e -> {
+            root = null;
+            visualizeTree();
         });
     }
 
