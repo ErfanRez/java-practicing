@@ -15,26 +15,26 @@ public class RestExceptionHandler {
 
 
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        BindingResult bindingResult = ex.getBindingResult();
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+//        BindingResult bindingResult = ex.getBindingResult();
+//
+//        Map<String, String> errorDetails = new HashMap<>();
+//        bindingResult.getFieldErrors().forEach(error ->
+//                errorDetails.put(error.getField(), error.getDefaultMessage())
+//        );
+//
+//        ErrorResponse errorResponse = new ErrorResponse(
+//                "error",
+//                "input validation failed",
+//                errorDetails
+//        );
+//
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
 
-        Map<String, String> errorDetails = new HashMap<>();
-        bindingResult.getFieldErrors().forEach(error ->
-                errorDetails.put(error.getField(), error.getDefaultMessage())
-        );
 
-        ErrorResponse errorResponse = new ErrorResponse(
-                "error",
-                "input validation failed",
-                errorDetails
-        );
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuleExceptions(Exception ex) {
         String errorMessage = ex.getLocalizedMessage();
 
