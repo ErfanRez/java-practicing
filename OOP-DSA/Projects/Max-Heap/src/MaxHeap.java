@@ -1,5 +1,3 @@
-package maxheap;
-
 public class MaxHeap { // IntMaxHeap
     public static final int INITIAL_CAPACITY = 25;
     private int[] a;

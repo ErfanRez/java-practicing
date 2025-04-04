@@ -1,5 +1,3 @@
-package maxheap;
-
 import javafx.geometry.VPos;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;

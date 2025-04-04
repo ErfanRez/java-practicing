@@ -1,21 +1,19 @@
-package maxheap;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-public class MaxHeapHardCoded extends Application {
+
+public class MaxHeapVisualizer extends Application {
+
 
     private MaxHeap heap = new MaxHeap();
     private TreePane visualizer = new TreePane();
     private StackPane centerPane = new StackPane();
+
 
     private Label arrayViewTitleLabel = new Label("Array View: ");
     private Label arrayViewExprLabel = new Label();
@@ -25,12 +23,36 @@ public class MaxHeapHardCoded extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws EmptyMaxHeapException {
+    public void start(Stage primaryStage) {
+
         BorderPane mainPane = new BorderPane();
+
         centerPane.getChildren().add(visualizer);
         visualizer.prefWidthProperty().bind(centerPane.widthProperty());
         visualizer.prefHeightProperty().bind(centerPane.heightProperty());
         mainPane.setCenter(centerPane);
+
+        TextField insertField = new TextField();
+        insertField.setPromptText("Insert key");
+        Button insertButton = new Button("Insert");
+
+
+        Button deleteButton = new Button("Remove Max");
+        Button clearButton = new Button("Clear");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        HBox controlPanel = new HBox(10, insertField, insertButton, deleteButton, spacer, clearButton);
+        controlPanel.setAlignment(Pos.CENTER_LEFT);
+        controlPanel.setPadding(new Insets(10));
+        controlPanel.setStyle("-fx-background-color: #f0f0f0;");
+
+        Separator separator = new Separator();
+
+        VBox topSection = new VBox(10, controlPanel, separator);
+        topSection.setAlignment(Pos.CENTER);
+        mainPane.setTop(topSection);
 
 
         HBox arrayViewBox = new HBox(10);
@@ -45,35 +67,50 @@ public class MaxHeapHardCoded extends Application {
         mainPane.setBottom(bottomBox);
 
         Scene scene = new Scene(mainPane, 800, 600);
-        primaryStage.setTitle("Max Heap Visualizer (HardCoded)");
+        primaryStage.setTitle("Max Heap Visualizer");
         primaryStage.setScene(scene);
         primaryStage.show();
 
 
         centerPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            if (heap.size() > 0) {
-                visualizeHeap();
+            visualizeTree();
+        });
+
+
+        insertButton.setOnAction(e -> {
+            try {
+                int key = Integer.parseInt(insertField.getText().trim());
+                heap.add(key);
+                insertField.clear();
+                visualizeTree();
+            } catch (NumberFormatException ex) {
+                insertField.clear();
             }
         });
 
 
-        heap.add(44);
-        heap.add(30);
-        heap.add(50);
-        heap.add(22);
-        heap.add(60);
-        heap.add(55);
-        heap.add(77);
-        heap.add(55);
-        heap.add(11);
+        deleteButton.setOnAction(e -> {
+            try {
+                heap.removeMax();
+                visualizeTree();
+            } catch (EmptyMaxHeapException ex) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Heap Empty");
+                alert.setHeaderText(null);
+                alert.setContentText("The max-heap is empty.");
+                alert.showAndWait();
+            }
+        });
 
-//        heap.removeMax();
 
-        visualizeHeap();
+        clearButton.setOnAction(e -> {
+            heap = new MaxHeap();
+            visualizeTree();
+        });
     }
 
 
-    private void visualizeHeap() {
+    private void visualizeTree() {
         visualizer.clear();
         double centerX = centerPane.getWidth() / 2;
         double centerY = 80;
@@ -82,6 +119,7 @@ public class MaxHeapHardCoded extends Application {
         if (n > 0 && heapArray != null) {
             visualizer.drawTree(heapArray, n, 1, centerX, centerY, TreePane.INITIAL_HGAP);
         }
+
         arrayViewExprLabel.setText(getArrayView(heapArray, n));
     }
 
@@ -99,4 +137,6 @@ public class MaxHeapHardCoded extends Application {
         return sb.toString();
     }
 }
+
+
 

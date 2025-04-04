@@ -1,21 +1,19 @@
-package maxheap;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-
-public class MaxHeapVisualizer extends Application {
-
+public class MaxHeapHardCoded extends Application {
 
     private MaxHeap heap = new MaxHeap();
     private TreePane visualizer = new TreePane();
     private StackPane centerPane = new StackPane();
-
 
     private Label arrayViewTitleLabel = new Label("Array View: ");
     private Label arrayViewExprLabel = new Label();
@@ -25,36 +23,12 @@ public class MaxHeapVisualizer extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
-
+    public void start(Stage primaryStage) throws EmptyMaxHeapException {
         BorderPane mainPane = new BorderPane();
-
         centerPane.getChildren().add(visualizer);
         visualizer.prefWidthProperty().bind(centerPane.widthProperty());
         visualizer.prefHeightProperty().bind(centerPane.heightProperty());
         mainPane.setCenter(centerPane);
-
-        TextField insertField = new TextField();
-        insertField.setPromptText("Insert key");
-        Button insertButton = new Button("Insert");
-
-
-        Button deleteButton = new Button("Remove Max");
-        Button clearButton = new Button("Clear");
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        HBox controlPanel = new HBox(10, insertField, insertButton, deleteButton, spacer, clearButton);
-        controlPanel.setAlignment(Pos.CENTER_LEFT);
-        controlPanel.setPadding(new Insets(10));
-        controlPanel.setStyle("-fx-background-color: #f0f0f0;");
-
-        Separator separator = new Separator();
-
-        VBox topSection = new VBox(10, controlPanel, separator);
-        topSection.setAlignment(Pos.CENTER);
-        mainPane.setTop(topSection);
 
 
         HBox arrayViewBox = new HBox(10);
@@ -75,40 +49,25 @@ public class MaxHeapVisualizer extends Application {
 
 
         centerPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            visualizeHeap();
-        });
-
-
-        insertButton.setOnAction(e -> {
-            try {
-                int key = Integer.parseInt(insertField.getText().trim());
-                heap.add(key);
-                insertField.clear();
+            if (heap.size() > 0) {
                 visualizeHeap();
-            } catch (NumberFormatException ex) {
-                insertField.clear();
             }
         });
 
 
-        deleteButton.setOnAction(e -> {
-            try {
-                heap.removeMax();
-                visualizeHeap();
-            } catch (EmptyMaxHeapException ex) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Heap Empty");
-                alert.setHeaderText(null);
-                alert.setContentText("The max-heap is empty.");
-                alert.showAndWait();
-            }
-        });
+        heap.add(44);
+        heap.add(30);
+        heap.add(50);
+        heap.add(22);
+        heap.add(60);
+        heap.add(55);
+        heap.add(77);
+        heap.add(55);
+        heap.add(11);
 
+//        heap.removeMax();
 
-        clearButton.setOnAction(e -> {
-            heap = new MaxHeap();
-            visualizeHeap();
-        });
+        visualizeHeap();
     }
 
 
@@ -121,7 +80,6 @@ public class MaxHeapVisualizer extends Application {
         if (n > 0 && heapArray != null) {
             visualizer.drawTree(heapArray, n, 1, centerX, centerY, TreePane.INITIAL_HGAP);
         }
-
         arrayViewExprLabel.setText(getArrayView(heapArray, n));
     }
 
@@ -139,6 +97,4 @@ public class MaxHeapVisualizer extends Application {
         return sb.toString();
     }
 }
-
-
 

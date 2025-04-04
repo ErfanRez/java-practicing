@@ -1,5 +1,3 @@
-package maxheap;
-
 public class EmptyMaxHeapException extends Exception {
     public EmptyMaxHeapException() {
         super();
