@@ -1,5 +1,3 @@
-package avl;
-
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -9,6 +7,10 @@ import javafx.geometry.VPos;
 import javafx.scene.text.TextBoundsType;
 
 public class TreePane extends Pane {
+    public static final double INITIAL_HGAP = 150;      // Initial horizontal spacing
+    private static final double FIXED_EDGE_LENGTH = 80;  // Fixed vertical edge length
+    private static final double HGAP_SHRINK_FACTOR = 0.52; // 30% reduction per level
+    private static final double NODE_RADIUS = 20;        // Circle radius
 
     public void clear() {
         this.getChildren().clear();
@@ -18,32 +20,30 @@ public class TreePane extends Pane {
         if (root != null) {
             drawNode(x, y, root.key);
             if (root.left != null) {
-                drawEdge(x, y, x - hGap, y + 50);
-                drawTree(root.left, x - hGap, y + 50, hGap / 2);
+                double childX = x - hGap;
+                double childY = y + FIXED_EDGE_LENGTH;
+                drawEdge(x, y, childX, childY);
+                drawTree(root.left, childX, childY, hGap * HGAP_SHRINK_FACTOR);
             }
             if (root.right != null) {
-                drawEdge(x, y, x + hGap, y + 50);
-                drawTree(root.right, x + hGap, y + 50, hGap / 2);
+                double childX = x + hGap;
+                double childY = y + FIXED_EDGE_LENGTH;
+                drawEdge(x, y, childX, childY);
+                drawTree(root.right, childX, childY, hGap * HGAP_SHRINK_FACTOR);
             }
         }
     }
 
     private void drawNode(double x, double y, int value) {
-
-        Circle circle = new Circle(x, y, 20);
+        Circle circle = new Circle(x, y, NODE_RADIUS);
         circle.setFill(Color.LIGHTBLUE);
         circle.setStroke(Color.BLACK);
 
-
         Text text = new Text(String.valueOf(value));
-
         text.setTextOrigin(VPos.CENTER);
-
         text.setBoundsType(TextBoundsType.VISUAL);
-
         text.applyCss();
         double textWidth = text.getLayoutBounds().getWidth();
-
         text.setX(x - textWidth / 2);
         text.setY(y);
 

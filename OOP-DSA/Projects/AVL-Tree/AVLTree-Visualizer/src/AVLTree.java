@@ -2,27 +2,16 @@
 //! Data Structures, Alireza Nikian, Fall 2024
 //! Islamic Azad University of Najafabad
 
-import java.util.*;
-
-
-class Node {
-    int key, height;
-    Node left, right;
-
-    public Node(){}
-
-    public Node(int d) {
-        key = d;
-        height = 1;
-    }
-}
-
 // Console App
 public class AVLTree {
 
     private Node root;
 
     public AVLTree(){}
+
+    public Node getRoot() {
+        return root;
+    }
 
     private int height(Node n) {
         if (n == null)
@@ -50,7 +39,7 @@ public class AVLTree {
         return x;
     }
 
-    // Get balance factor of a node
+
     private int getBalanceFactor(Node n) {
         if (n == null)
             return 0;
@@ -61,7 +50,7 @@ public class AVLTree {
         root = this.insert(root, item);
     }
 
-    // Insert a node
+
     private Node insert(Node node, int item) {
         if (node == null)
             return (new Node(item));
@@ -72,10 +61,10 @@ public class AVLTree {
         else
             return node;
 
-        // Update the height of the ancestor node
+
         node.height = 1 + Math.max(height(node.left), height(node.right));
 
-        // Get the balance factor of this node
+
         int balanceFactor = getBalanceFactor(node);
 
 
@@ -180,52 +169,48 @@ public class AVLTree {
         return node;
     }
 
-    private void inOrder(){
-        this.inOrder(root);
+    public void printInOrder(){
+        this.printInOrder(root);
     }
 
-    private void inOrder(Node node) {
+    private void printInOrder(Node node) {
         if (node != null) {
-            inOrder(node.left);
+            printInOrder(node.left);
             System.out.print(node.key + " ");
-            inOrder(node.right);
+            printInOrder(node.right);
         }
     }
 
-    private void reverseInOrder(){
-        this.reverseInOrder(root);
+    public void printReverseInOrder(){
+        this.printReverseInOrder(root);
     }
 
-    private void reverseInOrder(Node node){
+    private void printReverseInOrder(Node node){
         if (node != null) {
-            reverseInOrder(node.right);
+            printReverseInOrder(node.right);
             System.out.print(node.key + " ");
-            reverseInOrder(node.left);
+            printReverseInOrder(node.left);
         }
     }
 
-    private void preOrder(){
-        this.preOrder(root);
+    public String getInorder(){
+        return this.getInorder(root);
     }
 
-    public void preOrder(Node node) {
-        if (node != null) {
-            System.out.print(node.key + " ");
-            preOrder(node.left);
-            preOrder(node.right);
-        }
+    private String getInorder(Node node) {
+        if (node == null)
+            return "";
+        return getInorder(node.left) + node.key + " " + getInorder(node.right);
     }
 
-    private void postOrder(){
-        this.postOrder(root);
+    public String getReverseInorder(){
+        return this.getReverseInorder(root);
     }
 
-    public void postOrder(Node node) {
-        if (node != null) {
-            preOrder(node.left);
-            preOrder(node.right);
-            System.out.print(node.key + " ");
-        }
+    private String getReverseInorder(Node node) {
+        if (node == null)
+            return "";
+        return getReverseInorder(node.right) + node.key + " " + getReverseInorder(node.left);
     }
 
     // Print the tree
@@ -298,12 +283,12 @@ public class AVLTree {
         System.out.print("\n\n");
 
         System.out.println("Inorder traversal: ");
-        tree.inOrder();
+        tree.printInOrder();
 
         System.out.print("\n\n");
 
         System.out.println("Reverse inorder traversal: ");
-        tree.reverseInOrder();
+        tree.printReverseInOrder();
 
         // System.out.println("Preorder traversal: ");
         // tree.preOrder(tree.root);
