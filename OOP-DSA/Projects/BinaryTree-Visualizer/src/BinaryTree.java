@@ -1,104 +1,146 @@
-///*************************************************
- // Author: Alireza Nikian
- // Faculty of Computer Engineering
- // Islamic Azad University, Najafabad Branch
- //
- // class TreeNode
- //*************************************************
+public class BinaryTree {
+    private TreeNode root;
 
-class TreeNode{ // IntBinaryTreeNode
-    // package visible data fields
-    int data;
-    TreeNode left; // left child or left subtree
-    TreeNode right; // right child or right subtree
-    public TreeNode(){
-    }
-    public TreeNode(int data){
-        this.data=data;
-        this.left=null;
-        this.right=null;
-    }
-}
+    //         9
+    //       /   \
+    //      5     8
+    //     / \     \
+    //    3   1     6
 
-public class ConsoleBinaryTree { // IntBinaryTree
-    private TreeNode root; // reference to the overall root
+    //    public BinaryTree() {
+    //        root = new TreeNode(9);
+    //        root.left = new TreeNode(5);
+    //        root.right = new TreeNode(8);
+    //        root.left.left = new TreeNode(3);
+    //        root.left.right = new TreeNode(1);
+    //        root.right.right = new TreeNode(6);
+    //    }
 
-    /*
-    9
-    / \
-    5 8
-    / \ \
-    3 1 6
-    */
-    public ConsoleBinaryTree() {
-        root = new TreeNode(9);
-        root.left = new TreeNode(5);
-        root.right = new TreeNode(8);
-        root.left.left = new TreeNode(3);
-        root.left.right = new TreeNode(1);
-        root.right.right = new TreeNode(6);
+    public BinaryTree() {
+        root = new TreeNode(14);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(11);
+        root.left.left = new TreeNode(1);
+        root.left.right = new TreeNode(3);
+        root.right.left = new TreeNode(10);
+        root.right.right = new TreeNode(30);
+        root.right.left.left = new TreeNode(7);
+        root.right.right.left = new TreeNode(40);
     }
 
-    // public Tree(){
-// root=new TreeNode(14);
-// root.left=new TreeNode(2);
-// root.right=new TreeNode(11);
-// root.left.left=new TreeNode(1);
-//// root.left.right=new TreeNode(3);
-//// root.right.left=new TreeNode(10);
-//// root.right.right=new TreeNode(30);
-//// root.right.left.left=new TreeNode(7);
-//// root.right.right.left=new TreeNode(40);
-// }
+    public BinaryTree(BinaryTree original) { // copy constructor (deep copy)
+        root = copy(original.root);
+    }
+
+    private TreeNode copy(TreeNode p) {
+        if (p == null)
+            return null;
+        TreeNode temp = new TreeNode();
+        temp.data = p.data;
+        temp.left = copy(p.left);
+        temp.right = copy(p.right);
+        return temp;
+    }
+
+    public TreeNode getRoot() {
+        return root;
+    }
+
+
+    public String getLevelOrder() {
+        if (root == null) return "";
+        StringBuilder sb = new StringBuilder();
+        java.util.Queue < TreeNode > queue = new java.util.LinkedList < > ();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            TreeNode curr = queue.poll();
+            sb.append(curr.data).append(" ");
+            if (curr.left != null)
+                queue.offer(curr.left);
+            if (curr.right != null)
+                queue.offer(curr.right);
+        }
+        return sb.toString().trim();
+    }
+
+    public String getInorder() {
+        return inorder(root).trim();
+    }
+
+    private String inorder(TreeNode node) {
+        if (node == null)
+            return "";
+        return inorder(node.left) + node.data + " " + inorder(node.right);
+    }
+
+    public String getPreorder() {
+        return preorder(root).trim();
+    }
+
+    private String preorder(TreeNode node) {
+        if (node == null)
+            return "";
+        return node.data + " " + preorder(node.left) + preorder(node.right);
+    }
+
+    public String getPostorder() {
+        return postorder(root).trim();
+    }
+
+    private String postorder(TreeNode node) {
+        if (node == null)
+            return "";
+        return postorder(node.left) + postorder(node.right) + node.data + " ";
+    }
+
+    public String getReverseInorder() {
+        return reverseInorder(root).trim();
+    }
+
+    private String reverseInorder(TreeNode node) {
+        if (node == null)
+            return "";
+        return reverseInorder(node.right) + node.data + " " + reverseInorder(node.left);
+    }
+
+    public String getReversePreorder() {
+        return reversePreorder(root).trim();
+    }
+
+    private String reversePreorder(TreeNode node) {
+        if (node == null)
+            return "";
+        return node.data + " " + reversePreorder(node.right) + reversePreorder(node.left);
+    }
+
+    public String getReversePostorder() {
+        return reversePostorder(root).trim();
+    }
+
+    private String reversePostorder(TreeNode node) {
+        if (node == null)
+            return "";
+        return reversePostorder(node.right) + reversePostorder(node.left) + node.data + " ";
+    }
+
+    public static void main(String[] args) {
+        FXConfig.main(args);
+    }
+
+
+    //Mr. Nikian's Codes
+    ///////////////////////////////////////////////////////////////////
     public boolean isEmpty() {
         return root == null;
-    }
-
-    public void inorder() {
-        inorder(root);
-    }
-
-    private void inorder(TreeNode p) {
-        if (p != null) {
-            inorder(p.left);
-            System.out.print(p.data + " "); // visit(p);
-            inorder(p.right);
-        }
     }
 
     private static void visit(TreeNode p) {
         System.out.print(p.data + " ");
     }
 
-    /////////////////////////////////////////////////////////////////
-    public void preorder() {
-        preorder(root);
-    }
 
-    private void preorder(TreeNode p) {
-        if (p != null) {
-            System.out.print(p.data + " "); // visit(p);
-            preorder(p.left);
-            preorder(p.right);
-        }
-    }
-
-    /////////////////////////////////////////////////////////////////
-    public void postorder() {
-        postorder(root);
-    }
-
-    private void postorder(TreeNode p) {
-        if (p != null) {
-            postorder(p.left);
-            postorder(p.right);
-            System.out.print(p.data + " "); // visit(p);
-        }
-    }
-
-    /////////////////////////////////////////////////////////////////
     public void nonRecursiveInorder() { // iterative
-        java.util.Stack<TreeNode> s = new java.util.Stack<>();
+        java.util.Stack < TreeNode > s = new java.util.Stack < > ();
         TreeNode p = root;
         while (true) {
             while (p != null) {
@@ -114,7 +156,7 @@ public class ConsoleBinaryTree { // IntBinaryTree
     }
 
     public void nonRecursivePreorder() { // iterative
-        java.util.Stack<TreeNode> s = new java.util.Stack<>();
+        java.util.Stack < TreeNode > s = new java.util.Stack < > ();
         TreeNode p = root;
         while (true) {
             while (p != null) {
@@ -126,21 +168,6 @@ public class ConsoleBinaryTree { // IntBinaryTree
                 return;
             p = s.pop();
             p = p.right;
-        }
-    }
-
-    public void levelOrder() { // breadth-first traversal
-        java.util.Queue<TreeNode> q = new java.util.LinkedList<>();
-        TreeNode p = root;
-        while (p != null) {
-            System.out.print(p.data + " "); // visit(p);
-            if (p.left != null)
-                q.offer(p.left); // q.enqueue(p.left);
-            if (p.right != null)
-                q.offer(p.right); // q.enqueue(p.right);
-            if (q.isEmpty())
-                return;
-            p = q.poll(); // p=q.dequeue();
         }
     }
 
@@ -181,41 +208,26 @@ public class ConsoleBinaryTree { // IntBinaryTree
     }
 
     // private int height(TreeNode p){
-// if (p==null)
-// return -1;
-// return 1 + Math.max(height(p.left),height(p.right));
-// }
-/////////////////////////////////////////////////////////////////
-    public ConsoleBinaryTree(ConsoleBinaryTree original) { // copy constructor (deep copy)
-        root = copy(original.root);
-    }
+    // if (p==null)
+    // return -1;
+    // return 1 + Math.max(height(p.left),height(p.right));
+    // }
 
-    private TreeNode copy(TreeNode p) {
-        if (p == null)
-            return null;
-        TreeNode temp = new TreeNode();
-        temp.data = p.data;
-        temp.left = copy(p.left);
-        temp.right = copy(p.right);
-        return temp;
-    }
-
-    /////////////////////////////////////////////////////////////////
-    public boolean equals(ConsoleBinaryTree other) {
+    public boolean equals(BinaryTree other) {
         return equals(root, other.root);
     }
 
     private static boolean equals(TreeNode first, TreeNode second) {
         if (first == null && second == null)
             return true;
-        if (first != null && second != null && first.data == second.data
-                && equals(first.left, second.left)
-                && equals(first.right, second.right))
+        if (first != null && second != null && first.data == second.data &&
+                equals(first.left, second.left) &&
+                equals(first.right, second.right))
             return true;
         return false;
     }
 
-    /////////////////////////////////////////////////////////////////
+
     public boolean isFull() {
         return isFull(root);
     }
@@ -260,8 +272,8 @@ public class ConsoleBinaryTree { // IntBinaryTree
     private boolean isBalanced(TreeNode p) {
         if (p == null)
             return true;
-        return (Math.abs(height(p.left) - height(p.right)) <= 1)
-                && isBalanced(p.left) && isBalanced(p.right);
+        return (Math.abs(height(p.left) - height(p.right)) <= 1) &&
+                isBalanced(p.left) && isBalanced(p.right);
     }
 
     public boolean isComplete() {
@@ -317,18 +329,17 @@ public class ConsoleBinaryTree { // IntBinaryTree
             printSideways(p.left, indent + " ");
         }
     }
-// public void test(){
-// test(root);
-// }
-//
-// private void test(TreeNode p){
-// if (p!=null){
-// System.out.print(p.data + " ");
-// test(p.right);
-// System.out.print(p.data + " ");
-// test(p.left);
-// }
-// }
+
+    // public void test(){
+    // test(root);
+    // }
+    //
+    // private void test(TreeNode p){
+    // if (p!=null){
+    // System.out.print(p.data + " ");
+    // test(p.right);
+    // System.out.print(p.data + " ");
+    // test(p.left);
+    // }
+    // }
 }
-
-

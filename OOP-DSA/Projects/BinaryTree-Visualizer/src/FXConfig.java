@@ -1,5 +1,3 @@
-package bt;
-
 // BinaryTreeVisualizer.java
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -14,20 +12,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
-public class BinaryTreeVisualizer extends Application {
+public class FXConfig extends Application {
 
     private BinaryTree tree = new BinaryTree();
     private TreePane treePane = new TreePane();
@@ -118,8 +103,8 @@ public class BinaryTreeVisualizer extends Application {
     private void updateDisplay() {
         treePane.clear();
         double centerX = centerPane.getWidth() / 2;
-        double centerY = 80;
-        treePane.drawTree(tree.getRoot(), centerX, centerY, 150);
+        double centerY = 50;
+        treePane.drawTree(tree.getRoot(), centerX, centerY, TreePane.INITIAL_HGAP);
 
         inorderExprLabel.setText(tree.getInorder());
         preorderExprLabel.setText(tree.getPreorder());

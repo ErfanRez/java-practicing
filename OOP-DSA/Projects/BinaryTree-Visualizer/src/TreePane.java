@@ -1,15 +1,16 @@
-package bt;
-
-import javafx.geometry.VPos;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import javafx.geometry.VPos;
 import javafx.scene.text.TextBoundsType;
 
-
 public class TreePane extends Pane {
+    public static final double INITIAL_HGAP = 150;      // Initial horizontal spacing
+    private static final double FIXED_EDGE_LENGTH = 80;  // Fixed vertical edge length
+    private static final double HGAP_SHRINK_FACTOR = 0.52; // 30% reduction per level
+    private static final double NODE_RADIUS = 20;        // Circle radius
 
     public void clear() {
         this.getChildren().clear();
@@ -19,18 +20,22 @@ public class TreePane extends Pane {
         if (root != null) {
             drawNode(x, y, root.data);
             if (root.left != null) {
-                drawEdge(x, y, x - hGap, y + 50);
-                drawTree(root.left, x - hGap, y + 50, hGap / 2);
+                double childX = x - hGap;
+                double childY = y + FIXED_EDGE_LENGTH;
+                drawEdge(x, y, childX, childY);
+                drawTree(root.left, childX, childY, hGap * HGAP_SHRINK_FACTOR);
             }
             if (root.right != null) {
-                drawEdge(x, y, x + hGap, y + 50);
-                drawTree(root.right, x + hGap, y + 50, hGap / 2);
+                double childX = x + hGap;
+                double childY = y + FIXED_EDGE_LENGTH;
+                drawEdge(x, y, childX, childY);
+                drawTree(root.right, childX, childY, hGap * HGAP_SHRINK_FACTOR);
             }
         }
     }
 
     private void drawNode(double x, double y, int value) {
-        Circle circle = new Circle(x, y, 20);
+        Circle circle = new Circle(x, y, NODE_RADIUS);
         circle.setFill(Color.LIGHTBLUE);
         circle.setStroke(Color.BLACK);
 
@@ -51,8 +56,8 @@ public class TreePane extends Pane {
         double distance = Math.sqrt(dx * dx + dy * dy);
         double offsetX = dx * 20 / distance;
         double offsetY = dy * 20 / distance;
+
         Line line = new Line(x1 + offsetX, y1 + offsetY, x2 - offsetX, y2 - offsetY);
         this.getChildren().add(line);
     }
 }
-
