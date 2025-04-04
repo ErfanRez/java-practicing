@@ -194,23 +194,23 @@ public class AVLTree {
     }
 
     public String getInorder(){
-        return this.getInorder(root);
+        return this.inorder(root);
     }
 
-    private String getInorder(Node node) {
+    private String inorder(Node node) {
         if (node == null)
             return "";
-        return getInorder(node.left) + node.key + " " + getInorder(node.right);
+        return inorder(node.left) + node.key + " " + inorder(node.right);
     }
 
     public String getReverseInorder(){
-        return this.getReverseInorder(root);
+        return this.reverseInorder(root);
     }
 
-    private String getReverseInorder(Node node) {
+    private String reverseInorder(Node node) {
         if (node == null)
             return "";
-        return getReverseInorder(node.right) + node.key + " " + getReverseInorder(node.left);
+        return reverseInorder(node.right) + node.key + " " + reverseInorder(node.left);
     }
 
     // Print the tree
