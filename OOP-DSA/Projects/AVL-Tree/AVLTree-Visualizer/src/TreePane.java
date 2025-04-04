@@ -16,9 +16,9 @@ public class TreePane extends Pane {
         this.getChildren().clear();
     }
 
-    public void drawTree(Node root, double x, double y, double hGap) {
+    public void drawTree(TreeNode root, double x, double y, double hGap) {
         if (root != null) {
-            drawNode(x, y, root.key);
+            drawNode(x, y, root.data);
             if (root.left != null) {
                 double childX = x - hGap;
                 double childY = y + FIXED_EDGE_LENGTH;

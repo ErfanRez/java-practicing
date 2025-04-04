@@ -5,23 +5,23 @@
 // Console App
 public class AVLTree {
 
-    private Node root;
+    private TreeNode root;
 
     public AVLTree(){}
 
-    public Node getRoot() {
+    public TreeNode getRoot() {
         return root;
     }
 
-    private int height(Node n) {
+    private int height(TreeNode n) {
         if (n == null)
             return 0;
         return n.height;
     }
 
-    private Node rightRotate(Node y) {
-        Node x = y.left;
-        Node T = x.right;
+    private TreeNode rightRotate(TreeNode y) {
+        TreeNode x = y.left;
+        TreeNode T = x.right;
         x.right = y;
         y.left = T;
         y.height = 1 + Math.max(height(y.left), height(y.right));
@@ -29,9 +29,9 @@ public class AVLTree {
         return x;
     }
 
-    private Node leftRotate(Node y) {
-        Node x = y.right;
-        Node T = x.left;
+    private TreeNode leftRotate(TreeNode y) {
+        TreeNode x = y.right;
+        TreeNode T = x.left;
         x.left = y;
         y.right = T;
         y.height = 1 + Math.max(height(y.left), height(y.right));
@@ -40,7 +40,7 @@ public class AVLTree {
     }
 
 
-    private int getBalanceFactor(Node n) {
+    private int getBalanceFactor(TreeNode n) {
         if (n == null)
             return 0;
         return height(n.right) - height(n.left);
@@ -51,12 +51,12 @@ public class AVLTree {
     }
 
 
-    private Node insert(Node node, int item) {
+    private TreeNode insert(TreeNode node, int item) {
         if (node == null)
-            return (new Node(item));
-        if (item < node.key)
+            return (new TreeNode(item));
+        if (item < node.data)
             node.left = insert(node.left, item);
-        else if (item > node.key)
+        else if (item > node.data)
             node.right = insert(node.right, item);
         else
             return node;
@@ -69,17 +69,17 @@ public class AVLTree {
 
 
         if (balanceFactor < -1) { // Left-heavy subtree
-            if (item < node.left.key) {
+            if (item < node.left.data) {
                 return rightRotate(node); // Left-Left Case
-            } else if (item > node.left.key) {
+            } else if (item > node.left.data) {
                 node.left = leftRotate(node.left);
                 return rightRotate(node); // Left-Right Case
             }
         }
         if (balanceFactor > 1) { // Right-heavy subtree
-            if (item > node.right.key) {
+            if (item > node.right.data) {
                 return leftRotate(node); // Right-Right Case
-            } else if (item < node.right.key) {
+            } else if (item < node.right.data) {
                 node.right = rightRotate(node.right);
                 return leftRotate(node); // Right-Left Case
             }
@@ -89,16 +89,16 @@ public class AVLTree {
     }
 
 //  Deleting a node (Minimum of right subtree)
-    private Node minValueNode(Node node) {
-        Node current = node;
+    private TreeNode minValueNode(TreeNode node) {
+        TreeNode current = node;
         while (current.left != null)
             current = current.left;
         return current;
     }
 
 //  Deleting a node (Maximum of left subtree)
-    private Node maxValueNode(Node node) {
-        Node current = node;
+    private TreeNode maxValueNode(TreeNode node) {
+        TreeNode current = node;
         while (current.right != null)
             current = current.right;
         return current;
@@ -109,16 +109,16 @@ public class AVLTree {
     }
 
     // Delete a node
-    private Node delete(Node node, int item) {
+    private TreeNode delete(TreeNode node, int item) {
         if (node == null)
             return node;
-        if (item < node.key)
+        if (item < node.data)
             node.left = delete(node.left, item);
-        else if (item > node.key)
+        else if (item > node.data)
             node.right = delete(node.right, item);
         else {
             if ((node.left == null) || (node.right == null)) {
-                Node temp = node.left != null ? node.left : node.right;
+                TreeNode temp = node.left != null ? node.left : node.right;
 
                 if (temp == null) {
                     temp = node;
@@ -135,9 +135,9 @@ public class AVLTree {
 
 //          deleting using maximum of left subtree
             else {
-                Node temp = maxValueNode(node.left);
-                node.key = temp.key;
-                node.left = delete(node.left, temp.key);
+                TreeNode temp = maxValueNode(node.left);
+                node.data = temp.data;
+                node.left = delete(node.left, temp.data);
             }
         }
 
@@ -173,10 +173,10 @@ public class AVLTree {
         this.printInOrder(root);
     }
 
-    private void printInOrder(Node node) {
+    private void printInOrder(TreeNode node) {
         if (node != null) {
             printInOrder(node.left);
-            System.out.print(node.key + " ");
+            System.out.print(node.data + " ");
             printInOrder(node.right);
         }
     }
@@ -185,10 +185,10 @@ public class AVLTree {
         this.printReverseInOrder(root);
     }
 
-    private void printReverseInOrder(Node node){
+    private void printReverseInOrder(TreeNode node){
         if (node != null) {
             printReverseInOrder(node.right);
-            System.out.print(node.key + " ");
+            System.out.print(node.data + " ");
             printReverseInOrder(node.left);
         }
     }
@@ -197,20 +197,20 @@ public class AVLTree {
         return this.inorder(root);
     }
 
-    private String inorder(Node node) {
+    private String inorder(TreeNode node) {
         if (node == null)
             return "";
-        return inorder(node.left) + node.key + " " + inorder(node.right);
+        return inorder(node.left) + node.data + " " + inorder(node.right);
     }
 
     public String getReverseInorder(){
         return this.reverseInorder(root);
     }
 
-    private String reverseInorder(Node node) {
+    private String reverseInorder(TreeNode node) {
         if (node == null)
             return "";
-        return reverseInorder(node.right) + node.key + " " + reverseInorder(node.left);
+        return reverseInorder(node.right) + node.data + " " + reverseInorder(node.left);
     }
 
     // Print the tree
@@ -218,7 +218,7 @@ public class AVLTree {
         printTree(root, "", true);
     }
 
-    private void printTree(Node currPtr, String indent, boolean last) {
+    private void printTree(TreeNode currPtr, String indent, boolean last) {
         if (currPtr != null) {
             System.out.print(indent);
             if (last) {
@@ -228,7 +228,7 @@ public class AVLTree {
                 System.out.print("L----");
                 indent += "|  ";
             }
-            System.out.println(currPtr.key);
+            System.out.println(currPtr.data);
             printTree(currPtr.left, indent, false);
             printTree(currPtr.right, indent, true);
         }
