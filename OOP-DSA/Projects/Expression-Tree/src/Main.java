@@ -1,5 +1,3 @@
-package exptree;
-
 //! The following code is written by Erfan Rezaei
 //! Data Structures, Alireza Nikian, Fall 2024
 //! Islamic Azad University of Najafabad

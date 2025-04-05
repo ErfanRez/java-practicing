@@ -4,23 +4,17 @@
 
 import java.util.*;
 
-class Node {
-    String data;
-    Node left, right;
-
-    Node(String value) {
-        this.data = value;
-        left = right = null;
-    }
-}
-
 
 //Console App
 public class ExpressionTree {
-    private Node root;
+    private TreeNode root;
 
     ExpressionTree(String expression){
         constructTree(expression);
+    }
+
+    public TreeNode getRoot(){
+        return root;
     }
 
     private static int precedence(char op) {
@@ -100,16 +94,16 @@ public class ExpressionTree {
 
     public void constructTree(String expression) {
         String postfix = infixToPostfix(expression);
-        Stack<Node> stack = new Stack<>();
+        Stack<TreeNode> stack = new Stack<>();
 
         for (String token : postfix.split(" ")) {
             if (token.length() == 1 && isOperator(token.charAt(0))) { // Operator
-                Node operatorNode = new Node(token);
+                TreeNode operatorNode = new TreeNode(token);
                 operatorNode.right = stack.pop(); // Right operand
                 operatorNode.left = stack.pop(); // Left operand
                 stack.push(operatorNode);
             } else { // Operand
-                stack.push(new Node(token));
+                stack.push(new TreeNode(token));
             }
         }
 
@@ -121,7 +115,7 @@ public class ExpressionTree {
         inorderTraversal(root);
     }
 
-    private void inorderTraversal(Node root) {
+    private void inorderTraversal(TreeNode root) {
         if (root != null) {
             inorderTraversal(root.left);
             System.out.print(root.data + " ");
@@ -129,11 +123,43 @@ public class ExpressionTree {
         }
     }
 
+    public String getPreorder(){
+        return this.preorder(root);
+    }
+
+    private String preorder(TreeNode node) {
+        if (node == null) return "";
+        return node.data + " " + preorder(node.left) + preorder(node.right);
+    }
+
+    public String getPostorder(){
+        return this.postorder(root);
+    }
+
+    private String postorder(TreeNode node) {
+        if (node == null) return "";
+        return postorder(node.left) + postorder(node.right) + node.data + " ";
+    }
+
+    public int getMaxDepth(){
+        return maxDepth(root);
+    }
+
+    private int maxDepth(TreeNode node) {
+        if (node == null)
+            return 0;
+        else {
+            int leftDepth = maxDepth(node.left);
+            int rightDepth = maxDepth(node.right);
+            return Math.max(leftDepth, rightDepth) + 1;
+        }
+    }
+
     public void printTree() {
         printTree(root, "", true);
     }
 
-    private void printTree(Node currPtr, String indent, boolean last) {
+    private void printTree(TreeNode currPtr, String indent, boolean last) {
         if (currPtr != null) {
             System.out.print(indent);
             if (last) {
@@ -169,4 +195,3 @@ public class ExpressionTree {
         et2.inorderTraversal(); // 3 + 4 * 2 / 1 - 5 ^ 2
     }
 }
-

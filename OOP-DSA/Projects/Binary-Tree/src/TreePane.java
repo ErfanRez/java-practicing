@@ -7,10 +7,10 @@ import javafx.geometry.VPos;
 import javafx.scene.text.TextBoundsType;
 
 public class TreePane extends Pane {
-    public static final double INITIAL_HGAP = 150;      // Initial horizontal spacing
-    private static final double FIXED_EDGE_LENGTH = 80;  // Fixed vertical edge length
-    private static final double HGAP_SHRINK_FACTOR = 0.52; // 30% reduction per level
-    private static final double NODE_RADIUS = 20;        // Circle radius
+    public static final double INITIAL_HGAP = 150;
+    private static final double FIXED_EDGE_LENGTH = 80;
+    private static final double HGAP_SHRINK_FACTOR = 0.52;
+    private static final double NODE_RADIUS = 20;
 
     public void clear() {
         this.getChildren().clear();

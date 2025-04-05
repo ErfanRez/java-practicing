@@ -1,5 +1,3 @@
-package exptree;
-
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -15,7 +13,7 @@ public class TreePane extends Pane {
         this.getChildren().clear();
     }
 
-    public void drawTree(Node root, double x, double y, double hGap, int level, int maxDepth) {
+    public void drawTree(TreeNode root, double x, double y, double hGap, int level, int maxDepth) {
         if (root != null) {
             drawNode(x, y, root.data);
 
@@ -42,7 +40,7 @@ public class TreePane extends Pane {
         Text text = new Text(value);
 
         StackPane stack = new StackPane();
-        stack.setLayoutX(x - 20); // offset by the circle's radius
+        stack.setLayoutX(x - 20);
         stack.setLayoutY(y - 20);
         stack.getChildren().addAll(circle, text);
 

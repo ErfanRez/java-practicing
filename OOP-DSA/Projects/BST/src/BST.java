@@ -1,18 +1,4 @@
 
-class TreeNode{ // BSTNode
-    // package visible data fields
-    int data; // key
-    TreeNode left; // left child or left subtree
-    TreeNode right; // right child or right subtree
-    public TreeNode(){
-    }
-    public TreeNode(int data){
-        this.data=data;
-        this.left=null;
-        this.right=null;
-    }
-}
-
 public class BST{ // IntBinarySearchTree
     private TreeNode root; // reference to the overall root
 
@@ -31,6 +17,30 @@ public class BST{ // IntBinarySearchTree
         temp.left=copy(p.left);
         temp.right=copy(p.right);
         return temp;
+    }
+
+    public TreeNode getRoot(){
+        return root;
+    }
+
+    public String getInorder(){
+        return inorder(root);
+    }
+
+    private String inorder(TreeNode node) {
+        if (node == null)
+            return "";
+        return inorder(node.left) + node.data + " " + inorder(node.right);
+    }
+
+    public String getReverseInorder(){
+        return reverseInorder(root);
+    }
+
+    private String reverseInorder(TreeNode node) {
+        if (node == null)
+            return "";
+        return reverseInorder(node.right) + node.data + " " + reverseInorder(node.left);
     }
     /////////////////////////////////////////////////////////////////
     public boolean equals(BST other){
