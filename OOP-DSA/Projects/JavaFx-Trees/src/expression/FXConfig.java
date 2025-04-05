@@ -104,7 +104,7 @@ public class FXConfig extends Application {
     private void drawTreeCentered(int maxDepth) {
         visualizer.clear();
         double centerX = centerPane.getWidth() / 2;
-        double centerY = 80;
+        double centerY = 50;
         visualizer.drawTree(tree.getRoot(), centerX, centerY, 150, 0, maxDepth);
     }
 
