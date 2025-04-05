@@ -4,6 +4,6 @@
 
 public class Main {
     public static void main(String[] args) {
-        ExpressionTreeVisualizer.main(args);
+        FXConfig.main(args);
     }
 }

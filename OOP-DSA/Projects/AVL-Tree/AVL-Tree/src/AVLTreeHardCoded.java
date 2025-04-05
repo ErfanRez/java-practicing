@@ -19,8 +19,21 @@ public class AVLTreeHardCoded extends Application {
     private Label reverseInorderTitleLabel = new Label("Reverse Inorder: ");
     private Label reverseInorderExprLabel = new Label();
 
-    public static void main(String[] args) {
-        launch(args);
+
+    // Hard coded insertion and deletion from here
+    private void testData() {
+        tree.insert(20);
+        tree.insert(10);
+        tree.insert(30);
+        tree.insert(5);
+        tree.insert(15);
+        tree.insert(40);
+        tree.insert(12);
+        tree.insert(17);
+
+//        tree.delete(20);
+
+        visualizeTree();
     }
 
     @Override
@@ -44,7 +57,7 @@ public class AVLTreeHardCoded extends Application {
             }
         });
 
-        insertTestData();
+        testData();
     }
 
     private void setupUI(BorderPane mainPane) {
@@ -62,18 +75,6 @@ public class AVLTreeHardCoded extends Application {
         mainPane.setBottom(bottomBox);
     }
 
-    private void insertTestData() {
-        tree.insert(20);
-        tree.insert(10);
-        tree.insert(30);
-        tree.insert(5);
-        tree.insert(15);
-        tree.insert(40);
-        tree.insert(12);
-        tree.insert(17);
-
-        visualizeTree();
-    }
 
     private void visualizeTree() {
         visualizer.clear();
@@ -83,5 +84,9 @@ public class AVLTreeHardCoded extends Application {
 
         inorderExprLabel.setText(tree.getInorder());
         reverseInorderExprLabel.setText(tree.getReverseInorder());
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

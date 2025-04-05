@@ -7,7 +7,7 @@ public class AVLTree {
 
     private TreeNode root;
 
-    public AVLTree(){}
+    public AVLTree() {}
 
     public TreeNode getRoot() {
         return root;
@@ -46,7 +46,7 @@ public class AVLTree {
         return height(n.right) - height(n.left);
     }
 
-    public void insert(int item){
+    public void insert(int item) {
         root = this.insert(root, item);
     }
 
@@ -88,7 +88,7 @@ public class AVLTree {
         return node;
     }
 
-//  Deleting a node (Minimum of right subtree)
+    //  Deleting a node (Minimum of right subtree)
     private TreeNode minValueNode(TreeNode node) {
         TreeNode current = node;
         while (current.left != null)
@@ -96,7 +96,7 @@ public class AVLTree {
         return current;
     }
 
-//  Deleting a node (Maximum of left subtree)
+    //  Deleting a node (Maximum of left subtree)
     private TreeNode maxValueNode(TreeNode node) {
         TreeNode current = node;
         while (current.right != null)
@@ -104,7 +104,7 @@ public class AVLTree {
         return current;
     }
 
-    public void delete(int item){
+    public void delete(int item) {
         root = this.delete(root, item);
     }
 
@@ -126,14 +126,15 @@ public class AVLTree {
                 } else
                     node = temp;
             }
-//            deleting using minimum of right subtree
+
+            // deleting using minimum of right subtree
 //            else {
-//                Node temp = minValueNode(node.right);
-//                node.key = temp.key;
-//                node.right = delete(node.right, temp.key);
+//                TreeNode temp = minValueNode(node.right);
+//                node.data = temp.data;
+//                node.right = delete(node.right, temp.data);
 //            }
 
-//          deleting using maximum of left subtree
+            // deleting using maximum of left subtree
             else {
                 TreeNode temp = maxValueNode(node.left);
                 node.data = temp.data;
@@ -169,7 +170,7 @@ public class AVLTree {
         return node;
     }
 
-    public void printInOrder(){
+    public void printInOrder() {
         this.printInOrder(root);
     }
 
@@ -181,11 +182,11 @@ public class AVLTree {
         }
     }
 
-    public void printReverseInOrder(){
+    public void printReverseInOrder() {
         this.printReverseInOrder(root);
     }
 
-    private void printReverseInOrder(TreeNode node){
+    private void printReverseInOrder(TreeNode node) {
         if (node != null) {
             printReverseInOrder(node.right);
             System.out.print(node.data + " ");
@@ -193,7 +194,7 @@ public class AVLTree {
         }
     }
 
-    public String getInorder(){
+    public String getInorder() {
         return this.inorder(root);
     }
 
@@ -203,7 +204,7 @@ public class AVLTree {
         return inorder(node.left) + node.data + " " + inorder(node.right);
     }
 
-    public String getReverseInorder(){
+    public String getReverseInorder() {
         return this.reverseInorder(root);
     }
 
@@ -247,7 +248,7 @@ public class AVLTree {
         System.out.print("\n\n");
 
         System.out.println("Inserting 50:");
-         tree.insert(50);
+        tree.insert(50);
         tree.printTree();
         System.out.print("\n\n");
 

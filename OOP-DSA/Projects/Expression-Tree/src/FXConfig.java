@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-public class ExpressionTreeVisualizer extends Application {
+public class FXConfig extends Application {
 
     private ExpressionTree tree;
     private TreePane visualizer = new TreePane();
