@@ -37,17 +37,11 @@
 
         <!-- Songs Cards Container -->
         <div id="songs" class="d-flex flex-nowrap gap-3 overflow-x-auto scrollable-container py-2">
-            <div th:replace="~{fragments/song-card}"></div>
-            <div th:replace="~{fragments/song-card}"></div>
-            <div th:replace="~{fragments/song-card}"></div>
-            <div th:replace="~{fragments/song-card}"></div>
-            <div th:replace="~{fragments/song-card}"></div>
-            <div th:replace="~{fragments/song-card}"></div>
-            <div th:replace="~{fragments/song-card}"></div>
-            <div th:replace="~{fragments/song-card}"></div>
-            <div th:replace="~{fragments/song-card}"></div>
-            <div th:replace="~{fragments/song-card}"></div>
+            <div th:each="song : ${songs}">
+                <div th:replace="~{fragments/song-card :: song-card(song=${song})}"></div>
+            </div>
         </div>
+
 
         <!-- Right Arrow -->
         <button class="btn z-1 arrow-right bg-transparent" onclick="scrollContainerRight('songs')">

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class SongService implements ISongService {
@@ -47,5 +48,15 @@ public class SongService implements ISongService {
         song.setCover(cover);
         song.setArtist(user);
         songRepository.save(song);
+    }
+
+    @Override
+    public List<Song> findAllSongs() {
+        return songRepository.findAll();
+    }
+
+    @Override
+    public List<Song> findTopTen() {
+        return songRepository.findTopTen();
     }
 }

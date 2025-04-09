@@ -3,8 +3,13 @@ package com.music.model;
 import com.music.utils.Genres;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class Song extends BaseEntity {
 
@@ -25,11 +30,11 @@ public class Song extends BaseEntity {
     @Column(nullable = false)
     private Cover cover;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "album_id", nullable = true)
     private Album album;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "artist_id", nullable = false)
     private User artist;
 }

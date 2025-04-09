@@ -48,9 +48,8 @@ public class DashboardController {
 
     @GetMapping()
     public String displayDashboard(@AuthenticationPrincipal User user, Model model){
-        if (user != null && user.getRole() == Roles.ARTIST) {
+        if (user != null && user.getRole() == Roles.ARTIST)
             model.addAttribute("currentUser", user);
-        }
 
         return "dashboard";
     }

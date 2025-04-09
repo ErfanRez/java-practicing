@@ -16,6 +16,7 @@ public class ArtistDto {
     @NotBlank(message = "Lastname is required")
     private String lastName;
 
+    @NotBlank(message = "Nickname is required")
     private String nickname;
 
     @NotBlank(message = "Username is required")

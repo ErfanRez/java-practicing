@@ -2,10 +2,14 @@ package com.music.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Embeddable
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Cover {
     @Column(name = "cover_key")
     private String key;

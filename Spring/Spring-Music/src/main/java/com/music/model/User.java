@@ -2,14 +2,18 @@ package com.music.model;
 
 import com.music.utils.Roles;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class User extends BaseEntity implements UserDetails {
     @Column(nullable = true)
@@ -17,6 +21,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(nullable = true)
     private String lastName;
+
+    @Transient
+    private String fullName = this.getFirstName() + " " + this.getLastName();
 
     @Column(nullable = true, unique = true)
     private String nickname; // Optional
@@ -58,8 +65,6 @@ public class User extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "artist", orphanRemoval = true)
     private List<Album> albums = new ArrayList<>();
-
-    public User() {}
 
     public User(String username, String password, Roles role, String email) {
         this.username = username;
