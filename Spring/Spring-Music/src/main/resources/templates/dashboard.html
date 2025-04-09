@@ -19,9 +19,10 @@
         <div class="d-flex align-items-center">
             <img src="/assets/images/singer.webp" alt="Artist" class="cover-container object-fit-cover rounded-circle me-4" width="250" height="250">
             <div class="d-flex flex-column">
-                <h3 sec:authentication="name">Artist Name</h3>
-                <h4 class="text-secondary-emphasis">Nickname</h4>
-                <h5 class="text-secondary">Artist Name</h5>
+                <h3 th:text="${currentUser.firstName + ' ' + currentUser.lastName}">Artist Name</h3>
+                <h4 th:if="${currentUser.nickname != null}"
+                    class="text-secondary-emphasis"
+                    th:text="${currentUser.nickname}">Nickname</h4>
             </div>
         </div>
         <div class="d-flex flex-column">

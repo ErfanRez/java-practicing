@@ -80,7 +80,7 @@ public class SecurityConfig {
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) -> {
             // Redirect to the login page for unauthorized access
-            response.sendRedirect("/dashboard");
+            response.sendRedirect("/");
         };
     }
 

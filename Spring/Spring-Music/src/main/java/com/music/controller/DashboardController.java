@@ -9,6 +9,7 @@ import com.music.service.S3Service;
 import com.music.service.album.AlbumService;
 import com.music.service.song.SongService;
 import com.music.service.user.UserService;
+import com.music.utils.Roles;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.Getter;
@@ -46,7 +47,11 @@ public class DashboardController {
     }
 
     @GetMapping()
-    public String displayDashboard(){
+    public String displayDashboard(@AuthenticationPrincipal User user, Model model){
+        if (user != null && user.getRole() == Roles.ARTIST) {
+            model.addAttribute("currentUser", user);
+        }
+
         return "dashboard";
     }
 
