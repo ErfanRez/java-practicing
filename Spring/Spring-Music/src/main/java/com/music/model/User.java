@@ -22,9 +22,6 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = true)
     private String lastName;
 
-    @Transient
-    private String fullName = this.getFirstName() + " " + this.getLastName();
-
     @Column(nullable = true, unique = true)
     private String nickname; // Optional
 
@@ -71,6 +68,11 @@ public class User extends BaseEntity implements UserDetails {
         this.password = password;
         this.role = role;
         this.email = email;
+    }
+
+    public String getFullName() {
+        return (firstName != null ? firstName : "") +
+                (lastName != null ? " " + lastName : "");
     }
 
     public void addFavoriteSong(Song song) {

@@ -83,4 +83,13 @@ public class AlbumService implements IAlbumService {
 
         albumRepository.save(album);
     }
+
+    @Override
+    public List<Album> getAllAlbums() {
+        return albumRepository.findAll();
+    }
+
+    public List<Album> findTopTen(){
+        return albumRepository.findTopTen();
+    }
 }

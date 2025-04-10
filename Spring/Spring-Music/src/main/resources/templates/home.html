@@ -66,16 +66,9 @@
 
         <!-- Album Cards Container -->
         <div id="albums" class="d-flex flex-nowrap gap-3 overflow-x-auto scrollable-container py-2">
-            <div th:replace="~{fragments/album-card}"></div>
-            <div th:replace="~{fragments/album-card}"></div>
-            <div th:replace="~{fragments/album-card}"></div>
-            <div th:replace="~{fragments/album-card}"></div>
-            <div th:replace="~{fragments/album-card}"></div>
-            <div th:replace="~{fragments/album-card}"></div>
-            <div th:replace="~{fragments/album-card}"></div>
-            <div th:replace="~{fragments/album-card}"></div>
-            <div th:replace="~{fragments/album-card}"></div>
-            <div th:replace="~{fragments/album-card}"></div>
+            <div th:each="album : ${albums}">
+                <div th:replace="~{fragments/album-card :: album-card(album=${album})}"></div>
+            </div>
         </div>
 
         <!-- Right Arrow -->
