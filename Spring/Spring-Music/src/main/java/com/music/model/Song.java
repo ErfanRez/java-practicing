@@ -2,7 +2,6 @@ package com.music.model;
 
 import com.music.utils.Genres;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +22,9 @@ public class Song extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Genres genre;
+
+    @Column(nullable = false)
+    private String duration;
 
     private long likeCount = 0;
 

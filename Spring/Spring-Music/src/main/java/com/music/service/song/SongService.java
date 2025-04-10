@@ -13,8 +13,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import static com.music.utils.Utility.getDuration;
 
 @Service
 public class SongService implements ISongService {
@@ -44,9 +47,19 @@ public class SongService implements ISongService {
         cover.setKey(coverKey);
         cover.setUrl(coverUrl);
 
+
+        File tempFile = File.createTempFile("uploaded", ".mp3");
+        audioFile.transferTo(tempFile);
+
+        String duration = getDuration(tempFile);
+
+        // Delete the temporary file
+        tempFile.delete();
+
         Song song = TrackDto.toSongMapper(trackDto, audioKey, audioUrl);
         song.setCover(cover);
         song.setArtist(user);
+        song.setDuration(duration);
         songRepository.save(song);
     }
 

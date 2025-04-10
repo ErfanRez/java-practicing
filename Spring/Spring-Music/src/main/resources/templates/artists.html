@@ -9,16 +9,9 @@
 
     <div class="d-flex flex-wrap align-items-center justify-content-start gap-3 py-2 px-5">
 
-        <div th:replace="~{fragments/artist-card}"></div>
-        <div th:replace="~{fragments/artist-card}"></div>
-        <div th:replace="~{fragments/artist-card}"></div>
-        <div th:replace="~{fragments/artist-card}"></div>
-        <div th:replace="~{fragments/artist-card}"></div>
-        <div th:replace="~{fragments/artist-card}"></div>
-        <div th:replace="~{fragments/artist-card}"></div>
-        <div th:replace="~{fragments/artist-card}"></div>
-        <div th:replace="~{fragments/artist-card}"></div>
-        <div th:replace="~{fragments/artist-card}"></div>
+        <div th:each="artist : ${artists}">
+            <div th:replace="~{fragments/artist-card :: artist-card(artist=${artist})}"></div>
+        </div>
 
     </div>
 

@@ -2,8 +2,10 @@ package com.music.controller;
 
 import com.music.model.Album;
 import com.music.model.Song;
+import com.music.model.User;
 import com.music.service.album.AlbumService;
 import com.music.service.song.SongService;
+import com.music.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,22 +18,28 @@ import java.util.List;
 public class HomeController {
     private final SongService songService;
     private final AlbumService albumService;
+    private final UserService userService;
 
-    public HomeController(SongService songService, AlbumService albumService) {
+    public HomeController(SongService songService, AlbumService albumService, UserService userService) {
         this.songService = songService;
         this.albumService = albumService;
+        this.userService = userService;
     }
 
     @GetMapping
     public String displayHome(Model model) {
         List<Song> songs = songService.findTopTen();
         List<Album> albums = albumService.findTopTen();
+        List<User> artists = userService.findTenArtists();
 
         if (!songs.isEmpty())
             model.addAttribute("songs", songs);
 
         if(!albums.isEmpty())
             model.addAttribute("albums", albums);
+
+        if(!artists.isEmpty())
+            model.addAttribute("artists", artists);
 
         return "home";
     }

@@ -9,12 +9,14 @@ import com.music.model.User;
 import com.music.repository.UserRepository;
 import com.music.service.S3Service;
 import com.music.utils.Constants;
+import com.music.utils.Roles;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class UserService implements IUserService {
@@ -57,6 +59,16 @@ public class UserService implements IUserService {
     @Override
     public boolean existsByUsernameOrEmailOrNickname(String username, String email, String nickname) {
         return userRepository.existsByUsernameOrEmailOrNickname(username, email, nickname);
+    }
+
+    @Override
+    public List<User> findTenArtists() {
+        return userRepository.findTop10ByRole(Roles.ARTIST);
+    }
+
+    @Override
+    public List<User> findAllArtists() {
+        return userRepository.findAllByRole(Roles.ARTIST);
     }
 
 }

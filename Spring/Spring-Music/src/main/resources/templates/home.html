@@ -94,16 +94,9 @@
 
         <!-- Artists Cards Container -->
         <div id="artists" class="d-flex flex-nowrap gap-3 overflow-x-auto scrollable-container py-2">
-            <div th:replace="~{fragments/artist-card}"></div>
-            <div th:replace="~{fragments/artist-card}"></div>
-            <div th:replace="~{fragments/artist-card}"></div>
-            <div th:replace="~{fragments/artist-card}"></div>
-            <div th:replace="~{fragments/artist-card}"></div>
-            <div th:replace="~{fragments/artist-card}"></div>
-            <div th:replace="~{fragments/artist-card}"></div>
-            <div th:replace="~{fragments/artist-card}"></div>
-            <div th:replace="~{fragments/artist-card}"></div>
-            <div th:replace="~{fragments/artist-card}"></div>
+            <div th:each="artist : ${artists}">
+                <div th:replace="~{fragments/artist-card :: artist-card(artist=${artist})}"></div>
+            </div>
         </div>
 
         <!-- Right Arrow -->

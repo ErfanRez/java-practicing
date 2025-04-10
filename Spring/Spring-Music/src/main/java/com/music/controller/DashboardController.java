@@ -12,7 +12,6 @@ import com.music.service.user.UserService;
 import com.music.utils.Roles;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -30,7 +29,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Slf4j
-@Getter
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardController {
