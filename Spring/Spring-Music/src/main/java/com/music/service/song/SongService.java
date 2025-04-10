@@ -72,4 +72,9 @@ public class SongService implements ISongService {
     public List<Song> findTopTen() {
         return songRepository.findTopTen();
     }
+
+    @Override
+    public List<Song> findSingleTracksByArtist(User artist) {
+        return songRepository.findSingleTracksByArtist(artist);
+    }
 }

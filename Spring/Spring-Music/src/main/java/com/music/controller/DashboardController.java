@@ -4,6 +4,7 @@ package com.music.controller;
 import com.music.dto.AlbumDto;
 import com.music.dto.ArtistDto;
 import com.music.dto.TrackDto;
+import com.music.model.Song;
 import com.music.model.User;
 import com.music.service.S3Service;
 import com.music.service.album.AlbumService;
@@ -33,21 +34,23 @@ import java.nio.file.Paths;
 @RequestMapping("/dashboard")
 public class DashboardController {
     private final AlbumService albumService;
-    private final S3Service s3Service;
     private final SongService songService;
     private final UserService userService;
 
-    public DashboardController(AlbumService albumService, S3Service s3Service, SongService songService, UserService userService) {
+    public DashboardController(AlbumService albumService, SongService songService, UserService userService) {
         this.albumService = albumService;
-        this.s3Service = s3Service;
         this.songService = songService;
         this.userService = userService;
     }
 
     @GetMapping()
     public String displayDashboard(@AuthenticationPrincipal User user, Model model){
-        if (user != null && user.getRole() == Roles.ARTIST)
+        if (user != null && user.getRole() == Roles.ARTIST) {
+            List<Song> tracks = songService.findSingleTracksByArtist(user);
+            model.addAttribute("tracks", tracks);
             model.addAttribute("currentUser", user);
+        }
+
 
         return "dashboard";
     }

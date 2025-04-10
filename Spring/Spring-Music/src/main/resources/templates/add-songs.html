@@ -9,7 +9,9 @@
                  alt="Album Cover"
                  class="rounded-3 shadow-sm mb-2"
                  style="width: 150px; height: 150px; object-fit: cover;"
-                 hx-trigger="load delay:100ms">
+                 hx-get="${session.album.coverUrl}"
+                 hx-trigger="load delay:100ms"
+                 >
             <h2 th:text="${session.album.title}">Album Name</h2>
         </div>
 

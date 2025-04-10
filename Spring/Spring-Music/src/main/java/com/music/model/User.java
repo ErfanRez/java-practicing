@@ -60,7 +60,7 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "artist", orphanRemoval = true)
     private List<Song> songs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "artist", orphanRemoval = true)
+    @OneToMany(mappedBy = "artist", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Album> albums = new ArrayList<>();
 
     public User(String username, String password, Roles role, String email) {

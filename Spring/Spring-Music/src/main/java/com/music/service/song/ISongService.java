@@ -15,4 +15,6 @@ public interface ISongService {
     List<Song> findAllSongs();
 
     List<Song> findTopTen();
+
+    List<Song> findSingleTracksByArtist(User artist);
 }

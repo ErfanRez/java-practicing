@@ -1,4 +1,4 @@
-<div th:fragment="song-card (song)" class="card border-0 rounded-2 flex-shrink-0" style="width: 13rem;">
+<div th:fragment="song-card (song)" class="card border-0 rounded-2 flex-shrink-0" style="width: 13rem;" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <div class="play-card">
 
         <img th:src="${song.cover.url != null} ? ${song.cover.url} : '/assets/images/album-cover.webp'"
@@ -6,7 +6,7 @@
         <div class="play-icon">
             <i class="fa-solid fa-play"></i>
         </div>
-        <div class="like-icon">
+        <div class="like-icon" sec:authorize="isAuthenticated()">
             <i class="fa-solid fa-heart"></i>
         </div>
     </div>

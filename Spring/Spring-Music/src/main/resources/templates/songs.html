@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <body>
 <section layout:fragment="content" class="grid-span">
 
@@ -17,60 +17,40 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="song-row align-middle">
+            <tr th:each="song, iterStat : ${songs}" class="song-row align-middle">
                 <th scope="row">
-                    <span class="row-number">1</span>
+                    <span class="row-number" th:text="${iterStat.count}">1</span>
                     <i class="fa-solid fa-play play-button"></i>
                 </th>
                 <td class="d-flex align-items-center">
-                    <img src="/assets/images/album-cover.webp" alt="Cover" class="me-3 rounded-3" style="object-fit: cover; width: 50px; height: 50px;">
+                    <img th:src="${song.cover.url ?: '/assets/images/album-cover.webp'}"
+                         alt="Cover"
+                         class="me-3 rounded-3"
+                         style="object-fit: cover; width: 50px; height: 50px;">
+
                     <div class="d-flex flex-column">
-                        <a href="#" class="link-light link-underline-opacity-0 link-underline-opacity-75-hover" style="width: fit-content;">Sample Song 1</a>
-                        <a href="#" class="link-secondary link-underline-opacity-0 link-underline-opacity-75-hover h6 text-body-tertiary" style="width: fit-content;">Singer</a>
-                    </div>
-                </td>
-<!--                without image-->
-<!--                <td class="d-flex flex-column">-->
-<!--                    <a href="#" class="link-light link-underline-opacity-0 link-underline-opacity-75-hover" style="width: fit-content;">Sample Song 3</a>-->
-<!--                    <a href="#" class="link-secondary link-underline-opacity-0 link-underline-opacity-75-hover h6 text-body-tertiary" style="width: fit-content;">Singer</a>-->
-<!--                </td>-->
-                <td class="text-end">
-                    <button class="heart-btn" title="Add to favorite"><i class="fa-regular fa-heart me-3"></i></button>
-                    <span>3:45</span>
-                </td>
-            </tr>
-            <tr class="song-row align-middle">
-                <th scope="row">
-                    <span class="row-number">2</span>
-                    <i class="fa-solid fa-play play-button"></i>
-                </th>
-                <td class="d-flex align-items-center">
-                    <img src="/assets/images/album-cover.webp" alt="Cover" class="me-3 rounded-3" style="object-fit: cover; width: 50px; height: 50px;">
-                    <div class="d-flex flex-column">
-                        <a href="#" class="link-light link-underline-opacity-0 link-underline-opacity-75-hover" style="width: fit-content;">Sample Song 2</a>
-                        <a href="#" class="link-secondary link-underline-opacity-0 link-underline-opacity-75-hover h6 text-body-tertiary" style="width: fit-content;">Singer</a>
+                        <h6
+                                class="link-light link-underline-opacity-0 link-underline-opacity-75-hover"
+                                style="width: fit-content;"
+                                th:text="${song.title}">
+                            Sample Song
+                        </h6>
+
+                        <a th:href="@{/artists/{id}(id=${song.artist.id})}"
+                           class="link-secondary link-underline-opacity-0 link-underline-opacity-75-hover text-body-tertiary"
+                           style="width: fit-content; font-size: 14px;"
+                           th:text="${song.artist.nickname}">
+                            Singer
+                        </a>
                     </div>
                 </td>
                 <td class="text-end">
-                    <button class="heart-btn" title="Add to favorite"><i class="fa-regular fa-heart me-3"></i></button>
-                    <span>4:20</span>
-                </td>
-            </tr>
-            <tr class="song-row align-middle">
-                <th scope="row">
-                    <span class="row-number">3</span>
-                    <i class="fa-solid fa-play play-button"></i>
-                </th>
-                <td class="d-flex align-items-center">
-                    <img src="/assets/images/album-cover.webp" alt="Cover" class="me-3 rounded-3" style="object-fit: cover; width: 50px; height: 50px;">
-                    <div class="d-flex flex-column">
-                        <a href="#" class="link-light link-underline-opacity-0 link-underline-opacity-75-hover" style="width: fit-content;">Sample Song 3</a>
-                        <a href="#" class="link-secondary link-underline-opacity-0 link-underline-opacity-75-hover h6 text-body-tertiary" style="width: fit-content;">Singer</a>
-                    </div>
-                </td>
-                <td class="text-end">
-                    <button class="heart-btn" title="Add to favorite"><i class="fa-regular fa-heart me-3"></i></button>
-                    <span>2:58</span>
+                    <!-- Favorite button -->
+                    <button class="heart-btn" title="Add to favorite" sec:authorize="isAuthenticated()">
+                        <i class="fa-regular fa-heart me-3"></i>
+                    </button>
+
+                    <span th:text="${song.duration}">3:45</span>
                 </td>
             </tr>
             </tbody>
