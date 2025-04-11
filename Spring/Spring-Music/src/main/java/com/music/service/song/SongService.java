@@ -1,5 +1,6 @@
 package com.music.service.song;
 
+import com.music.model.Album;
 import com.music.model.User;
 import com.music.repository.UserRepository;
 import com.music.utils.Constants;
@@ -76,5 +77,10 @@ public class SongService implements ISongService {
     @Override
     public List<Song> findSingleTracksByArtist(User artist) {
         return songRepository.findSingleTracksByArtist(artist);
+    }
+
+    @Override
+    public List<Song> findByAlbum(Album album) {
+        return songRepository.findByAlbumOrderByCreatedAt(album);
     }
 }

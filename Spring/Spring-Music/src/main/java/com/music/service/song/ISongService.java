@@ -2,6 +2,7 @@ package com.music.service.song;
 
 
 import com.music.dto.TrackDto;
+import com.music.model.Album;
 import com.music.model.Song;
 import com.music.model.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,4 +18,6 @@ public interface ISongService {
     List<Song> findTopTen();
 
     List<Song> findSingleTracksByArtist(User artist);
+
+    List<Song> findByAlbum(Album album);
 }

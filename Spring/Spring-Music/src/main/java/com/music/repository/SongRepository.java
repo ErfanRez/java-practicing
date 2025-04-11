@@ -1,5 +1,6 @@
 package com.music.repository;
 
+import com.music.model.Album;
 import com.music.model.Song;
 import com.music.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,6 @@ public interface SongRepository extends JpaRepository<Song, Long> {
 
     @Query("from Song s where s.artist = ?1 and s.album is null ")
     List<Song> findSingleTracksByArtist(User artist);
+
+    List<Song> findByAlbumOrderByCreatedAt(Album album);
 }
