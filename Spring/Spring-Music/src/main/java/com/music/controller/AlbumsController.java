@@ -18,7 +18,7 @@ public class AlbumsController {
 
     @GetMapping("/albums")
     public String displayAlbums(Model model) {
-        List<Album> albums = albumService.getAllAlbums();
+        List<Album> albums = albumService.findAllAlbums();
 
         if (!albums.isEmpty())
             model.addAttribute("albums", albums);

@@ -11,7 +11,8 @@ import java.util.List;
 public interface IAlbumService {
     void saveAlbumWithSongsAndCover(AlbumDto albumDto, List<String> songTitles, List<MultipartFile> songFiles, User user) throws IOException;
 
-    List<Album> getAllAlbums();
+    List<Album> findAllAlbums();
 
+    List<Album> findTopTen();
 
 }

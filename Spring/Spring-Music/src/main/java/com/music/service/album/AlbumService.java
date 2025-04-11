@@ -16,11 +16,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static com.music.utils.Utility.getDuration;
 
 @Service
 public class AlbumService implements IAlbumService {
@@ -70,6 +73,14 @@ public class AlbumService implements IAlbumService {
             String songKey = Constants.SONGS_PREFIX + System.currentTimeMillis() + "_" + songFile.getOriginalFilename();
             String songUrl = s3Service.uploadFile(songKey, songFile.getBytes());
 
+            File tempFile = File.createTempFile("uploaded", ".mp3");
+            songFile.transferTo(tempFile);
+
+            String duration = getDuration(tempFile);
+
+            // Delete the temporary file
+            tempFile.delete();
+
             Song song = new Song();
             song.setTitle(songTitle);
             song.setAudioKey(songKey);
@@ -77,6 +88,7 @@ public class AlbumService implements IAlbumService {
             song.setGenre(album.getGenre());
             song.setCover(cover);
             song.setArtist(user);
+            song.setDuration(duration);
 
             album.addSong(song);
         }
@@ -85,7 +97,7 @@ public class AlbumService implements IAlbumService {
     }
 
     @Override
-    public List<Album> getAllAlbums() {
+    public List<Album> findAllAlbums() {
         return albumRepository.findAll();
     }
 
