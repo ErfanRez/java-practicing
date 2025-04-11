@@ -3,21 +3,50 @@
 <body>
 <section layout:fragment="content" class="grid-span">
 
-    <div class="d-flex mt-3 px-5">
-        <img th:src="${album.cover.url ?: '/assets/images/album-cover.webp'}" alt="Cover" class="cover-container object-fit-cover rounded-3 me-4" width="200" height="200">
-        <div class="d-flex flex-column justify-content-between py-3">
-            <div>
-                <h3 th:text="${album.title}">Title</h3>
-                <a th:href="@{/artists/{id}(id=${album.artist.id})}"
-                   class="link-secondary link-underline-opacity-0 link-underline-opacity-75-hover text-secondary-emphasis h4"
-                   style="width: fit-content;"
-                   th:text="${album.artist.nickname}">
-                    Singer
-                </a>
-            </div>
+    <div th:if="${deleteMessage}">
+        <div th:replace="~{fragments/toast :: toast('success', ${deleteMessage})}"></div>
+    </div>
 
-            <h6 class="text-secondary"><span th:text="${songs.size()} + ' songs'"></span> - <span th:text="${album.genre.displayName}"></span> - <span th:text="${album.releaseDate}"></span></h6>
+    <div class="d-flex justify-content-between align-items-center mt-3 px-5">
+        <div class="d-flex">
+            <img th:src="${album.cover.url ?: '/assets/images/album-cover.webp'}" alt="Cover" class="cover-container object-fit-cover rounded-3 me-4" width="200" height="200">
+            <div class="d-flex flex-column justify-content-between py-3">
+                <div>
+                    <h3 th:text="${album.title}">Title</h3>
+                    <a th:href="@{/artists/{id}(id=${album.artist.id})}"
+                       class="link-secondary link-underline-opacity-0 link-underline-opacity-75-hover text-secondary-emphasis h4"
+                       style="width: fit-content;"
+                       th:text="${album.artist.nickname}">
+                        Singer
+                    </a>
+                </div>
+
+                <h6 class="text-secondary"><span th:text="${songs.size()} + ' songs'"></span> - <span th:text="${album.genre.displayName}"></span> - <span th:text="${album.releaseDate}"></span></h6>
+            </div>
         </div>
+
+       <div class="d-flex flex-column gap-4">
+           <form th:action="@{/albums/add-fav/{id}(id=${album.id})}"
+                 sec:authorize="isAuthenticated()"
+                 method="post"
+                 class="d-inline-block">
+               <button type="submit" class="btn btn-secondary btn-lg" title="Add to favorites">
+                   <i class="fa-solid fa-heart"></i>
+               </button>
+           </form>
+
+           <form th:action="@{/albums/delete/{id}(id=${album.id})}"
+                 sec:authorize="hasRole('ADMIN')"
+                 method="post"
+                 class="d-inline-block"
+                 onsubmit="return confirm('Are you sure you want to delete this album?')">
+
+               <input type="hidden" name="_method" value="DELETE"/>
+               <button type="submit" class="btn btn-danger btn-lg" title="Delete song">
+                   <i class="fa-solid fa-trash"></i>
+               </button>
+           </form>
+       </div>
     </div>
 
     <div class="d-flex align-items-center justify-content-start mt-4 px-5">
@@ -57,11 +86,26 @@
                     </div>
                 </td>
                 <td class="text-end">
-                    <!-- Favorite button -->
+                    <!-- Delete Button (Admin Only) -->
+                    <span class="delete-btn " sec:authorize="hasRole('ADMIN')">
+                        <form th:action="@{/songs/delete/{id}(id=${song.id})}"
+                              method="post"
+                              class="d-inline-block"
+                              onsubmit="return confirm('Are you sure you want to delete this song?')">
+
+                            <input type="hidden" name="_method" value="DELETE"/>
+                            <button type="submit" class="btn btn-link p-0 border-0 bg-transparent me-3" title="Delete song">
+                                <i class="fa-solid fa-trash text-danger"></i>
+                            </button>
+                        </form>
+                    </span>
+
+                    <!-- Favorite Button -->
                     <button class="heart-btn" title="Add to favorite" sec:authorize="isAuthenticated()">
                         <i class="fa-regular fa-heart me-3"></i>
                     </button>
 
+                    <!-- Duration -->
                     <span th:text="${song.duration}">3:45</span>
                 </td>
             </tr>

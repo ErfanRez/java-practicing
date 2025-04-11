@@ -2,6 +2,10 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/layout}">
 <body>
 <section layout:fragment="content" class="grid-span">
+    <div th:if="${deleteMessage}">
+        <div th:replace="~{fragments/toast :: toast('success', ${deleteMessage})}"></div>
+    </div>
+
     <div th:if="${error}">
         <div th:replace="~{fragments/toast :: toast('danger', ${error})}"></div>
     </div>

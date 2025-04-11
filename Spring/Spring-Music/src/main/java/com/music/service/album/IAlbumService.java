@@ -17,4 +17,6 @@ public interface IAlbumService {
 
     List<Album> findTopTen();
 
+    void deleteAlbum(Long id, User user);
+
 }

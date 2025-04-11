@@ -57,10 +57,10 @@ public class User extends BaseEntity implements UserDetails {
     )
     private Set<Album> favoriteAlbums = new HashSet<>();
 
-    @OneToMany(mappedBy = "artist", orphanRemoval = true)
+    @OneToMany(mappedBy = "artist",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Song> songs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "artist", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "artist", orphanRemoval = true, cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Album> albums = new ArrayList<>();
 
     public User(String username, String password, Roles role, String email) {

@@ -113,7 +113,27 @@ footer a:hover {
     transition: var(--transition);
 }
 
+.delete-icon {
+    position: absolute;
+    display: flex;
+    top: 8px;
+    left: 18px;
+    width: fit-content;
+    height: fit-content;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0; /* Initially hidden */
+    transition: var(--transition);
+}
+
 .like-icon:hover{
+    scale: var(--scale-percentage);
+}
+
+.delete-icon:hover{
     scale: var(--scale-percentage);
 }
 
@@ -121,7 +141,8 @@ footer a:hover {
     scale: var(--scale-percentage);
 }
 
-.play-card:hover .like-icon {
+.play-card:hover .like-icon,
+.play-card:hover .delete-icon {
     opacity: 1;
 }
 
@@ -193,8 +214,17 @@ footer a:hover {
     cursor: pointer;
 }
 
+.delete-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
 .song-row .play-button,
-.song-row .heart-btn{
+.song-row .heart-btn,
+.song-row .delete-btn
+{
     display: none;
     cursor: pointer;
     transition: var(--transition);
@@ -206,7 +236,9 @@ footer a:hover {
 
 
 .song-row:hover .play-button,
-.song-row:hover .heart-btn {
+.song-row:hover .heart-btn,
+.song-row:hover .delete-btn
+{
     display: inline;
 }
 

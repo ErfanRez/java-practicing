@@ -22,4 +22,6 @@ public interface IUserService {
 
     List<User> findAllArtists();
 
+    void deleteArtist(Long id, User user);
+
 }

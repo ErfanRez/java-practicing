@@ -2,10 +2,13 @@ package com.music.service.user;
 
 import com.music.dto.ArtistDto;
 import com.music.dto.RegisterDto;
+import com.music.exception.AccessDeniedException;
 import com.music.exception.ArtistNotFoundException;
 import com.music.exception.DuplicateUsernameOrEmailException;
+import com.music.exception.SongNotFoundException;
 import com.music.model.ArtistPic;
 import com.music.model.Cover;
+import com.music.model.Song;
 import com.music.model.User;
 import com.music.repository.UserRepository;
 import com.music.service.S3Service;
@@ -75,6 +78,25 @@ public class UserService implements IUserService {
     @Override
     public List<User> findAllArtists() {
         return userRepository.findAllByRole(Roles.ARTIST);
+    }
+
+    @Override
+    @Transactional
+    public void deleteArtist(Long id, User user) {
+        User artist = userRepository.findById(id)
+                .orElseThrow(() -> new ArtistNotFoundException("Artist with id " + id + " not found"));
+
+        if (!user.getRole().equals(Roles.ADMIN)) {
+            throw new AccessDeniedException("You don't have permission to delete this song");
+        }
+
+
+        if (artist.getProfilePic() != null) {
+            s3Service.deleteFile(artist.getProfilePic().getKey());
+        }
+
+
+        userRepository.delete(artist);
     }
 
 }

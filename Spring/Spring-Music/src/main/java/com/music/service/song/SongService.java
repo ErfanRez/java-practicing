@@ -1,5 +1,7 @@
 package com.music.service.song;
 
+import com.music.exception.AccessDeniedException;
+import com.music.exception.SongNotFoundException;
 import com.music.model.Album;
 import com.music.model.User;
 import com.music.repository.UserRepository;
@@ -9,6 +11,7 @@ import com.music.model.Cover;
 import com.music.model.Song;
 import com.music.repository.SongRepository;
 import com.music.service.S3Service;
+import com.music.utils.Roles;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -82,5 +85,27 @@ public class SongService implements ISongService {
     @Override
     public List<Song> findByAlbum(Album album) {
         return songRepository.findByAlbumOrderByCreatedAt(album);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSong(Long id, User user) {
+        Song song = songRepository.findById(id)
+                .orElseThrow(() -> new SongNotFoundException("Song with id " + id + " not found"));
+
+        // Check if user is admin or the song's artist
+        if (!user.getRole().equals(Roles.ADMIN) &&
+                !song.getArtist().getId().equals(user.getId())) {
+            throw new AccessDeniedException("You don't have permission to delete this song");
+        }
+
+
+        s3Service.deleteFile(song.getAudioKey());
+        if (song.getCover() != null) {
+            s3Service.deleteFile(song.getCover().getKey());
+        }
+
+
+        songRepository.delete(song);
     }
 }

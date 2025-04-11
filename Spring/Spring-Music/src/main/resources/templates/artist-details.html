@@ -3,12 +3,30 @@
 <body>
 <section layout:fragment="content" class="grid-span mt-3">
 
-    <div class="d-flex align-items-center mt-3 px-5">
-        <img th:src="${artist.profilePic.url ?: '/assets/images/singer.webp'}" alt="Artist" class="cover-container object-fit-cover rounded-circle me-4" width="250" height="250">
-        <div class="d-flex flex-column">
-            <h3 th:text="${artist.fullName}">Artist Name</h3>
-            <h4 class="text-secondary-emphasis" th:text="${artist.nickname}">Nickname</h4>
+    <div th:if="${deleteMessage}">
+        <div th:replace="~{fragments/toast :: toast('success', ${deleteMessage})}"></div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-3 px-5">
+        <div class="d-flex align-items-center">
+            <img th:src="${artist.profilePic.url ?: '/assets/images/singer.webp'}" alt="Artist" class="cover-container object-fit-cover rounded-circle me-4" width="250" height="250">
+            <div class="d-flex flex-column">
+                <h3 th:text="${artist.fullName}">Artist Name</h3>
+                <h4 class="text-secondary-emphasis" th:text="${artist.nickname}">Nickname</h4>
+            </div>
         </div>
+
+        <form th:action="@{/artists/delete/{id}(id=${artist.id})}"
+              sec:authorize="hasRole('ADMIN')"
+              method="post"
+              class="d-inline-block"
+              onsubmit="return confirm('Are you sure you want to delete this artist?')">
+
+            <input type="hidden" name="_method" value="DELETE"/>
+            <button type="submit" class="btn btn-danger btn-lg" title="Delete song">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </form>
     </div>
 
     <!--    ARTIST content-->
@@ -28,7 +46,7 @@
 
             <!-- Album Cards Container -->
             <div id="albums" class="d-flex flex-nowrap gap-3 overflow-x-auto scrollable-container py-2">
-                <div th:each="album : ${artist.albums}">
+                <div th:if="${artist.albums.size() > 0}" th:each="album : ${artist.albums}">
                     <div th:replace="~{fragments/album-card :: album-card(album=${album})}"></div>
                 </div>
             </div>
@@ -43,7 +61,7 @@
 
         <!-- Tracks-->
         <div class="d-flex align-items-center justify-content-start mt-3 px-5">
-            <h3 class="h3">Single Tracks <span th:text="'(' + ${tracks.size()} + ')'">(3)</span></h3>
+            <h3 class="h3">Single Tracks <span th:text="'(' + ${tracks?.size()} + ')'">(3)</span></h3>
         </div>
 
         <div class="px-5 mt-2">
@@ -84,11 +102,26 @@
                         </div>
                     </td>
                     <td class="text-end">
-                        <!-- Favorite button -->
+                        <!-- Delete Button (Admin Only) -->
+                        <span class="delete-btn " sec:authorize="hasRole('ADMIN')">
+                        <form th:action="@{/songs/delete/{id}(id=${song.id})}"
+                              method="post"
+                              class="d-inline-block"
+                              onsubmit="return confirm('Are you sure you want to delete this song?')">
+
+                            <input type="hidden" name="_method" value="DELETE"/>
+                            <button type="submit" class="btn btn-link p-0 border-0 bg-transparent me-3" title="Delete song">
+                                <i class="fa-solid fa-trash text-danger"></i>
+                            </button>
+                        </form>
+                    </span>
+
+                        <!-- Favorite Button -->
                         <button class="heart-btn" title="Add to favorite" sec:authorize="isAuthenticated()">
                             <i class="fa-regular fa-heart me-3"></i>
                         </button>
 
+                        <!-- Duration -->
                         <span th:text="${song.duration}">3:45</span>
                     </td>
                 </tr>

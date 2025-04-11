@@ -7,6 +7,10 @@
         <div th:replace="~{fragments/toast :: toast('success', ${success})}"></div>
     </div>
 
+    <div th:if="${deleteMessage}">
+        <div th:replace="~{fragments/toast :: toast('success', ${deleteMessage})}"></div>
+    </div>
+
 
     <div class="d-flex align-items-center justify-content-between mt-3 px-5" sec:authorize="hasAnyRole('ADMIN')">
         <div>
@@ -46,7 +50,7 @@
             <!-- Songs Cards Container -->
             <div id="songs" class="d-flex flex-nowrap gap-3 overflow-x-auto scrollable-container py-2">
                 <div th:each="song : ${tracks}">
-                    <div th:replace="~{fragments/song-card :: song-card(song=${song})}"></div>
+                    <div th:replace="~{fragments/dash-song-card :: dash-song-card(song=${song})}"></div>
                 </div>
             </div>
 
@@ -73,7 +77,7 @@
             <!-- Album Cards Container -->
             <div id="albums" class="d-flex flex-nowrap gap-3 overflow-x-auto scrollable-container py-2">
                 <div th:each="album : ${currentUser.albums}">
-                    <div th:replace="~{fragments/album-card :: album-card(album=${album})}"></div>
+                    <div th:replace="~{fragments/dash-album-card :: dash-album-card(album=${album})}"></div>
                 </div>
             </div>
 

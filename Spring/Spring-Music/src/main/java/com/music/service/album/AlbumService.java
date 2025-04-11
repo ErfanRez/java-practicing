@@ -1,7 +1,10 @@
 package com.music.service.album;
 
+import com.music.exception.AccessDeniedException;
 import com.music.exception.AlbumNotFoundException;
+import com.music.exception.SongNotFoundException;
 import com.music.model.User;
+import com.music.repository.SongRepository;
 import com.music.repository.UserRepository;
 import com.music.utils.Constants;
 import com.music.dto.AlbumDto;
@@ -10,6 +13,7 @@ import com.music.model.Cover;
 import com.music.model.Song;
 import com.music.repository.AlbumRepository;
 import com.music.service.S3Service;
+import com.music.utils.Roles;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,12 +36,14 @@ public class AlbumService implements IAlbumService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final HttpSession session;
+    private final SongRepository songRepository;
 
-    public AlbumService(AlbumRepository albumRepository, UserRepository userRepository, S3Service s3Service, HttpSession session) {
+    public AlbumService(AlbumRepository albumRepository, UserRepository userRepository, S3Service s3Service, HttpSession session, SongRepository songRepository) {
         this.albumRepository = albumRepository;
         this.userRepository = userRepository;
         this.s3Service = s3Service;
         this.session = session;
+        this.songRepository = songRepository;
     }
 
     @Override
@@ -110,5 +116,32 @@ public class AlbumService implements IAlbumService {
 
     public List<Album> findTopTen(){
         return albumRepository.findTopTen();
+    }
+
+    @Override
+    @Transactional
+    public void deleteAlbum(Long id, User user) {
+        Album album = albumRepository.findById(id)
+                .orElseThrow(() -> new AlbumNotFoundException("Album with id " + id + " not found"));
+
+
+        if (!user.getRole().equals(Roles.ADMIN) &&
+                !album.getArtist().getId().equals(user.getId())) {
+            throw new AccessDeniedException("You don't have permission to delete this album");
+        }
+
+        List<Song> songs = songRepository.findByAlbumOrderByCreatedAt(album);
+
+        songs.forEach(song -> {
+            s3Service.deleteFile(song.getAudioKey());
+            songRepository.delete(song);
+        });
+
+
+        if (album.getCover() != null && album.getCover().getKey() != null) {
+            s3Service.deleteFile(album.getCover().getKey());
+        }
+
+        albumRepository.delete(album);
     }
 }

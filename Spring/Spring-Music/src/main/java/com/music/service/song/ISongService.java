@@ -20,4 +20,6 @@ public interface ISongService {
     List<Song> findSingleTracksByArtist(User artist);
 
     List<Song> findByAlbum(Album album);
+
+    void deleteSong(Long id, User user);
 }

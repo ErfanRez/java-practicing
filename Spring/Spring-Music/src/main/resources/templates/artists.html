@@ -3,6 +3,10 @@
 <body>
 <section layout:fragment="content" class="grid-span">
 
+    <div th:if="${deleteMessage}">
+        <div th:replace="~{fragments/toast :: toast('success', ${deleteMessage})}"></div>
+    </div>
+
     <div class="d-flex align-items-center justify-content-start mt-3 px-5">
         <h3 class="h3">Artists</h3>
     </div>
