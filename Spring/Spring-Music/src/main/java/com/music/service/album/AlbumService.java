@@ -1,5 +1,6 @@
 package com.music.service.album;
 
+import com.music.exception.AlbumNotFoundException;
 import com.music.model.User;
 import com.music.repository.UserRepository;
 import com.music.utils.Constants;
@@ -94,6 +95,12 @@ public class AlbumService implements IAlbumService {
         }
 
         albumRepository.save(album);
+    }
+
+    @Override
+    public Album findById(Long id) {
+
+        return albumRepository.findById(id).orElseThrow(() -> new AlbumNotFoundException("Album with ID: " + id + "Not Found!"));
     }
 
     @Override
