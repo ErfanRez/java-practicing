@@ -16,6 +16,7 @@ public interface IUserService {
 
     boolean existsByUsernameOrEmailOrNickname(String username, String email, String nickname);
 
+    User findById(Long id);
 
     List<User> findTenArtists();
 

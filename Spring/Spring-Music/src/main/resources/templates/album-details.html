@@ -16,7 +16,7 @@
                 </a>
             </div>
 
-            <h6 class="text-secondary"><span th:text="${songs.size()} + ' songs'"></span> - <span th:text="${album.releaseDate}"></span></h6>
+            <h6 class="text-secondary"><span th:text="${songs.size()} + ' songs'"></span> - <span th:text="${album.genre.displayName}"></span> - <span th:text="${album.releaseDate}"></span></h6>
         </div>
     </div>
 

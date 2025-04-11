@@ -2,6 +2,7 @@ package com.music.service.user;
 
 import com.music.dto.ArtistDto;
 import com.music.dto.RegisterDto;
+import com.music.exception.ArtistNotFoundException;
 import com.music.exception.DuplicateUsernameOrEmailException;
 import com.music.model.ArtistPic;
 import com.music.model.Cover;
@@ -59,6 +60,11 @@ public class UserService implements IUserService {
     @Override
     public boolean existsByUsernameOrEmailOrNickname(String username, String email, String nickname) {
         return userRepository.existsByUsernameOrEmailOrNickname(username, email, nickname);
+    }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new ArtistNotFoundException("Artist with ID " + id + " not found!"));
     }
 
     @Override
