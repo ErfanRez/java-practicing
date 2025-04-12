@@ -64,7 +64,7 @@
 
         <!-- Albums-->
         <div class="d-flex align-items-center justify-content-start mt-3 px-5">
-            <h3 class="h3">My Albums <span th:text="'(' + ${currentUser.albums.size()} + ')'">(15)</span></h3>
+            <h3 class="h3">My Albums <span th:text="'(' + ${albums.size()} + ')'">(15)</span></h3>
         </div>
 
         <!-- Scrollable Container with Arrows -->
@@ -76,7 +76,7 @@
 
             <!-- Album Cards Container -->
             <div id="albums" class="d-flex flex-nowrap gap-3 overflow-x-auto scrollable-container py-2">
-                <div th:each="album : ${currentUser.albums}">
+                <div th:each="album : ${albums}">
                     <div th:replace="~{fragments/dash-album-card :: dash-album-card(album=${album})}"></div>
                 </div>
             </div>

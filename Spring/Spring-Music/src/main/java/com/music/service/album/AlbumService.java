@@ -109,7 +109,7 @@ public class AlbumService implements IAlbumService {
     @Override
     @Transactional
     public Album findById(Long id, User auth) {
-        Album album = albumRepository.findById(id).orElseThrow(() -> new AlbumNotFoundException("Album with ID: " + id + "Not Found!"));
+        Album album = albumRepository.findById(id).orElseThrow(() -> new AlbumNotFoundException("Album with ID: " + id + " Not Found!"));
 
         if(auth != null){
             User user = userRepository.findByUsername(auth.getUsername())
@@ -122,6 +122,16 @@ public class AlbumService implements IAlbumService {
 
 
         return album;
+    }
+
+    @Override
+    @Transactional
+    public List<Album> findByArtist(User artist) {
+        List<Album> albums = albumRepository.findByArtist(artist);
+
+        modifyUserFavorites(artist, albums);
+
+        return albums;
     }
 
     private void modifyUserFavorites(User auth, Collection<Album> albums){
@@ -159,7 +169,7 @@ public class AlbumService implements IAlbumService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void deleteAlbum(Long id, User user) {
         Album album = albumRepository.findById(id)
                 .orElseThrow(() -> new AlbumNotFoundException("Album with id " + id + " not found"));
@@ -173,16 +183,15 @@ public class AlbumService implements IAlbumService {
         List<Song> songs = songRepository.findByAlbumOrderByCreatedAt(album);
 
         songs.forEach(song -> {
-            s3Service.deleteFile(song.getAudioKey());
             songRepository.delete(song);
+            s3Service.deleteFile(song.getAudioKey());
         });
 
+        albumRepository.delete(album);
 
         if (album.getCover() != null && album.getCover().getKey() != null) {
             s3Service.deleteFile(album.getCover().getKey());
         }
-
-        albumRepository.delete(album);
     }
 
     @Override

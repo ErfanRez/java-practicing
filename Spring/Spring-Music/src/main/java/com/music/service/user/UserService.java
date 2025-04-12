@@ -15,6 +15,7 @@ import com.music.service.S3Service;
 import com.music.utils.Constants;
 import com.music.utils.Roles;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,7 +95,6 @@ public class UserService implements IUserService {
         if (artist.getProfilePic() != null) {
             s3Service.deleteFile(artist.getProfilePic().getKey());
         }
-
 
         userRepository.delete(artist);
     }

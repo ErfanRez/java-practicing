@@ -14,6 +14,8 @@ public interface IAlbumService {
 
     Album findById(Long id, User auth);
 
+    List<Album> findByArtist(User artist);
+
     List<Album> findAllAlbums(User auth);
 
     List<Album> findTopTen(User auth);

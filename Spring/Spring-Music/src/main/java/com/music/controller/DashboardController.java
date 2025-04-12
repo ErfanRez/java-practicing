@@ -4,6 +4,7 @@ package com.music.controller;
 import com.music.dto.AlbumDto;
 import com.music.dto.ArtistDto;
 import com.music.dto.TrackDto;
+import com.music.model.Album;
 import com.music.model.Song;
 import com.music.model.User;
 import com.music.service.S3Service;
@@ -48,7 +49,10 @@ public class DashboardController {
     public String displayDashboard(@AuthenticationPrincipal User user, Model model){
         if (user != null && user.getRole() == Roles.ARTIST) {
             List<Song> tracks = songService.findSingleTracksByArtist(user);
+            List<Album> albums = albumService.findByArtist(user);
+
             model.addAttribute("tracks", tracks);
+            model.addAttribute("albums", albums);
             model.addAttribute("currentUser", user);
         }
 

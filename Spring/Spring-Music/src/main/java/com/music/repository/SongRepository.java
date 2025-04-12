@@ -13,7 +13,7 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     @Query("from Song s order by s.likeCount desc")
     List<Song> findAllOrderByLikeCountDesc();
 
-    @Query("select s from Song s order by s.likeCount asc limit 10")
+    @Query("select s from Song s order by s.likeCount desc limit 10")
     List<Song> findTopTen();
 
     @Query("from Song s where s.artist = ?1 and s.album is null ")

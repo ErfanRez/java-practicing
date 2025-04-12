@@ -55,16 +55,13 @@ public class AlbumsController {
     public String deleteAlbum(
             @PathVariable Long id,
             @AuthenticationPrincipal User user,
-            RedirectAttributes redirectAttributes,
-            HttpServletRequest request) {
+            RedirectAttributes redirectAttributes) {
 
         albumService.deleteAlbum(id, user);
 
         redirectAttributes.addFlashAttribute("deleteMessage", "Album deleted successfully");
 
-        String referer = request.getHeader("Referer");
-
-        return "redirect:" + (referer != null ? referer : "/");
+        return "redirect:/";
 
     }
 

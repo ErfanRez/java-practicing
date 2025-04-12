@@ -206,83 +206,76 @@ document.addEventListener("DOMContentLoaded", () => {
     const artistEl = document.getElementById("player-artist");
     const coverEl = document.getElementById("player-cover");
 
-    // Load state from sessionStorage
-    const savedState = sessionStorage.getItem("playerState");
-    if (savedState) {
-        const { audioUrl, title, artistNickname, coverUrl, currentTime, isPlaying } = JSON.parse(savedState);
-        loadSong({ audioUrl, title, artistNickname, coverUrl, currentTime, isPlaying });
-    }
-
+    // Function to format time in mm:ss
     function formatTime(seconds) {
         const mins = Math.floor(seconds / 60) || 0;
         const secs = Math.floor(seconds % 60) || 0;
         return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
     }
 
-    function loadSong({ audioUrl, title, artistNickname, coverUrl, currentTime = 0, isPlaying = false }) {
+    // Function to load a new song
+    function loadSong({ audioUrl, title, artistNickname, coverUrl }) {
+        // Reset audio to start
         audio.src = audioUrl;
+        audio.currentTime = 0;
+        audio.load();
+
+        // Update UI elements
         titleEl.textContent = title;
         artistEl.textContent = artistNickname;
         coverEl.src = coverUrl || "/assets/images/album-cover.webp";
-        audio.currentTime = currentTime;
-        audio.load();
 
-        if (isPlaying) {
-            audio.play();
+        // Reset progress bar
+        progressFilled.style.width = "0%";
+        currentTimeEl.textContent = formatTime(0);
+
+        // Update duration when metadata is loaded
+        audio.addEventListener("loadedmetadata", () => {
+            durationEl.textContent = formatTime(audio.duration);
+        });
+
+        // Play the audio
+        audio.play().then(() => {
             playIcon.classList.replace("fa-play", "fa-pause");
-        } else {
-            playIcon.classList.replace("fa-pause", "fa-play");
-        }
-
-        // Save state
-        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl, title, artistNickname, coverUrl, currentTime: audio.currentTime, isPlaying: !audio.paused }));
+        }).catch(error => {
+            console.error("Error playing audio:", error);
+        });
     }
 
+    // Play/Pause button click event
     playBtn.addEventListener("click", () => {
         if (audio.paused) {
-            audio.play();
-            playIcon.classList.replace("fa-play", "fa-pause");
+            audio.play().then(() => {
+                playIcon.classList.replace("fa-play", "fa-pause");
+            }).catch(error => {
+                console.error("Error playing audio:", error);
+            });
         } else {
             audio.pause();
             playIcon.classList.replace("fa-pause", "fa-play");
         }
-
-        // Save state
-        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl: audio.src, title: titleEl.textContent, artistNickname: artistEl.textContent, coverUrl: coverEl.src, currentTime: audio.currentTime, isPlaying: !audio.paused }));
     });
 
+    // Update progress bar as audio plays
     audio.addEventListener("timeupdate", () => {
         const percent = (audio.currentTime / audio.duration) * 100;
         progressFilled.style.width = `${percent}%`;
         currentTimeEl.textContent = formatTime(audio.currentTime);
     });
 
-    audio.addEventListener("loadedmetadata", () => {
-        durationEl.textContent = formatTime(audio.duration);
-    });
-
-    audio.addEventListener("ended", () => {
-        playIcon.classList.replace("fa-pause", "fa-play");
-        progressFilled.style.width = "0%";
-        currentTimeEl.textContent = "0:00";
-
-        // Save state
-        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl: audio.src, title: titleEl.textContent, artistNickname: artistEl.textContent, coverUrl: coverEl.src, currentTime: 0, isPlaying: false }));
-    });
-
+    // Seek functionality: update audio currentTime based on click position
     progressContainer.addEventListener("click", (e) => {
         const width = progressContainer.clientWidth;
         const clickX = e.offsetX;
         const duration = audio.duration;
         audio.currentTime = (clickX / width) * duration;
-
-        // Save state
-        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl: audio.src, title: titleEl.textContent, artistNickname: artistEl.textContent, coverUrl: coverEl.src, currentTime: audio.currentTime, isPlaying: !audio.paused }));
     });
 
     // Expose function globally to be called from song cards
     window.playSong = loadSong;
 });
+
+
 
 
 

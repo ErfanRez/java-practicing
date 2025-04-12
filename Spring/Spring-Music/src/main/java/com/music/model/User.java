@@ -41,7 +41,7 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Roles role = Roles.USER; // Default role is USER, (ADMIN, USER, ARTIST)
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "user_favorite_songs",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -49,7 +49,7 @@ public class User extends BaseEntity implements UserDetails {
     )
     private Set<Song> favoriteSongs = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "user_favorite_albums",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -57,10 +57,10 @@ public class User extends BaseEntity implements UserDetails {
     )
     private Set<Album> favoriteAlbums = new HashSet<>();
 
-    @OneToMany(mappedBy = "artist",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "artist",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Song> songs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "artist", orphanRemoval = true, cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "artist", orphanRemoval = true, cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
     private List<Album> albums = new ArrayList<>();
 
     public User(String username, String password, Roles role, String email) {
