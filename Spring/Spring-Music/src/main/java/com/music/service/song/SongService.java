@@ -88,7 +88,7 @@ public class SongService implements ISongService {
     @Override
     @Transactional
     public List<Song> findAllSongs(User auth) {
-        List<Song> songs = songRepository.findAll();
+        List<Song> songs = songRepository.findAllOrderByLikeCountDesc();
 
         modifyUserFavorites(auth, songs);
 

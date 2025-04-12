@@ -141,7 +141,7 @@ public class AlbumService implements IAlbumService {
     @Override
     @Transactional
     public List<Album> findAllAlbums(User auth) {
-        List<Album> albums = albumRepository.findAll();
+        List<Album> albums = albumRepository.findAllByLikeCountDesc();
 
         modifyUserFavorites(auth, albums);
 

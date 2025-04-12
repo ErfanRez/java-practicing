@@ -10,6 +10,9 @@ import java.util.List;
 
 public interface SongRepository extends JpaRepository<Song, Long> {
 
+    @Query("from Song s order by s.likeCount desc")
+    List<Song> findAllOrderByLikeCountDesc();
+
     @Query("select s from Song s order by s.likeCount asc limit 10")
     List<Song> findTopTen();
 
