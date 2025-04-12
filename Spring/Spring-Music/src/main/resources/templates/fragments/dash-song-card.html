@@ -4,7 +4,13 @@
         <img th:src="${song.cover.url != null} ? ${song.cover.url} : '/assets/images/album-cover.webp'"
              class="card-img-top rounded-3 mb-2" alt="Cover">
 
-        <div class="play-icon" title="Play">
+        <div th:attr="onclick=|playSong({
+                        audioUrl: '${song.audioUrl}',
+                        title: '${song.title}',
+                        artistNickname: '${song.artist.nickname}',
+                        coverUrl: '${song.cover.url}'
+                    })|"
+             class="play-icon">
             <i class="fa-solid fa-play"></i>
         </div>
 
