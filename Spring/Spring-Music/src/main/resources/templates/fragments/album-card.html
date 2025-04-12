@@ -3,6 +3,7 @@
         <div class="play-card">
             <img th:src="${album.cover.url ?: '/assets/images/album-cover.webp'}"
                  class="card-img-top rounded-3 mb-2" alt="Cover">
+
             <div class="like-icon" sec:authorize="isAuthenticated()" title="Add to favorites">
                 <i class="fa-solid fa-heart text-body"></i>
             </div>
@@ -14,8 +15,8 @@
                       onsubmit="return confirm('Are you sure you want to delete this album?')">
 
                     <input type="hidden" name="_method" value="delete"/>
-                    <button type="submit" class="btn btn-link p-0 border-0 bg-transparent">
-                        <i class="fa-solid fa-trash text-danger"></i>
+                    <button type="submit" class="btn btn-link p-0 border-0 bg-transparent text-danger">
+                        <i class="fa-solid fa-trash"></i>
                     </button>
                 </form>
             </div>

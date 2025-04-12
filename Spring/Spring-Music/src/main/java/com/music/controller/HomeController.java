@@ -7,6 +7,7 @@ import com.music.service.album.AlbumService;
 import com.music.service.song.SongService;
 import com.music.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +28,8 @@ public class HomeController {
     }
 
     @GetMapping
-    public String displayHome(Model model) {
-        List<Song> songs = songService.findTopTen();
+    public String displayHome(Model model, @AuthenticationPrincipal User user) {
+        List<Song> songs = songService.findTopTen(user);
         List<Album> albums = albumService.findTopTen();
         List<User> artists = userService.findTenArtists();
 

@@ -2,6 +2,7 @@ package com.music.service.song;
 
 import com.music.exception.AccessDeniedException;
 import com.music.exception.SongNotFoundException;
+import com.music.exception.UserNotFoundException;
 import com.music.model.Album;
 import com.music.model.User;
 import com.music.repository.UserRepository;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import static com.music.utils.Utility.getDuration;
 
@@ -68,23 +70,79 @@ public class SongService implements ISongService {
     }
 
     @Override
-    public List<Song> findAllSongs() {
-        return songRepository.findAll();
+    @Transactional
+    public List<Song> findAllSongs(User auth) {
+        List<Song> songs = songRepository.findAll();
+
+        if(auth != null){
+            User user = userRepository.findByUsername(auth.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            Set<Song> favoriteSongs = user.getFavoriteSongs();
+
+            for (Song song : songs) {
+                song.setFavorite(favoriteSongs.contains(song));
+            }
+
+        }
+
+        return songs;
     }
 
     @Override
-    public List<Song> findTopTen() {
-        return songRepository.findTopTen();
+    @Transactional
+    public List<Song> findTopTen(User auth) {
+        List<Song> songs = songRepository.findTopTen();
+
+        if(auth != null){
+            User user = userRepository.findByUsername(auth.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            Set<Song> favoriteSongs = user.getFavoriteSongs();
+
+            for (Song song : songs) {
+                song.setFavorite(favoriteSongs.contains(song));
+            }
+
+        }
+
+        return songs;
     }
 
     @Override
+    @Transactional
     public List<Song> findSingleTracksByArtist(User artist) {
-        return songRepository.findSingleTracksByArtist(artist);
+        List<Song> tracks = songRepository.findSingleTracksByArtist(artist);
+        User user = userRepository.findByUsername(artist.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Set<Song> favoriteSongs = user.getFavoriteSongs();
+
+        for (Song song : tracks) {
+            song.setFavorite(favoriteSongs.contains(song));
+        }
+
+        return tracks;
     }
 
     @Override
-    public List<Song> findByAlbum(Album album) {
-        return songRepository.findByAlbumOrderByCreatedAt(album);
+    @Transactional
+    public List<Song> findByAlbum(Album album, User auth) {
+        List<Song> songs = songRepository.findByAlbumOrderByCreatedAt(album);
+
+        if(auth != null){
+            User user = userRepository.findByUsername(auth.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            Set<Song> favoriteSongs = user.getFavoriteSongs();
+
+            for (Song song : songs) {
+                song.setFavorite(favoriteSongs.contains(song));
+            }
+
+        }
+
+        return songs;
     }
 
     @Override
@@ -107,5 +165,24 @@ public class SongService implements ISongService {
 
 
         songRepository.delete(song);
+    }
+
+    @Override
+    @Transactional
+    public void addFavorite(Long id, User auth) {
+        User user = userRepository.findByUsername(auth.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User with username:" + auth.getUsername() + " not found"));
+
+        Song song = songRepository.findById(id)
+                .orElseThrow(() -> new SongNotFoundException("song with id " + id + " not found"));
+
+
+        if (user.getFavoriteSongs().contains(song)) {
+            user.removeFavoriteSong(song);
+        } else {
+            user.addFavoriteSong(song);
+        }
+
+        userRepository.save(user);
     }
 }

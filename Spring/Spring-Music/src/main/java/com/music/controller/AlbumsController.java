@@ -40,11 +40,11 @@ public class AlbumsController {
     }
 
     @GetMapping("/{id}")
-    public String displaySingleAlbum(@PathVariable Long id, Model model){
+    public String displaySingleAlbum(@PathVariable Long id, Model model, @AuthenticationPrincipal User user){
         Album album = albumService.findById(id);
         model.addAttribute("album", album);
 
-        List<Song> songs = songService.findByAlbum(album);
+        List<Song> songs = songService.findByAlbum(album, user);
         if (!songs.isEmpty())
             model.addAttribute("songs", songs);
 

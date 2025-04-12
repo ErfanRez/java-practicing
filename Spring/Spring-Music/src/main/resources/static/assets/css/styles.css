@@ -19,6 +19,10 @@ body {
     color: var(--spring-color) !important;
 }
 
+.text-rose{
+    color: #f26a8d;
+}
+
 main {
     flex: 1;
     overflow: auto;
@@ -100,8 +104,8 @@ footer a:hover {
 .like-icon {
     position: absolute;
     display: flex;
-    top: 15px;
-    right: 20px;
+    top: 8px;
+    right: 18px;
     width: fit-content;
     height: fit-content;
     align-items: center;

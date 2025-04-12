@@ -25,8 +25,8 @@ public class SongsController {
     }
 
     @GetMapping
-    public String displaySongs(Model model){
-        List<Song> songs = songService.findAllSongs();
+    public String displaySongs(Model model, @AuthenticationPrincipal User user){
+        List<Song> songs = songService.findAllSongs(user);
 
         if(!songs.isEmpty())
             model.addAttribute("songs", songs);
@@ -44,6 +44,19 @@ public class SongsController {
         songService.deleteSong(id, user);
 
         redirectAttributes.addFlashAttribute("deleteMessage", "Song deleted successfully");
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + (referer != null ? referer : "/");
+
+    }
+
+    @PostMapping("/add-fav/{id}")
+    public String addFavorite(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user,
+            HttpServletRequest request) {
+
+        songService.addFavorite(id, user);
 
         String referer = request.getHeader("Referer");
         return "redirect:" + (referer != null ? referer : "/");

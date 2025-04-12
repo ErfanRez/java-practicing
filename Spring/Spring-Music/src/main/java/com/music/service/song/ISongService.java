@@ -13,13 +13,15 @@ import java.util.List;
 public interface ISongService {
     void saveTrackWithCover(TrackDto trackDto, MultipartFile audioFile, MultipartFile coverFile, User user) throws IOException;
 
-    List<Song> findAllSongs();
+    List<Song> findAllSongs(User user);
 
-    List<Song> findTopTen();
+    List<Song> findTopTen(User user);
 
     List<Song> findSingleTracksByArtist(User artist);
 
-    List<Song> findByAlbum(Album album);
+    List<Song> findByAlbum(Album album, User user);
 
     void deleteSong(Long id, User user);
+
+    void addFavorite(Long id, User user);
 }
