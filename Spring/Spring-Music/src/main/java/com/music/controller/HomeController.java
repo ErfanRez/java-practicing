@@ -30,7 +30,7 @@ public class HomeController {
     @GetMapping
     public String displayHome(Model model, @AuthenticationPrincipal User user) {
         List<Song> songs = songService.findTopTen(user);
-        List<Album> albums = albumService.findTopTen();
+        List<Album> albums = albumService.findTopTen(user);
         List<User> artists = userService.findTenArtists();
 
         if (!songs.isEmpty())

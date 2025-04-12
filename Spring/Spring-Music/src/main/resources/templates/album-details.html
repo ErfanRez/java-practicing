@@ -30,8 +30,8 @@
                  sec:authorize="isAuthenticated()"
                  method="post"
                  class="d-inline-block">
-               <button type="submit" class="btn btn-secondary btn-lg" title="Add to favorites">
-                   <i class="fa-solid fa-heart"></i>
+               <button type="submit" class="btn btn-outline-light btn-lg" title="Add to favorites">
+                   <i class="fa-solid fa-heart" th:classappend="${album.isFavorite} ? ' text-rose' : ''"></i>
                </button>
            </form>
 

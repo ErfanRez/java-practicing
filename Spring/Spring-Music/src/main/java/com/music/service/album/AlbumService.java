@@ -16,6 +16,7 @@ import com.music.service.S3Service;
 import com.music.utils.Roles;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,10 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
 
 import static com.music.utils.Utility.getDuration;
 
@@ -104,18 +107,55 @@ public class AlbumService implements IAlbumService {
     }
 
     @Override
-    public Album findById(Long id) {
+    @Transactional
+    public Album findById(Long id, User auth) {
+        Album album = albumRepository.findById(id).orElseThrow(() -> new AlbumNotFoundException("Album with ID: " + id + "Not Found!"));
 
-        return albumRepository.findById(id).orElseThrow(() -> new AlbumNotFoundException("Album with ID: " + id + "Not Found!"));
+        if(auth != null){
+            User user = userRepository.findByUsername(auth.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            Set<Album> favoriteAlbums = user.getFavoriteAlbums();
+
+            album.setFavorite(favoriteAlbums.contains(album));
+        }
+
+
+        return album;
+    }
+
+    private void modifyUserFavorites(User auth, Collection<Album> albums){
+        if(auth != null){
+            User user = userRepository.findByUsername(auth.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            Set<Album> favoriteAlbums = user.getFavoriteAlbums();
+
+            for (Album album : albums) {
+                album.setFavorite(favoriteAlbums.contains(album));
+            }
+
+        }
     }
 
     @Override
-    public List<Album> findAllAlbums() {
-        return albumRepository.findAll();
+    @Transactional
+    public List<Album> findAllAlbums(User auth) {
+        List<Album> albums = albumRepository.findAll();
+
+        modifyUserFavorites(auth, albums);
+
+        return albums;
     }
 
-    public List<Album> findTopTen(){
-        return albumRepository.findTopTen();
+    @Override
+    @Transactional
+    public List<Album> findTopTen(User auth){
+        List<Album> albums = albumRepository.findTopTen();
+
+        modifyUserFavorites(auth, albums);
+
+        return albums;
     }
 
     @Override
@@ -143,5 +183,42 @@ public class AlbumService implements IAlbumService {
         }
 
         albumRepository.delete(album);
+    }
+
+    @Override
+    @Transactional
+    public void addFavorite(Long id, User auth) {
+        User user = userRepository.findByUsername(auth.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User with username:" + auth.getUsername() + " not found"));
+
+        Album album = albumRepository.findById(id)
+                .orElseThrow(() -> new SongNotFoundException("album with id " + id + " not found"));
+
+
+        if (user.getFavoriteAlbums().contains(album)) {
+            user.removeFavoriteAlbum(album);
+            if(album.getLikeCount() > 0)
+                album.setLikeCount(album.getLikeCount() - 1);
+        } else {
+            user.addFavoriteAlbum(album);
+            album.setLikeCount(album.getLikeCount() + 1);
+        }
+
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public Set<Album> findUserFavorites(User auth) {
+        User user = userRepository.findByUsername(auth.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User with username:" + auth.getUsername() + " not found"));
+
+        Hibernate.initialize(user.getFavoriteAlbums());
+
+        Set<Album> favoriteAlbums = user.getFavoriteAlbums();
+
+        modifyUserFavorites(auth, favoriteAlbums);
+
+        return favoriteAlbums;
     }
 }

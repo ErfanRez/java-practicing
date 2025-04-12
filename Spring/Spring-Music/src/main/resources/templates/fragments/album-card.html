@@ -4,8 +4,13 @@
             <img th:src="${album.cover.url ?: '/assets/images/album-cover.webp'}"
                  class="card-img-top rounded-3 mb-2" alt="Cover">
 
+            <!-- Favorite Button -->
             <div class="like-icon" sec:authorize="isAuthenticated()" title="Add to favorites">
-                <i class="fa-solid fa-heart text-body"></i>
+                <form th:action="@{/albums/add-fav/{id}(id=${album.id})}" method="post">
+                    <button type="submit" class="btn btn-link p-0 border-0 bg-transparent text-body">
+                        <i class="fa-solid fa-heart" th:classappend="${album.isFavorite} ? ' text-rose' : ''"></i>
+                    </button>
+                </form>
             </div>
 
             <div class="delete-icon" sec:authorize="hasRole('ADMIN')" title="Delete">

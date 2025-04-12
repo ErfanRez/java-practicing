@@ -29,8 +29,8 @@ public class AlbumsController {
     }
 
     @GetMapping
-    public String displayAlbums(Model model) {
-        List<Album> albums = albumService.findAllAlbums();
+    public String displayAlbums(Model model, @AuthenticationPrincipal User user) {
+        List<Album> albums = albumService.findAllAlbums(user);
 
         if (!albums.isEmpty())
             model.addAttribute("albums", albums);
@@ -41,7 +41,7 @@ public class AlbumsController {
 
     @GetMapping("/{id}")
     public String displaySingleAlbum(@PathVariable Long id, Model model, @AuthenticationPrincipal User user){
-        Album album = albumService.findById(id);
+        Album album = albumService.findById(id, user);
         model.addAttribute("album", album);
 
         List<Song> songs = songService.findByAlbum(album, user);
@@ -67,4 +67,17 @@ public class AlbumsController {
         return "redirect:" + (referer != null ? referer : "/");
 
     }
+
+    @PostMapping("/add-fav/{id}")
+    public String addFavorite(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user,
+            HttpServletRequest request) {
+
+        albumService.addFavorite(id, user);
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + (referer != null ? referer : "/");
+    }
+
 }

@@ -3,22 +3,19 @@
 <body>
 <section layout:fragment="content" class="grid-span">
 
+    <div th:if="${deleteMessage}">
+        <div th:replace="~{fragments/toast :: toast('success', ${deleteMessage})}"></div>
+    </div>
+
     <div class="d-flex align-items-center justify-content-start mt-3 px-5">
-        <h3 class="h3">Albums</h3>
+        <h3 class="h3">Favorite Albums <span th:text="'(' + ${albums.size()} + ')'"></span></h3>
     </div>
 
 
     <div class="d-flex align-items-center justify-content-start flex-wrap gap-3 py-2 px-5">
-        <div th:replace="~{fragments/album-card}"></div>
-        <div th:replace="~{fragments/album-card}"></div>
-        <div th:replace="~{fragments/album-card}"></div>
-        <div th:replace="~{fragments/album-card}"></div>
-        <div th:replace="~{fragments/album-card}"></div>
-        <div th:replace="~{fragments/album-card}"></div>
-        <div th:replace="~{fragments/album-card}"></div>
-        <div th:replace="~{fragments/album-card}"></div>
-        <div th:replace="~{fragments/album-card}"></div>
-        <div th:replace="~{fragments/album-card}"></div>
+        <div th:each="album : ${albums}">
+            <div th:replace="~{fragments/album-card :: album-card(album=${album})}"></div>
+        </div>
     </div>
 
     <hr class="mt-5">

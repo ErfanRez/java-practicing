@@ -25,6 +25,9 @@ public class Album extends BaseEntity {
 
     private long likeCount = 0;
 
+    @Transient
+    private boolean isFavorite = false;
+
     @Embedded
     private Cover cover;
 

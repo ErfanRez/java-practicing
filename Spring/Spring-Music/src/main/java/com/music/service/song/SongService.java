@@ -14,12 +14,14 @@ import com.music.repository.SongRepository;
 import com.music.service.S3Service;
 import com.music.utils.Roles;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -69,11 +71,7 @@ public class SongService implements ISongService {
         songRepository.save(song);
     }
 
-    @Override
-    @Transactional
-    public List<Song> findAllSongs(User auth) {
-        List<Song> songs = songRepository.findAll();
-
+    private void modifyUserFavorites(User auth, Collection<Song> songs){
         if(auth != null){
             User user = userRepository.findByUsername(auth.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -85,6 +83,14 @@ public class SongService implements ISongService {
             }
 
         }
+    }
+
+    @Override
+    @Transactional
+    public List<Song> findAllSongs(User auth) {
+        List<Song> songs = songRepository.findAll();
+
+        modifyUserFavorites(auth, songs);
 
         return songs;
     }
@@ -94,17 +100,7 @@ public class SongService implements ISongService {
     public List<Song> findTopTen(User auth) {
         List<Song> songs = songRepository.findTopTen();
 
-        if(auth != null){
-            User user = userRepository.findByUsername(auth.getUsername())
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-            Set<Song> favoriteSongs = user.getFavoriteSongs();
-
-            for (Song song : songs) {
-                song.setFavorite(favoriteSongs.contains(song));
-            }
-
-        }
+        modifyUserFavorites(auth, songs);
 
         return songs;
     }
@@ -130,17 +126,7 @@ public class SongService implements ISongService {
     public List<Song> findByAlbum(Album album, User auth) {
         List<Song> songs = songRepository.findByAlbumOrderByCreatedAt(album);
 
-        if(auth != null){
-            User user = userRepository.findByUsername(auth.getUsername())
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-            Set<Song> favoriteSongs = user.getFavoriteSongs();
-
-            for (Song song : songs) {
-                song.setFavorite(favoriteSongs.contains(song));
-            }
-
-        }
+        modifyUserFavorites(auth, songs);
 
         return songs;
     }
@@ -179,10 +165,28 @@ public class SongService implements ISongService {
 
         if (user.getFavoriteSongs().contains(song)) {
             user.removeFavoriteSong(song);
+            if(song.getLikeCount() > 0)
+                song.setLikeCount(song.getLikeCount() - 1);
         } else {
             user.addFavoriteSong(song);
+            song.setLikeCount(song.getLikeCount() + 1);
         }
 
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public Set<Song> findUserFavorites(User auth) {
+        User user = userRepository.findByUsername(auth.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User with username:" + auth.getUsername() + " not found"));
+
+        Hibernate.initialize(user.getFavoriteSongs());
+
+        Set<Song> favoriteSongs = user.getFavoriteSongs();
+
+        modifyUserFavorites(auth, favoriteSongs);
+
+        return favoriteSongs;
     }
 }
