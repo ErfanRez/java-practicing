@@ -195,6 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Elements
     const audio = document.getElementById("audio");
     const playBtn = document.getElementById("player-play");
     const playIcon = playBtn.querySelector("i");
@@ -206,89 +207,203 @@ document.addEventListener("DOMContentLoaded", () => {
     const artistEl = document.getElementById("player-artist");
     const coverEl = document.getElementById("player-cover");
 
-    // Load state from sessionStorage
-    const savedState = sessionStorage.getItem("playerState");
-    if (savedState) {
-        const { audioUrl, title, artistNickname, coverUrl, currentTime, isPlaying } = JSON.parse(savedState);
-        loadSong({ audioUrl, title, artistNickname, coverUrl, currentTime, isPlaying });
+    // State
+    let isSeeking = false;
+    let currentSong = null;
+
+    // Initialize
+    initPlayer();
+
+    function initPlayer() {
+        console.log("[Player] Initializing...");
+
+        // Load only basic saved state (current song and play status)
+        loadBasicState();
+
+        // Setup event listeners
+        setupEventListeners();
+    }
+
+    function loadBasicState() {
+        try {
+            const savedState = sessionStorage.getItem("playerState");
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                if (state.audioUrl) {
+                    console.log("[Player] Loading basic saved state...");
+                    currentSong = {
+                        audioUrl: state.audioUrl,
+                        title: state.title,
+                        artistNickname: state.artistNickname,
+                        coverUrl: state.coverUrl
+                    };
+
+                    // Update UI without resuming playback position
+                    titleEl.textContent = currentSong.title || "Unknown Title";
+                    artistEl.textContent = currentSong.artistNickname || "Unknown Artist";
+                    coverEl.src = currentSong.coverUrl || "/assets/images/album-cover.webp";
+
+                    // Load audio but don't set time
+                    audio.src = currentSong.audioUrl;
+
+                    // Update play/pause state
+                    if (state.isPlaying) {
+                        audio.play().catch(e => {
+                            console.log("[Player] Autoplay prevented:", e);
+                        });
+                    }
+                }
+            }
+        } catch (e) {
+            console.log("[Player] Error loading state:", e);
+            clearSavedState();
+        }
+    }
+
+    function clearSavedState() {
+        try {
+            sessionStorage.removeItem("playerState");
+        } catch (e) {
+            console.log("[Player] Error clearing state:", e);
+        }
+    }
+
+    function setupEventListeners() {
+        // Play/Pause button
+        playBtn.addEventListener("click", togglePlayback);
+
+        // Progress bar seeking
+        progressContainer.addEventListener("click", handleSeek);
+
+        // Audio element events
+        audio.addEventListener("timeupdate", updateProgress);
+        audio.addEventListener("loadedmetadata", updateDuration);
+        audio.addEventListener("ended", handlePlaybackEnd);
+        audio.addEventListener("error", handleAudioError);
+        audio.addEventListener("waiting", () => console.log("[Player] Buffering..."));
+        audio.addEventListener("playing", () => console.log("[Player] Playback started"));
     }
 
     function formatTime(seconds) {
-        const mins = Math.floor(seconds / 60) || 0;
-        const secs = Math.floor(seconds % 60) || 0;
+        if (isNaN(seconds)) return "0:00";
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
         return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
     }
 
-    function loadSong({ audioUrl, title, artistNickname, coverUrl, currentTime = 0, isPlaying = false }) {
-        audio.src = audioUrl;
-        titleEl.textContent = title;
-        artistEl.textContent = artistNickname;
-        coverEl.src = coverUrl || "/assets/images/album-cover.webp";
-        audio.currentTime = currentTime;
-        audio.load();
+    function loadSong(song) {
+        console.log(`[Player] Loading new song: ${song.title}`);
 
-        if (isPlaying) {
-            audio.play();
-            playIcon.classList.replace("fa-play", "fa-pause");
-        } else {
-            playIcon.classList.replace("fa-pause", "fa-play");
+        try {
+            // Store current song
+            currentSong = song;
+
+            // Update UI
+            titleEl.textContent = song.title || "Unknown Title";
+            artistEl.textContent = song.artistNickname || "Unknown Artist";
+            coverEl.src = song.coverUrl || "/assets/images/album-cover.webp";
+
+            // Reset audio element
+            audio.pause();
+            audio.src = "";
+            audio.load();
+
+            // Set new source
+            audio.src = song.audioUrl;
+
+            // Start playback
+            audio.play()
+                .then(() => {
+                    playIcon.classList.replace("fa-play", "fa-pause");
+                    saveBasicState();
+                })
+                .catch(e => {
+                    console.log("[Player] Playback failed:", e);
+                    playIcon.classList.replace("fa-pause", "fa-play");
+                });
+
+        } catch (e) {
+            console.log("[Player] Error loading song:", e);
         }
-
-        // Save state
-        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl, title, artistNickname, coverUrl, currentTime: audio.currentTime, isPlaying: !audio.paused }));
     }
 
-    playBtn.addEventListener("click", () => {
+    function togglePlayback() {
         if (audio.paused) {
-            audio.play();
-            playIcon.classList.replace("fa-play", "fa-pause");
+            audio.play()
+                .then(() => {
+                    playIcon.classList.replace("fa-play", "fa-pause");
+                    saveBasicState();
+                })
+                .catch(e => {
+                    console.log("[Player] Playback failed:", e);
+                });
         } else {
             audio.pause();
             playIcon.classList.replace("fa-pause", "fa-play");
+            saveBasicState();
         }
+    }
 
-        // Save state
-        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl: audio.src, title: titleEl.textContent, artistNickname: artistEl.textContent, coverUrl: coverEl.src, currentTime: audio.currentTime, isPlaying: !audio.paused }));
-    });
+    function updateProgress() {
+        if (!isSeeking && audio.duration) {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progressFilled.style.width = `${percent}%`;
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        }
+    }
 
-    audio.addEventListener("timeupdate", () => {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progressFilled.style.width = `${percent}%`;
-        currentTimeEl.textContent = formatTime(audio.currentTime);
-    });
-
-    audio.addEventListener("loadedmetadata", () => {
+    function updateDuration() {
         durationEl.textContent = formatTime(audio.duration);
-    });
+    }
 
-    audio.addEventListener("ended", () => {
+    function handleSeek(e) {
+        if (!audio.duration) return;
+
+        isSeeking = true;
+        const width = progressContainer.clientWidth;
+        const clickX = e.offsetX;
+        audio.currentTime = (clickX / width) * audio.duration;
+
+        setTimeout(() => {
+            isSeeking = false;
+        }, 100);
+    }
+
+    function handlePlaybackEnd() {
+        console.log("[Player] Playback ended");
         playIcon.classList.replace("fa-pause", "fa-play");
         progressFilled.style.width = "0%";
         currentTimeEl.textContent = "0:00";
+        saveBasicState();
+    }
 
-        // Save state
-        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl: audio.src, title: titleEl.textContent, artistNickname: artistEl.textContent, coverUrl: coverEl.src, currentTime: 0, isPlaying: false }));
-    });
+    function handleAudioError() {
+        console.log(`[Player] Audio error: ${audio.error ? audio.error.message : 'Unknown error'}`);
+        playIcon.classList.replace("fa-pause", "fa-play");
+    }
 
-    progressContainer.addEventListener("click", (e) => {
-        const width = progressContainer.clientWidth;
-        const clickX = e.offsetX;
-        const duration = audio.duration;
-        audio.currentTime = (clickX / width) * duration;
+    function saveBasicState() {
+        try {
+            const state = {
+                audioUrl: audio.src,
+                title: titleEl.textContent,
+                artistNickname: artistEl.textContent,
+                coverUrl: coverEl.src,
+                isPlaying: !audio.paused
+                // Note: We're intentionally not saving currentTime
+            };
+            sessionStorage.setItem("playerState", JSON.stringify(state));
+            console.log("[Player] Basic state saved");
+        } catch (e) {
+            console.log("[Player] Error saving state:", e);
+        }
+    }
 
-        // Save state
-        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl: audio.src, title: titleEl.textContent, artistNickname: artistEl.textContent, coverUrl: coverEl.src, currentTime: audio.currentTime, isPlaying: !audio.paused }));
-    });
-
-    // Expose function globally to be called from song cards
-    window.playSong = loadSong;
+    // Expose to window
+    window.playSong = (song) => {
+        console.log("[Player] Received play command from song card");
+        loadSong(song);
+    };
 });
-
-
-
-
-
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////
