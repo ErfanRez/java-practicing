@@ -24,7 +24,15 @@
             <tr th:each="song, iterStat : ${songs}" class="song-row align-middle">
                 <th scope="row">
                     <span class="row-number" th:text="${iterStat.count}">1</span>
-                    <i class="fa-solid fa-play play-button"></i>
+                    <div th:attr="onclick=|playSong({
+                        audioUrl: '${song.audioUrl}',
+                        title: '${song.title}',
+                        artistNickname: '${song.artist.nickname}',
+                        coverUrl: '${song.cover.url}'
+                    })|"
+                         class="play-button">
+                        <i class="fa-solid fa-play"></i>
+                    </div>
                 </th>
                 <td class="d-flex align-items-center">
                     <img th:src="${song.cover.url ?: '/assets/images/album-cover.webp'}"

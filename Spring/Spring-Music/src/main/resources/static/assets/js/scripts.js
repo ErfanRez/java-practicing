@@ -193,3 +193,102 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////
+
+document.addEventListener("DOMContentLoaded", () => {
+    const audio = document.getElementById("audio");
+    const playBtn = document.getElementById("player-play");
+    const playIcon = playBtn.querySelector("i");
+    const progressContainer = document.getElementById("progress-container");
+    const progressFilled = document.getElementById("progress-filled");
+    const currentTimeEl = document.getElementById("player-current");
+    const durationEl = document.getElementById("player-duration");
+    const titleEl = document.getElementById("player-title");
+    const artistEl = document.getElementById("player-artist");
+    const coverEl = document.getElementById("player-cover");
+
+    // Load state from sessionStorage
+    const savedState = sessionStorage.getItem("playerState");
+    if (savedState) {
+        const { audioUrl, title, artistNickname, coverUrl, currentTime, isPlaying } = JSON.parse(savedState);
+        loadSong({ audioUrl, title, artistNickname, coverUrl, currentTime, isPlaying });
+    }
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60) || 0;
+        const secs = Math.floor(seconds % 60) || 0;
+        return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+    }
+
+    function loadSong({ audioUrl, title, artistNickname, coverUrl, currentTime = 0, isPlaying = false }) {
+        audio.src = audioUrl;
+        titleEl.textContent = title;
+        artistEl.textContent = artistNickname;
+        coverEl.src = coverUrl || "/assets/images/album-cover.webp";
+        audio.currentTime = currentTime;
+        audio.load();
+
+        if (isPlaying) {
+            audio.play();
+            playIcon.classList.replace("fa-play", "fa-pause");
+        } else {
+            playIcon.classList.replace("fa-pause", "fa-play");
+        }
+
+        // Save state
+        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl, title, artistNickname, coverUrl, currentTime: audio.currentTime, isPlaying: !audio.paused }));
+    }
+
+    playBtn.addEventListener("click", () => {
+        if (audio.paused) {
+            audio.play();
+            playIcon.classList.replace("fa-play", "fa-pause");
+        } else {
+            audio.pause();
+            playIcon.classList.replace("fa-pause", "fa-play");
+        }
+
+        // Save state
+        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl: audio.src, title: titleEl.textContent, artistNickname: artistEl.textContent, coverUrl: coverEl.src, currentTime: audio.currentTime, isPlaying: !audio.paused }));
+    });
+
+    audio.addEventListener("timeupdate", () => {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progressFilled.style.width = `${percent}%`;
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+    });
+
+    audio.addEventListener("loadedmetadata", () => {
+        durationEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener("ended", () => {
+        playIcon.classList.replace("fa-pause", "fa-play");
+        progressFilled.style.width = "0%";
+        currentTimeEl.textContent = "0:00";
+
+        // Save state
+        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl: audio.src, title: titleEl.textContent, artistNickname: artistEl.textContent, coverUrl: coverEl.src, currentTime: 0, isPlaying: false }));
+    });
+
+    progressContainer.addEventListener("click", (e) => {
+        const width = progressContainer.clientWidth;
+        const clickX = e.offsetX;
+        const duration = audio.duration;
+        audio.currentTime = (clickX / width) * duration;
+
+        // Save state
+        sessionStorage.setItem("playerState", JSON.stringify({ audioUrl: audio.src, title: titleEl.textContent, artistNickname: artistEl.textContent, coverUrl: coverEl.src, currentTime: audio.currentTime, isPlaying: !audio.paused }));
+    });
+
+    // Expose function globally to be called from song cards
+    window.playSong = loadSong;
+});
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
