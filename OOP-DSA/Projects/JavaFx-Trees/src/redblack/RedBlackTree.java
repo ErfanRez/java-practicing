@@ -60,6 +60,22 @@ public class RedBlackTree {
         v.parent = u.parent;
     }
 
+    // Delete using minimum of right
+    public TreeNode minimum(TreeNode node) {
+        while (node.left != TNULL) {
+            node = node.left;
+        }
+        return node;
+    }
+
+    // Delete using maximum of left
+    public TreeNode maximum(TreeNode node) {
+        while (node.right != TNULL) {
+            node = node.right;
+        }
+        return node;
+    }
+
     private void deleteTreeNode(TreeNode node, int key) {
         TreeNode z = TNULL;
         TreeNode x, y;
@@ -169,22 +185,6 @@ public class RedBlackTree {
             }
         }
         x.color = 0;
-    }
-
-    // Delete using minimum of right
-    public TreeNode minimum(TreeNode node) {
-        while (node.left != TNULL) {
-            node = node.left;
-        }
-        return node;
-    }
-
-    // Delete using maximum of left
-    public TreeNode maximum(TreeNode node) {
-        while (node.right != TNULL) {
-            node = node.right;
-        }
-        return node;
     }
 
     public void insert(int key) {
