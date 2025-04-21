@@ -9,7 +9,7 @@ public class TreeNode {
 
     public TreeNode(int data) {
         this.data = data;
-        this.color = 1; // new nodes are red by default
+        this.color = 1; // red by default
         this.parent = null;
         this.left = null;
         this.right = null;
