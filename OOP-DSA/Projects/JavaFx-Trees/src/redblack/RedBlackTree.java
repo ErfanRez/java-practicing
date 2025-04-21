@@ -4,46 +4,7 @@ public class RedBlackTree {
     private TreeNode root;
     private TreeNode TNULL;
 
-
-    private void preOrderHelper(TreeNode node) {
-        if (node != TNULL) {
-            System.out.print(node.data + " ");
-            preOrderHelper(node.left);
-            preOrderHelper(node.right);
-        }
-    }
-
-
-    private void inOrderHelper(TreeNode node) {
-        if (node != TNULL) {
-            inOrderHelper(node.left);
-            System.out.print(node.data + " ");
-            inOrderHelper(node.right);
-        }
-    }
-
-
-    private void postOrderHelper(TreeNode node) {
-        if (node != TNULL) {
-            postOrderHelper(node.left);
-            postOrderHelper(node.right);
-            System.out.print(node.data + " ");
-        }
-    }
-
-
-    private TreeNode searchTreeHelper(TreeNode node, int key) {
-        if (node == TNULL || key == node.data) {
-            return node;
-        }
-
-        if (key < node.data) {
-            return searchTreeHelper(node.left, key);
-        }
-        return searchTreeHelper(node.right, key);
-    }
-
-
+    // Balance the tree after deletion of a node
     private void fixDelete(TreeNode x) {
         TreeNode s;
         while (x != root && x.color == 0) {
@@ -115,7 +76,7 @@ public class RedBlackTree {
         v.parent = u.parent;
     }
 
-    private void deleteTreeNodeHelper(TreeNode node, int key) {
+    private void deleteTreeNode(TreeNode node, int key) {
         TreeNode z = TNULL;
         TreeNode x, y;
         while (node != TNULL) {
@@ -144,7 +105,7 @@ public class RedBlackTree {
             x = z.left;
             rbTransplant(z, z.left);
         } else {
-            y = minimum(z.right);
+            y = maximum(z.left);
             yOriginalColor = y.color;
             x = y.right;
             if (y.parent == z) {
@@ -165,7 +126,7 @@ public class RedBlackTree {
         }
     }
 
-
+    // Balance the node after insertion
     private void fixInsert(TreeNode k) {
         TreeNode u;
         while (k.parent.color == 1) {
@@ -236,22 +197,7 @@ public class RedBlackTree {
         root = TNULL;
     }
 
-    public void preorder() {
-        preOrderHelper(this.root);
-    }
-
-    public void inorder() {
-        inOrderHelper(this.root);
-    }
-
-    public void postorder() {
-        postOrderHelper(this.root);
-    }
-
-    public TreeNode searchTree(int k) {
-        return searchTreeHelper(this.root, k);
-    }
-
+    // Delete using minimum of right
     public TreeNode minimum(TreeNode node) {
         while (node.left != TNULL) {
             node = node.left;
@@ -259,38 +205,12 @@ public class RedBlackTree {
         return node;
     }
 
+    // Delete using maximum of left
     public TreeNode maximum(TreeNode node) {
         while (node.right != TNULL) {
             node = node.right;
         }
         return node;
-    }
-
-    public TreeNode successor(TreeNode x) {
-        if (x.right != TNULL) {
-            return minimum(x.right);
-        }
-
-        TreeNode y = x.parent;
-        while (y != TNULL && x == y.right) {
-            x = y;
-            y = y.parent;
-        }
-        return y;
-    }
-
-    public TreeNode predecessor(TreeNode x) {
-        if (x.left != TNULL) {
-            return maximum(x.left);
-        }
-
-        TreeNode y = x.parent;
-        while (y != TNULL && x == y.left) {
-            x = y;
-            y = y.parent;
-        }
-
-        return y;
     }
 
     public void leftRotate(TreeNode x) {
@@ -370,22 +290,52 @@ public class RedBlackTree {
         fixInsert(node);
     }
 
-    public TreeNode getTNULL() {
-        return TNULL;
-    }
-
     public TreeNode getRoot() {
         return this.root;
     }
 
-    public void delete(int data) {
-        deleteTreeNodeHelper(this.root, data);
+    public TreeNode getTNULL() {
+        return TNULL;
     }
 
-    public void printTree() {
-        printHelper(this.root, "", true);
+    // Preorder
+    private void preOrder(TreeNode node) {
+        if (node != TNULL) {
+            System.out.print(node.data + " ");
+            preOrder(node.left);
+            preOrder(node.right);
+        }
     }
 
+    // Inorder
+    private void inOrder(TreeNode node) {
+        if (node != TNULL) {
+            inOrder(node.left);
+            System.out.print(node.data + " ");
+            inOrder(node.right);
+        }
+    }
+
+    // Post order
+    private void postOrder(TreeNode node) {
+        if (node != TNULL) {
+            postOrder(node.left);
+            postOrder(node.right);
+            System.out.print(node.data + " ");
+        }
+    }
+
+    public void preorder() {
+        preOrder(this.root);
+    }
+
+    public void inorder() {
+        inOrder(this.root);
+    }
+
+    public void postorder() {
+        postOrder(this.root);
+    }
 
     private String inOrderString(TreeNode node) {
         if (node == TNULL) return "";
@@ -403,6 +353,14 @@ public class RedBlackTree {
 
     public String getReverseInorder() {
         return reverseInOrderString(root);
+    }
+
+    public void delete(int data) {
+        deleteTreeNode(this.root, data);
+    }
+
+    public void printTree() {
+        printHelper(this.root, "", true);
     }
 
     public static void main(String[] args) {
