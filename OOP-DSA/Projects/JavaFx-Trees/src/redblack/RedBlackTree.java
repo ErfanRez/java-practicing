@@ -200,7 +200,9 @@ public class RedBlackTree {
 
         while (x != TNULL) {
             y = x;
-            if (node.data < x.data) {
+            if (key == x.data) {
+                return;  // key already in the tree → do nothing
+            } else if (key < x.data) {
                 x = x.left;
             } else {
                 x = x.right;
@@ -210,7 +212,7 @@ public class RedBlackTree {
         node.parent = y;
         if (y == null) {
             root = node;
-        } else if (node.data < y.data) {
+        } else if (key < y.data) {
             y.left = node;
         } else {
             y.right = node;
