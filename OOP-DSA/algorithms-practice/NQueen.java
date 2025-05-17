@@ -33,6 +33,7 @@ public class NQueen {
         queens(0);
 
         // n = 4
+        System.out.printf("For n = %d:\n", n);
         System.out.println("Number of possible solutions: " + solutionCount); // 2
         System.out.println("Number of nodes traversed: " + nodeCount); // 60
     }
