@@ -40,9 +40,9 @@ class UnboundedKnapsack {
 
         n = wt.length;
 
-        knapsack(W, val, wt);
+        int result = knapsack(W, val, wt);
 
-        System.out.println("Maximum value achievable = " + dp[W]);
+        System.out.println("Maximum value achievable = " + result);
         System.out.println("Items chosen:");
         for (int i = 0; i < n; i++) {
             if (count[i] > 0) {
