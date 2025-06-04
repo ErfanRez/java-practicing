@@ -1,7 +1,7 @@
 # Project Overview
 
 **Project Description**:
-AVL Tree, Binary Tree, Binary-Search Tree, Expression Tree, Max Heap, and Min Heap data structures in Java using JavaFX.
+AVL Tree, Red-Black Tree, Binary Tree, Binary-Search Tree, Expression Tree, Max Heap, and Min Heap data structures in Java using JavaFX.
 
 **Author**: Erfan Rezaei  
 **Course**: Data Structures  
