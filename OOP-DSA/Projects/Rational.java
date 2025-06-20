@@ -1,12 +1,10 @@
 //! Code by Erfan Rezaei
 //! Advanced Java Programming, Alireza Nikian, Spring 2024
 
-
-
 import java.util.Scanner;
 
 
-public class Rational {
+public class Rational implements Comparable<Rational> {
     private int num;
     private int den;
 
@@ -44,7 +42,7 @@ public class Rational {
         }
     }
 
-    private int gcd(int a, int b) {
+    private static int gcd(int a, int b) {
         while (b != 0) {
             int temp = b;
             b = a % b;
@@ -215,9 +213,12 @@ public class Rational {
     }
 
     public int compareTo(Rational other) {
-        if (this.area == other.area) return 0;
-        if (this.area > other.area) return 1;
-        if (this.area < other.area) return -1;
+        int thisNum = this.num * other.den;
+        int otherNum = other.num * this.den;
+
+        if (thisNum == otherNum) return 0;
+        if (thisNum > otherNum) return 1;
+        return -1;
     }
 
     public Rational findMax(Rational other) {
@@ -306,7 +307,7 @@ public class Rational {
         System.out.println(incrementByValue); // Expected output: 7/2
 
         Rational decrementByValue = r6.decrementBy(1); // 1/2
-        System.out.println(decrementByValue); // Expected output: 1/2
+        System.out.println(decrementByValue); // Expected output: -1/2
 
         // Multiply and Divide by value
         Rational multipliedByValue = r6.multiplyBy(2); // 1/1
@@ -335,6 +336,8 @@ public class Rational {
         // Invert
         Rational invertedR6 = r6.invert(); // 2/1
         System.out.println(invertedR6); // Expected output: 2/1
+
+        r6 = new Rational(1,2);
 
         // Power
         Rational powered = r6.power(3); // 1/8
