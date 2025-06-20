@@ -3,7 +3,6 @@
 
 import java.util.Scanner;
 
-
 public class Rational implements Comparable<Rational> {
     private int num;
     private int den;
@@ -128,7 +127,8 @@ public class Rational implements Comparable<Rational> {
     }
 
     public int signum() {
-        if (num == 0) return 0;
+        if (num == 0)
+            return 0;
         return num > 0 ? 1 : -1;
     }
 
@@ -216,9 +216,7 @@ public class Rational implements Comparable<Rational> {
         int thisNum = this.num * other.den;
         int otherNum = other.num * this.den;
 
-        if (thisNum == otherNum) return 0;
-        if (thisNum > otherNum) return 1;
-        return -1;
+        return Integer.compare(thisNum, otherNum);
     }
 
     public Rational findMax(Rational other) {
@@ -337,7 +335,7 @@ public class Rational implements Comparable<Rational> {
         Rational invertedR6 = r6.invert(); // 2/1
         System.out.println(invertedR6); // Expected output: 2/1
 
-        r6 = new Rational(1,2);
+        r6 = new Rational(1, 2);
 
         // Power
         Rational powered = r6.power(3); // 1/8
