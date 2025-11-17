@@ -1,13 +1,7 @@
 package expression;
 
-//! The following code is written by Erfan Rezaei
-//! Data Structures, Alireza Nikian, Fall 2024
-//! Islamic Azad University of Najafabad
-
 import java.util.*;
 
-
-//Console App
 public class ExpressionTree {
     private TreeNode root;
 
@@ -27,65 +21,78 @@ public class ExpressionTree {
                 return 2;
             case '^':
                 return 3;
+            case '~': case '@':
+                return 4;
             default:
                 return 0;
         }
     }
 
-    private static boolean isOperator(char c) {
+    private static boolean isBinaryOpChar(char c) {
         return c == '+' || c == '-' || c == '*' || c == '/' || c == '^';
     }
 
+    private static boolean isOperator(char c) {
+        return c == '+' || c == '-' || c == '*' || c == '/' || c == '^' || c == '~' || c == '@';
+    }
+
+    private static boolean isRightAssociative(char op) {
+        return op == '^' || op == '~' || op == '@';
+    }
+
     private static String infixToPostfix(String expression) {
-        expression = expression.replace(" ","");
+        expression = expression.replace(" ", "");
         String postfix = "";
         Stack<Character> operators = new Stack<>();
         String number = "";
 
-        for (char c : expression.toCharArray()) {
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
 
-            if (!isOperator(c) && c != '(' && c != ')') {
+            if (!isBinaryOpChar(c) && c != '(' && c != ')') {
                 number += c;
             } else {
-
                 if (!number.isEmpty()) {
                     postfix += number + " ";
                     number = "";
                 }
 
-
                 if (c == '(') {
                     operators.push(c);
-                }
-
-                else if (c == ')') {
+                } else if (c == ')') {
                     while (!operators.isEmpty() && operators.peek() != '(') {
                         postfix += operators.pop() + " ";
                     }
-                    operators.pop(); // Remove '('
-                }
+                    if (!operators.isEmpty()) operators.pop();
+                } else if (isBinaryOpChar(c)) {
+                    boolean unary = (c == '+' || c == '-') &&
+                            (i == 0 ||
+                                    expression.charAt(i - 1) == '(' ||
+                                    isBinaryOpChar(expression.charAt(i - 1)));
 
-                else if (isOperator(c)) {
-                    while (!operators.isEmpty() && precedence(operators.peek()) > precedence(c)) {
-                        postfix += operators.pop() + " ";
-                    }
-
-                    if (!(c == '^' && !operators.isEmpty() && operators.peek() == '^')) {
-                        while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(c)) {
+                    if (unary) {
+                        char unarySym = (c == '-') ? '~' : '@';
+                        while (!operators.isEmpty() &&
+                                (precedence(operators.peek()) > precedence(unarySym))) {
                             postfix += operators.pop() + " ";
                         }
+                        operators.push(unarySym);
+                    } else {
+                        while (!operators.isEmpty()
+                                && ((precedence(operators.peek()) > precedence(c))
+                                || (precedence(operators.peek()) == precedence(c) && !isRightAssociative(c)))
+                                && operators.peek() != '(') {
+                            postfix += operators.pop() + " ";
+                        }
+                        operators.push(c);
                     }
-
-                    operators.push(c);
                 }
-
             }
         }
 
         if (!number.isEmpty()) {
             postfix += number + " ";
         }
-
 
         while (!operators.isEmpty()) {
             postfix += operators.pop() + " ";
@@ -98,21 +105,35 @@ public class ExpressionTree {
         String postfix = infixToPostfix(expression);
         Stack<TreeNode> stack = new Stack<>();
 
-        for (String token : postfix.split(" ")) {
-            if (token.length() == 1 && isOperator(token.charAt(0))) { // Operator
+        for (String token : postfix.split("\\s+")) {
+            if (token.isEmpty()) continue;
+
+            if (token.length() == 1 && token.charAt(0) == '@') {
+                continue;
+            }
+
+            if (token.length() == 1 && token.charAt(0) == '~') {
+                TreeNode opNode = new TreeNode(token);
+                if (!stack.isEmpty()) {
+                    opNode.right = stack.pop();
+                }
+                opNode.left = null;
+                stack.push(opNode);
+            } else if (token.length() == 1 && isOperator(token.charAt(0))) {
                 TreeNode operatorNode = new TreeNode(token);
-                operatorNode.right = stack.pop(); // Right operand
-                operatorNode.left = stack.pop(); // Left operand
+                TreeNode right = stack.isEmpty() ? null : stack.pop();
+                TreeNode left = stack.isEmpty() ? null : stack.pop();
+                operatorNode.right = right;
+                operatorNode.left = left;
                 stack.push(operatorNode);
-            } else { // Operand
+            } else {
                 stack.push(new TreeNode(token));
             }
         }
 
-        root = stack.pop();
+        root = stack.isEmpty() ? null : stack.pop();
     }
 
-    // Inorder traversal to verify the tree
     public void inorderTraversal() {
         inorderTraversal(root);
     }
@@ -126,7 +147,7 @@ public class ExpressionTree {
     }
 
     public String getPreorder(){
-        return this.preorder(root);
+        return this.preorder(root).trim();
     }
 
     private String preorder(TreeNode node) {
@@ -135,12 +156,12 @@ public class ExpressionTree {
     }
 
     public String getPostorder(){
-        return this.postorder(root);
+        return this.postorder(root).trim();
     }
 
     private String postorder(TreeNode node) {
         if (node == null) return "";
-        return postorder(node.left) + postorder(node.right) + node.data + " ";
+        return (postorder(node.left) + postorder(node.right) + node.data + " ");
     }
 
     public int getMaxDepth(){
@@ -178,22 +199,20 @@ public class ExpressionTree {
     }
 
     public static void main(String[] args) {
-        String expression1 = "A + B - C * ( D / E - F ) + G"; //Infix expression
-        ExpressionTree et1 = new ExpressionTree(expression1);
+        String[] tests = {
+                "A + B - C * ( D / E - F ) + G",
+                "3 + 4 * 2 / ( 1 - 5 ) ^ 2",
+        };
 
-        et1.printTree();
-        System.out.println();
-        System.out.print("Inorder Traversal: ");
-        et1.inorderTraversal(); // A + B - C * D / E - F + G
-
-        System.out.print("\n\n");
-
-        String expression2 = "3 + 4 * 2 / ( 1 - 5 ) ^ 2";
-        ExpressionTree et2 = new ExpressionTree(expression2);
-
-        et2. printTree();
-        System.out.println();
-        System.out.print("Inorder Traversal: ");
-        et2.inorderTraversal(); // 3 + 4 * 2 / 1 - 5 ^ 2
+        for (String expr : tests) {
+            System.out.println("Expression: " + expr);
+            ExpressionTree et = new ExpressionTree(expr);
+            et.printTree();
+            System.out.println();
+            System.out.print("Inorder: ");
+            et.inorderTraversal();
+            System.out.println();
+            System.out.println("-----------\n");
+        }
     }
 }
