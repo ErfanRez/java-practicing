@@ -6,6 +6,6 @@ public class TreeNode {
 
     public TreeNode(int d) {
         data = d;
-        height = 1;
+        height = 0;
     }
 }

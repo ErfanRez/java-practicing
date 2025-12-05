@@ -25,24 +25,24 @@ public class AVLTreeHardCoded extends Application {
     // Hard coded insertion and deletion from here
     private void testData() {
 
-        tree.insert(40);
-        tree.insert(60);
-        tree.insert(50);
-        tree.insert(33);
-        tree.insert(55);
-        tree.insert(11);
-
-//        tree.insert(20);
-//        tree.insert(10);
-//        tree.insert(30);
-//        tree.insert(5);
-//        tree.insert(15);
 //        tree.insert(40);
-//        tree.insert(12);
-//        tree.insert(17);
+//        tree.insert(60);
+//        tree.insert(50);
+//        tree.insert(33);
+//        tree.insert(55);
+//        tree.insert(11);
+
+        tree.insert(20);
+        tree.insert(10);
+        tree.insert(30);
+        tree.insert(5);
+        tree.insert(15);
+        tree.insert(40);
+        tree.insert(12);
+        tree.insert(17);
 
 
-//        tree.delete(20);
+        tree.delete(20);
 
     }
 

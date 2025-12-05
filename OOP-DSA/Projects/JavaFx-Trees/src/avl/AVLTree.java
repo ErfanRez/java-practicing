@@ -17,7 +17,7 @@ public class AVLTree {
 
     private int height(TreeNode n) {
         if (n == null)
-            return 0;
+            return -1;
         return n.height;
     }
 
@@ -130,18 +130,18 @@ public class AVLTree {
             }
 
             // deleting using minimum of right subtree
-//            else {
-//                TreeNode temp = minValueNode(node.right);
-//                node.data = temp.data;
-//                node.right = delete(node.right, temp.data);
-//            }
+            else {
+                TreeNode temp = minValueNode(node.right);
+                node.data = temp.data;
+                node.right = delete(node.right, temp.data);
+            }
 
             // deleting using maximum of left subtree
-            else {
-                TreeNode temp = maxValueNode(node.left);
-                node.data = temp.data;
-                node.left = delete(node.left, temp.data);
-            }
+//            else {
+//                TreeNode temp = maxValueNode(node.left);
+//                node.data = temp.data;
+//                node.left = delete(node.left, temp.data);
+//            }
         }
 
         if (node == null)
