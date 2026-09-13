@@ -32,12 +32,10 @@ public class RedBlackTreeVisualizer extends Application {
         visualizer.prefHeightProperty().bind(centerPane.heightProperty());
         mainPane.setCenter(centerPane);
 
-        TextField insertField = new TextField();
-        insertField.setPromptText("Insert key");
+        TextField inputField = new TextField();
+        inputField.setPromptText("Enter key");
         Button insertButton = new Button("Insert");
 
-        TextField deleteField = new TextField();
-        deleteField.setPromptText("Delete key");
         Button deleteButton = new Button("Delete");
 
         Button clearButton = new Button("Clear");
@@ -45,7 +43,7 @@ public class RedBlackTreeVisualizer extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        HBox controlPanel = new HBox(10, insertField, insertButton, deleteField, deleteButton, spacer, clearButton);
+        HBox controlPanel = new HBox(10, inputField, insertButton, deleteButton, spacer, clearButton);
         controlPanel.setAlignment(Pos.CENTER_LEFT);
         controlPanel.setPadding(new Insets(10));
         controlPanel.setStyle("-fx-background-color: #f0f0f0;");
@@ -87,20 +85,20 @@ public class RedBlackTreeVisualizer extends Application {
 
         insertButton.setOnAction(e -> {
             try {
-                int key = Integer.parseInt(insertField.getText().trim());
+                int key = Integer.parseInt(inputField.getText().trim());
                 tree.insert(key);
-                insertField.clear();
+                inputField.clear();
                 visualizeTree();
             } catch (NumberFormatException ex) {
-                insertField.clear();
+                inputField.clear();
             }
         });
 
         deleteButton.setOnAction(e -> {
             try {
-                int key = Integer.parseInt(deleteField.getText().trim());
+                int key = Integer.parseInt(inputField.getText().trim());
                 tree.delete(key);
-                deleteField.clear();
+                inputField.clear();
                 visualizeTree();
             } catch (NumberFormatException ex) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
