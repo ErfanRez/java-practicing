@@ -151,10 +151,6 @@ public class SplayTreeVisualizer extends Application {
         });
 
 
-        // =========================================================
-        // Search
-        // =========================================================
-
         searchButton.setOnAction(e -> {
 
             try {
@@ -165,9 +161,6 @@ public class SplayTreeVisualizer extends Application {
 
                 inputField.clear();
 
-                // Important:
-                // search() can change the tree because the
-                // searched node is splayed to the root.
                 visualizeTree();
 
                 if (!found) {
@@ -191,10 +184,6 @@ public class SplayTreeVisualizer extends Application {
         });
 
 
-        // =========================================================
-        // Clear
-        // =========================================================
-
         clearButton.setOnAction(e -> {
 
             tree.clear();
@@ -203,10 +192,6 @@ public class SplayTreeVisualizer extends Application {
         });
     }
 
-
-    // =============================================================
-    // Visualization
-    // =============================================================
 
     private void visualizeTree() {
 
@@ -225,11 +210,6 @@ public class SplayTreeVisualizer extends Application {
 
         updateTraversals();
     }
-
-
-    // =============================================================
-    // Traversals
-    // =============================================================
 
     private void updateTraversals() {
 
@@ -309,10 +289,6 @@ public class SplayTreeVisualizer extends Application {
         result.append(node.element).append(" ");
     }
 
-
-    // =============================================================
-    // UI helpers
-    // =============================================================
 
     private void configureLabel(Label title, Label expression) {
 
